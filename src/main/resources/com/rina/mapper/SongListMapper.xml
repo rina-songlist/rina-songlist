@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rina.mapper.SongListMapper" >
+  <resultMap id="BaseResultMap" type="com.rina.domain.SongList" >
+    <id column="song_id" property="songId" jdbcType="BIGINT" />
+    <result column="song_name" property="songName" jdbcType="VARCHAR" />
+    <result column="song_artist" property="songArtist" jdbcType="VARCHAR" />
+    <result column="song_language" property="songLanguage" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from song_list
+    where song_id = #{songId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.rina.domain.SongList" >
+    insert into song_list (song_id, song_name, song_artist, 
+      song_language, create_by, create_time, 
+      update_by, update_time)
+    values (#{songId,jdbcType=BIGINT}, #{songName,jdbcType=VARCHAR}, #{songArtist,jdbcType=VARCHAR}, 
+      #{songLanguage,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.rina.domain.SongList" >
+    update song_list
+    set song_name = #{songName,jdbcType=VARCHAR},
+      song_artist = #{songArtist,jdbcType=VARCHAR},
+      song_language = #{songLanguage,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where song_id = #{songId,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select song_id, song_name, song_artist, song_language, create_by, create_time, update_by, 
+    update_time
+    from song_list
+    where song_id = #{songId,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select song_id, song_name, song_artist, song_language, create_by, create_time, update_by, 
+    update_time
+    from song_list
+  </select>
+</mapper>
