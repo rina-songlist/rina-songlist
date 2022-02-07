@@ -1,1 +1,13 @@
+server:
+  port: 8080
 
+
+spring:
+  datasource:
+    driver-class-name: ${DATABASE.DRIVER}
+    url: ${DATABASE.URL}
+    username: ${DATABASE.USERNAME}
+    password: ${DATABASE.PASSWORD}
+
+mybatis:
+  type-aliases-package: com.rina.domain
