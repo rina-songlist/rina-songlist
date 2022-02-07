@@ -8,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author arvin
  */
 @SpringBootApplication
-public class RinaSonglistApplication {
+@MapperScan("com.rina.mapper")
+public class RinaSongListApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RinaSongListApplication.class, args);
