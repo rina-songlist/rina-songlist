@@ -20,4 +20,19 @@ public interface SongListMapper {
     List<SongList> selectAll();
 
     int updateByPrimaryKey(SongList record);
+
+    /**
+     * 条件搜索歌单
+     * @param nameOrArtist 歌名或歌手名
+     * @return 歌单内容
+     */
+    List<SongList> selectByNameOrArtist(String nameOrArtist);
+
+    /**
+     * 通过多ID搜索歌单
+     * @param ids 多个歌曲ID
+     * @return 歌单内容
+     */
+    List<SongList> selectByIds(Long[] ids);
+
 }
