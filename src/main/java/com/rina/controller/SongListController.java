@@ -25,7 +25,7 @@ public class SongListController {
 
 	private final SongListService songListService;
 
-	@GetMapping("/get-list")
+	@GetMapping("/public-list")
 	@ApiOperation(value = "普通用户所看到的歌单信息", notes = "无需鉴权")
 	public PageResp<List<SongListDto>> publicUserSongList(@RequestParam(required = true) @ApiParam(value = "页面展示的数据量", required = true) Integer pageSize,
 	                                                      @RequestParam(required = true) @ApiParam(value = "当前页数", required = true) Integer pageNum,
