@@ -12,10 +12,12 @@ logging:
 
 spring:
   datasource:
-    driver-class-name: ${DATABASE.DRIVER}
-    url: ${DATABASE.URL}
-    username: ${DATABASE.USERNAME}
-    password: ${DATABASE.PASSWORD}
+    driver-class-name: ${DATABASE_DRIVER}
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  profiles:
+    active: ${SPRING_ACTIVE_PROFILE:dev}
 
 mybatis:
   type-aliases-package: com.rina.domain
