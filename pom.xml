@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.rina</groupId>
-	<artifactId>rina</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>rina-songlist</artifactId>
+	<version>1.0</version>
 	<name>rina-song-list</name>
 	<description>rina-song-list</description>
 	<properties>
