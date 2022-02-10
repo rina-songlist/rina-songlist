@@ -105,6 +105,32 @@
 				</configuration>
 			</plugin>
 			<!-- mybatis-generator 相关 -->
+			<!-- <plugin> -->
+			<!-- 	<artifactId>mybatis-generator-maven-plugin</artifactId> -->
+			<!-- 	<version>1.4.0</version> -->
+			<!-- 	<groupId>org.mybatis.generator</groupId> -->
+			<!-- 	<configuration> -->
+			<!-- 		<configurationFile>src/main/resources/mybatis-generator/generatorConfig.xml</configurationFile> -->
+			<!-- 		<verbose>true</verbose> -->
+			<!-- 		<overwrite>true</overwrite> -->
+			<!-- 	</configuration> -->
+			<!-- 	<executions> -->
+			<!-- 		<execution> -->
+			<!-- 			<id>Generate Mybatis Artifacts</id> -->
+			<!-- 			<goals> -->
+			<!-- 				<goal>generate</goal> -->
+			<!-- 			</goals> -->
+			<!-- 		</execution> -->
+			<!-- 	</executions> -->
+			<!-- 	<dependencies> -->
+			<!-- 		<dependency> -->
+			<!-- 			<groupId>mysql</groupId> -->
+			<!-- 			<artifactId>mysql-connector-java</artifactId> -->
+			<!-- 			<version>5.1.44</version> -->
+			<!-- 		</dependency> -->
+			<!-- 	</dependencies> -->
+			<!-- </plugin> -->
+			<!-- docker相关 -->
 			<plugin>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
 				<version>1.4.0</version>
