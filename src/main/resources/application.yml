@@ -26,3 +26,7 @@ pagehelper:
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
+
+rina:
+  jwt:
+    token-expire-time: ${TOKEN_EXPIRE_TIME:60*1000L}
