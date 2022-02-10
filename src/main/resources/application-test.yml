@@ -1,6 +1,5 @@
 logging:
   file:
-    name: rina.log
     path: /var/rina_log
   level:
     com:
