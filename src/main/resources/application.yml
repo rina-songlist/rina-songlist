@@ -12,8 +12,8 @@ logging:
 
 spring:
   datasource:
-    driver-class-name: ${DATABASE_DRIVER}
-    url: ${DATABASE_URL}
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_URL}?useSSL=false&characterEncoding=UTF-8
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
   profiles:
@@ -21,6 +21,7 @@ spring:
 
 mybatis:
   type-aliases-package: com.rina.domain
+  mapper-locations: classpath:com/rina/mapper/*.xml
 
 pagehelper:
   helper-dialect: mysql
