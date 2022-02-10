@@ -2,6 +2,7 @@ package com.rina.domain;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,10 @@ import java.util.Date;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-public class SongList {
+public class SongList implements Serializable {
+
+    private static final long serialVersionUID = -5514114779942724772L;
+
     private Long songId;
 
     private String songName;
