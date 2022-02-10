@@ -132,29 +132,25 @@
 			<!-- </plugin> -->
 			<!-- docker相关 -->
 			<plugin>
-				<artifactId>mybatis-generator-maven-plugin</artifactId>
-				<version>1.4.0</version>
-				<groupId>org.mybatis.generator</groupId>
-				<configuration>
-					<configurationFile>src/main/resources/mybatis-generator/generatorConfig.xml</configurationFile>
-					<verbose>true</verbose>
-					<overwrite>true</overwrite>
-				</configuration>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<version>1.4.13</version>
 				<executions>
 					<execution>
-						<id>Generate Mybatis Artifacts</id>
+						<id>default</id>
 						<goals>
-							<goal>generate</goal>
+							<goal>build</goal>
+							<goal>push</goal>
 						</goals>
 					</execution>
 				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>mysql</groupId>
-						<artifactId>mysql-connector-java</artifactId>
-						<version>5.1.44</version>
-					</dependency>
-				</dependencies>
+				<configuration>
+					<repository>spotify/foobar</repository>
+					<tag>${project.version}</tag>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
