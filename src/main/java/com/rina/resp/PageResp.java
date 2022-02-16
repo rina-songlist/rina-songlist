@@ -24,9 +24,9 @@ public class PageResp<T> extends Resp implements Serializable {
 	private T data;
 
 	/**
-	 * 表单总页数
+	 * 总数据条数
 	 */
-	private Integer totalPages;
+	private Long total;
 
 	public static<T> PageResp<T> succeed(ResultCode resultCode, T data) {
 		final PageResp<T> resp = new PageResp<>();
@@ -37,11 +37,11 @@ public class PageResp<T> extends Resp implements Serializable {
 
 	public static<T> PageResp<T> succeed(ResultCode resultCode,
 	                                     T data,
-	                                     int totalPages) {
+	                                     Long total) {
 		final PageResp<T> resp = new PageResp<>();
 		resp.setByResultCode(resultCode);
 		resp.setData(data);
-		resp.setTotalPages(totalPages);
+		resp.setTotal(total);
 		return resp;
 	}
 
