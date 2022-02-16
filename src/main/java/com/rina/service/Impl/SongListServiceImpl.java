@@ -32,7 +32,7 @@ public class SongListServiceImpl implements SongListService {
 	                                                  String nameOrArtist) {
 		final Page<Object> page = PageHelper.startPage(pageNum, pageSize);
 		List<SongListDto> songListDtoList = null;
-		int totalPages = 0;
+		long totalPages = 0;
 
 		if (ids != null && ids.length > 0) {
 			// 随机查询
@@ -55,7 +55,7 @@ public class SongListServiceImpl implements SongListService {
 							.build())
 					.collect(Collectors.toList());
 		}
-		totalPages = page.getPages();
+		totalPages = page.getTotal();
 
 		return PageResp.succeed(ResultCode.OK, songListDtoList, totalPages);
 	}

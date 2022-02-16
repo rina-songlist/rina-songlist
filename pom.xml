@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.rina</groupId>
 	<artifactId>rina-songlist</artifactId>
-	<version>1.0</version>
+	<version>1.0.1-beta</version>
 	<name>rina-song-list</name>
 	<description>rina-song-list</description>
 	<properties>
