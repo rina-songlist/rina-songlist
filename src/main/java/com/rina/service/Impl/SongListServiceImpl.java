@@ -28,9 +28,18 @@ public class SongListServiceImpl implements SongListService {
 	@Override
 	public PageResp<List<SongListDto>> querySongLists(Integer pageSize,
 	                                                  Integer pageNum,
-	                                                  Long[] ids,
-	                                                  String nameOrArtist) {
-		final Page<Object> page = PageHelper.startPage(pageNum, pageSize);
+	                                                  String orderBy,
+	                                                  Boolean withDesc,
+	                                                  String nameOrArtist,
+	                                                  Long... ids) {
+		String orderMsg = null;
+		if (!withDesc) {
+			orderMsg = "song_" + orderBy;
+		} else {
+			orderMsg = "song_" + orderBy + " desc";
+		}
+
+		final Page<Object> page = PageHelper.startPage(pageNum, pageSize, orderMsg);
 		List<SongListDto> songListDtoList = null;
 		long totalPages = 0;
 
