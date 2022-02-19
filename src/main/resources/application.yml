@@ -17,7 +17,7 @@ spring:
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
   profiles:
-    active: ${SPRING_ACTIVE_PROFILE:dev}
+    active: ${SPRING_ACTIVE_PROFILE:prod}
 
 mybatis:
   type-aliases-package: com.rina.domain
