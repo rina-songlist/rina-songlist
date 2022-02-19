@@ -44,10 +44,20 @@ docker run -itd --name mysql-test -p 3306:3306 mysql:5.7
 1. 导入已打包好的 `docker` 镜像
 
 ```bash
-docker load -i rina-songlist-1.0.rar
+docker load -i rina-songlist-(release-version).rar
 ```
 
 2. 使用 `.env` 或是环境变量启动项目，一下是启动示例：
+   1. 环境变量说明：
+      1. `DATABASE_URL`数据库地址
+      2. `DATABASE_USERNAME`数据库用户名
+      3. `DATABASE_PASSWORD`数据库密码
+      4. `SPRING_ACTIVE_PROFILE`运行环境配置“默认为prod”
+      5. `TOKEN_EXPIRE_TIME`TOKEN过期时间
+
+   2. 文件映射说明：
+      1. `/var/rina_log`日志文件输出地址
+
 
 ```bash
 docker run -itd --name my-rina-songlist \
@@ -57,7 +67,8 @@ docker run -itd --name my-rina-songlist \
    -e DATABASE_PASSWORD=123456 \
    -e SPRING_ACTIVE_PROFILE=prod \
    -e TOKEN_EXPIRE_TIME=60*1000L \
-   rina/rina-songlist:1.0
+   -v log:/var/rina_log
+   rina/rina-songlist:(release-version)
 ```
 
 3. 详细API接口信息详情请查看 [ApiDoc](./docs/ApiDoc.md)
@@ -67,3 +78,5 @@ docker run -itd --name my-rina-songlist \
 本项目是由 [`Intellij IDEA`](https://www.jetbrains.com/idea/) 编辑，JDK版本为 `jdk8`，使用 `MAVEN` 构建
 
 ❗️❗️❗️运行时环境变量时使用`.env` 文件，并使用 [EnvFile](https://www.jetbrains.com/idea/) 插件调用，`VSCode`与`Eclipse`用户请自行寻找适合的插件
+
+开发者请使用`test`版本运行，`test`版本包含`Swagger-ui`方便各位直接在网页上测试接口
