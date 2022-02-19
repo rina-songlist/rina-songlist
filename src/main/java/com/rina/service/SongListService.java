@@ -17,13 +17,17 @@ public interface SongListService {
 	 * 查询歌单
 	 * @param pageSize 页面大小
 	 * @param pageNum 第n页
+	 * @param orderBy 排序依据
+	 * @param withDesc 是否倒序
 	 * @param ids 歌曲IDs
 	 * @param nameOrArtist 歌名或歌手名
 	 * @return 歌单内容
 	 */
 	PageResp<List<SongListDto>> querySongLists(Integer pageSize,
 	                                           Integer pageNum,
-	                                           Long[] ids,
-	                                           String nameOrArtist);
+	                                           String orderBy,
+	                                           Boolean withDesc,
+	                                           String nameOrArtist,
+	                                           Long... ids);
 
 }

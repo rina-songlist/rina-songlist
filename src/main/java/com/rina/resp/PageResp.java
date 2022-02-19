@@ -45,4 +45,10 @@ public class PageResp<T> extends Resp implements Serializable {
 		return resp;
 	}
 
+	public static<T> PageResp<T> failed() {
+		final PageResp<T> resp = new PageResp<>();
+		resp.setByResultCode(ResultCode.NOT_FOUND);
+		return resp;
+	}
+
 }
