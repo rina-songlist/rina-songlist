@@ -8,6 +8,7 @@ import com.rina.mapper.SongListMapper;
 import com.rina.resp.PageResp;
 import com.rina.service.SongListService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  * @author arvin
  * @date 2022/02/07
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SongListServiceImpl implements SongListService {
@@ -28,34 +30,48 @@ public class SongListServiceImpl implements SongListService {
 	@Override
 	public PageResp<List<SongListDto>> querySongLists(Integer pageSize,
 	                                                  Integer pageNum,
-	                                                  Long[] ids,
-	                                                  String nameOrArtist) {
-		final Page<Object> page = PageHelper.startPage(pageNum, pageSize);
-		List<SongListDto> songListDtoList = null;
-		int totalPages = 0;
-
-		if (ids != null && ids.length > 0) {
-			// 随机查询
-			songListDtoList = songListMapper.selectByIds(ids).stream()
-					.map(songList -> SongListDto.builder()
-							.id(songList.getSongId())
-							.name(songList.getSongName())
-							.artist(songList.getSongArtist())
-							.language(songList.getSongLanguage())
-							.build())
-					.collect(Collectors.toList());
+	                                                  String orderBy,
+	                                                  Boolean withDesc,
+	                                                  String nameOrArtist,
+	                                                  Long... ids) {
+		String orderMsg = null;
+		if (!withDesc) {
+			orderMsg = "song_" + orderBy;
 		} else {
-			// 普通查询
-			songListDtoList = songListMapper.selectByNameOrArtist(nameOrArtist).stream()
-					.map(songList -> SongListDto.builder()
-							.id(songList.getSongId())
-							.name(songList.getSongName())
-							.artist(songList.getSongArtist())
-							.language(songList.getSongLanguage())
-							.build())
-					.collect(Collectors.toList());
+			orderMsg = "song_" + orderBy + " desc";
 		}
-		totalPages = page.getPages();
+
+		final Page<Object> page = PageHelper.startPage(pageNum, pageSize, orderMsg);
+		List<SongListDto> songListDtoList = null;
+		long totalPages = 0;
+
+		try {
+			if (ids != null && ids.length > 0) {
+				// 随机查询
+				songListDtoList = songListMapper.selectByIds(ids).stream()
+						.map(songList -> SongListDto.builder()
+								.id(songList.getSongId())
+								.name(songList.getSongName())
+								.artist(songList.getSongArtist())
+								.language(songList.getSongLanguage())
+								.build())
+						.collect(Collectors.toList());
+			} else {
+				// 普通查询
+				songListDtoList = songListMapper.selectByNameOrArtist(nameOrArtist).stream()
+						.map(songList -> SongListDto.builder()
+								.id(songList.getSongId())
+								.name(songList.getSongName())
+								.artist(songList.getSongArtist())
+								.language(songList.getSongLanguage())
+								.build())
+						.collect(Collectors.toList());
+			}
+		} catch (Exception e) {
+			log.error("查询参数有误 {}", e.getLocalizedMessage());
+			return PageResp.failed();
+		}
+		totalPages = page.getTotal();
 
 		return PageResp.succeed(ResultCode.OK, songListDtoList, totalPages);
 	}

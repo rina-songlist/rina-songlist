@@ -1,20 +1,33 @@
 server:
   port: 8080
 
+logging:
+  pattern:
+    console: '%clr(%d{E HH:mm:ss.SSS}){blue} %clr(%-5p) %clr(${PID}){faint} %clr(---){faint}
+              %clr([%8.15t]){cyan} %clr(%-40.40logger{0}){blue} %clr(:){red} %clr(%m){faint}%n'
+  logback:
+    rollingpolicy:
+      clean-history-on-start: true
+      max-history: 10
 
 spring:
   datasource:
-    driver-class-name: ${DATABASE.DRIVER}
-    url: ${DATABASE.URL}
-    username: ${DATABASE.USERNAME}
-    password: ${DATABASE.PASSWORD}
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_URL}?useSSL=false&characterEncoding=UTF-8
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  profiles:
+    active: ${SPRING_ACTIVE_PROFILE:prod}
 
 mybatis:
   type-aliases-package: com.rina.domain
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:com/rina/mapper/*.xml
 
 pagehelper:
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
+
+rina:
+  jwt:
+    token-expire-time: ${TOKEN_EXPIRE_TIME:60*1000L}

@@ -1,0 +1,9 @@
+logging:
+  level:
+    com:
+      rina: debug
+
+mybatis:
+  configuration:
+    # 在控制台输出sql语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

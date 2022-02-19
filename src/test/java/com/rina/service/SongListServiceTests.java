@@ -27,14 +27,14 @@ public class SongListServiceTests {
 
 	@Test
 	void TestQuerySongListsWithNameAndArtist() throws JsonProcessingException {
-		final PageResp<List<SongListDto>> listPageResp = songListService.querySongLists(10, 1, null, null);
+		final PageResp<List<SongListDto>> listPageResp = songListService.querySongLists(10, 1, "id", false,null,null);
 		final String s = objectMapper.writeValueAsString(listPageResp);
 		System.out.println(s);
 	}
 
 	@Test
 	void TestQuerySongListsWithIds() throws JsonProcessingException {
-		final PageResp<List<SongListDto>> listPageResp = songListService.querySongLists(10, 1, new Long[]{50L, 40L}, null);
+		final PageResp<List<SongListDto>> listPageResp = songListService.querySongLists(10, 1, "name", true,null, new Long[]{50L, 40L});
 		final String s = objectMapper.writeValueAsString(listPageResp);
 		System.out.println(s);
 	}

@@ -51,6 +51,8 @@
   | ------------ | ---------------- | -------- | -------- |
   | pageSize     | 页面展示的数据量 | Integer  | 不能为空 |
   | pageNum      | 当前页数         | Integer  | 不能为空 |
+  | orderBy | 排序依据 |String|不能为空|
+  | withDesc | 是否倒序排序 |Boolean|不能为空|
   | ids          | 歌曲IDs          | Long[]   | 可以为空 |
   | nameOrArtist | 歌名或歌手名     | String   | 可以为空 |
 
@@ -59,13 +61,13 @@
 
 - 相应参数
 
-- | 参数名     | 参数说明 |
-  | ---------- | -------- |
-  | totalPages | 总页数   |
-  | id         | 歌曲ID   |
-  | name       | 歌曲名   |
-  | artist     | 歌手名   |
-  | language   | 语言     |
+- | 参数名   | 参数说明   |
+  | -------- | ---------- |
+  | total    | 总数据条数 |
+  | id       | 歌曲ID     |
+  | name     | 歌曲名     |
+  | artist   | 歌手名     |
+  | language | 语言       |
 
   
 
@@ -89,7 +91,7 @@
         "language": "日文"
       }
     ],
-    "totalPages": 1
+    "total": 2
   }
   ```
 

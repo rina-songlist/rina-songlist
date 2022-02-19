@@ -1,0 +1,6 @@
+logging:
+  file:
+    path: /var/rina_log
+  level:
+    com:
+      rina: error
