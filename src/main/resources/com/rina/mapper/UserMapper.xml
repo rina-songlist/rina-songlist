@@ -1,46 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rina.mapper.UserMapper">
-  <resultMap id="BaseResultMap" type="com.rina.domain.User">
-    <id column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="status" jdbcType="BIT" property="status" />
-    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from user
-    where user_id = #{userId,jdbcType=BIGINT}
-  </delete>
-  <insert id="insert" parameterType="com.rina.domain.User">
-    insert into user (user_id, user_name, password, 
-      status, create_by, create_time, 
-      update_by, update_time)
-    values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{status,jdbcType=BIT}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
-  </insert>
-  <update id="updateByPrimaryKey" parameterType="com.rina.domain.User">
-    update user
-    set user_name = #{userName,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      status = #{status,jdbcType=BIT},
-      create_by = #{createBy,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_by = #{updateBy,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
-    where user_id = #{userId,jdbcType=BIGINT}
-  </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select user_id, user_name, password, status, create_by, create_time, update_by, update_time
-    from user
-    where user_id = #{userId,jdbcType=BIGINT}
-  </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select user_id, user_name, password, status, create_by, create_time, update_by, update_time
-    from user
-  </select>
+	<resultMap id="BaseResultMap" type="com.rina.domain.User">
+		<id column="user_id" jdbcType="BIGINT" property="userId"/>
+		<result column="user_name" jdbcType="VARCHAR" property="userName"/>
+		<result column="password" jdbcType="VARCHAR" property="password"/>
+		<result column="status" jdbcType="BIT" property="status"/>
+		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete
+		from user
+		where user_id = #{userId,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.rina.domain.User">
+		insert into user (user_id, user_name, password,
+		                  status, create_by, create_time,
+		                  update_by, update_time)
+		values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+		        #{status,jdbcType=BIT}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		        #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.rina.domain.User">
+		update user
+		set user_name   = #{userName,jdbcType=VARCHAR},
+		    password    = #{password,jdbcType=VARCHAR},
+		    status      = #{status,jdbcType=BIT},
+		    create_by   = #{createBy,jdbcType=VARCHAR},
+		    create_time = #{createTime,jdbcType=TIMESTAMP},
+		    update_by   = #{updateBy,jdbcType=VARCHAR},
+		    update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where user_id = #{userId,jdbcType=BIGINT}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select user_id,
+		       user_name,
+		       password,
+		       status,
+		       create_by,
+		       create_time,
+		       update_by,
+		       update_time
+		from user
+		where user_id = #{userId,jdbcType=BIGINT}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select user_id,
+		       user_name,
+		       password,
+		       status,
+		       create_by,
+		       create_time,
+		       update_by,
+		       update_time
+		from user
+	</select>
+
+	<select id="login" resultMap="BaseResultMap">
+		select user_id,
+		       user_name,
+		       password,
+		       status,
+		       create_by,
+		       create_time,
+		       update_by,
+		       update_time
+		from user
+		where user_name = #{username,jdbcType=VARCHAR}
+	</select>
 </mapper>

@@ -21,4 +21,11 @@ public interface UserMapper {
     List<User> selectAll();
 
     int updateByPrimaryKey(User record);
+
+    /**
+     * 通过用户名查询用户信息（主要是登陆时使用）
+     * @param username
+     * @return
+     */
+    User login(String username);
 }
