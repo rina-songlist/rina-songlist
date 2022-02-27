@@ -22,4 +22,12 @@ public interface UserRoleMapper {
     List<UserRole> selectAll();
 
     int updateByPrimaryKey(UserRole record);
+
+    /**
+     * 通过userID查找user（与其相关的role）的详细信息
+     * @param userId
+     * @return
+     */
+    UserRole findRoleByUser(Long userId);
+
 }
