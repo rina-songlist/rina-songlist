@@ -31,4 +31,9 @@ public class UserRole implements Serializable {
 
     private Date updateTime;
 
+    /**
+     * 连表查询时存放role信息
+     */
+    private Role role;
+
 }
