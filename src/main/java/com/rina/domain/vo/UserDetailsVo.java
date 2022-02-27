@@ -1,4 +1,4 @@
-package com.rina.domain.dos;
+package com.rina.domain.vo;
 
 import lombok.*;
 
@@ -15,12 +15,18 @@ import java.io.Serializable;
 @With
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDo implements Serializable {
+public class UserDetailsVo implements Serializable {
 
 	private static final long serialVersionUID = 3019037580106318923L;
 
+	/**
+	 * 用户名
+	 */
 	private String userName;
 
+	/**
+	 * 权限名
+	 */
 	private String roleName;
 
 }

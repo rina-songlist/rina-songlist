@@ -1,7 +1,7 @@
 package com.rina.util;
 
 import com.rina.config.AppProperties;
-import com.rina.domain.dos.UserDo;
+import com.rina.domain.vo.UserDetailsVo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -33,10 +33,10 @@ public class JwtUtil {
 
 	/**
 	 * 创建token
-	 * @param userDo 简略化的user信息
+	 * @param userDetailsVo 简略化的user信息
 	 * @return 加密后的token
 	 */
-	public String createJwtToken(UserDo userDo){
+	public String createJwtToken(UserDetailsVo userDetailsVo){
 		final long now = System.currentTimeMillis();
 
 		// 将自定义的过期时间解析并换算为long
@@ -48,8 +48,8 @@ public class JwtUtil {
 
 		return Jwts.builder()
 				.setId("rina")
-				.claim("authorities", userDo.getUserName())
-				.setSubject(userDo.getRoleName())
+				.claim("authorities", userDetailsVo.getUserName())
+				.setSubject(userDetailsVo.getRoleName())
 				.setIssuedAt(new Date(now))
 				.setExpiration(new Date(now + expireTime))
 				.signWith(KEY, SignatureAlgorithm.HS512)
