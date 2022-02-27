@@ -19,13 +19,13 @@ public class SongListMapperTests {
 	private SongListMapper songListMapper;
 
 	@Test
-	public void selectByNameOrArtist() {
+	public void testSelectByNameOrArtist() {
 		final List<SongList> songList = songListMapper.selectByNameOrArtist("影炎");
 		System.out.println(songList);
 	}
 
 	@Test
-	public void selectByIds() {
+	public void testSelectByIds() {
 		final List<SongList> songList = songListMapper.selectByIds(new Long[]{50L, 40L});
 		System.out.println(songList);
 	}
