@@ -6,6 +6,7 @@ import com.rina.domain.dto.SongListDto;
 import com.rina.enums.ResultCode;
 import com.rina.mapper.SongListMapper;
 import com.rina.resp.PageResp;
+import com.rina.resp.Resp;
 import com.rina.service.SongListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,12 +29,12 @@ public class SongListServiceImpl implements SongListService {
 	private final SongListMapper songListMapper;
 
 	@Override
-	public PageResp<List<SongListDto>> querySongLists(Integer pageSize,
-	                                                  Integer pageNum,
-	                                                  String orderBy,
-	                                                  Boolean withDesc,
-	                                                  String nameOrArtist,
-	                                                  Long... ids) {
+	public Resp querySongLists(Integer pageSize,
+	                           Integer pageNum,
+	                           String orderBy,
+	                           Boolean withDesc,
+	                           String nameOrArtist,
+	                           Long... ids) {
 		String orderMsg = null;
 		if (!withDesc) {
 			orderMsg = "song_" + orderBy;
@@ -69,7 +70,7 @@ public class SongListServiceImpl implements SongListService {
 			}
 		} catch (Exception e) {
 			log.error("查询参数有误 {}", e.getLocalizedMessage());
-			return PageResp.failed();
+			return Resp.failed();
 		}
 		totalPages = page.getTotal();
 

@@ -1,9 +1,6 @@
 package com.rina.service;
 
-import com.rina.domain.dto.SongListDto;
-import com.rina.resp.PageResp;
-
-import java.util.List;
+import com.rina.resp.Resp;
 
 /**
  * 歌单展示相关的服务
@@ -23,11 +20,11 @@ public interface SongListService {
 	 * @param nameOrArtist 歌名或歌手名
 	 * @return 歌单内容
 	 */
-	PageResp<List<SongListDto>> querySongLists(Integer pageSize,
-	                                           Integer pageNum,
-	                                           String orderBy,
-	                                           Boolean withDesc,
-	                                           String nameOrArtist,
-	                                           Long... ids);
+	Resp querySongLists(Integer pageSize,
+	                    Integer pageNum,
+	                    String orderBy,
+	                    Boolean withDesc,
+	                    String nameOrArtist,
+	                    Long... ids);
 
 }
