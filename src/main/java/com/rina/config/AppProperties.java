@@ -24,7 +24,7 @@ public class AppProperties {
 	public static class Jwt {
 		private String header = "Authorization";
 		// token过期时间
-		private Long tokenExpireTime = 60_000L;
+		private String tokenExpireTime = "60*1000";
 	}
 
 }

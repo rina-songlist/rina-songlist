@@ -34,4 +34,4 @@ pagehelper:
 
 rina:
   jwt:
-    token-expire-time: ${TOKEN_EXPIRE_TIME:60*1000L}
+    token-expire-time: ${TOKEN_EXPIRE_TIME:60*1000}

@@ -38,12 +38,20 @@ public class JwtUtil {
 	 */
 	public String createJwtToken(UserDo userDo){
 		final long now = System.currentTimeMillis();
+
+		// 将自定义的过期时间解析并换算为long
+		long expireTime = 1L;
+		final String[] strings = appProperties.getJwt().getTokenExpireTime().split("\\*");
+		for (String string : strings) {
+			expireTime *= Long.parseLong(string);
+		}
+
 		return Jwts.builder()
 				.setId("rina")
 				.claim("authorities", userDo.getUserName())
 				.setSubject(userDo.getRoleName())
 				.setIssuedAt(new Date(now))
-				.setExpiration(new Date(now + appProperties.getJwt().getTokenExpireTime()))
+				.setExpiration(new Date(now + expireTime))
 				.signWith(KEY, SignatureAlgorithm.HS512)
 				.compact();
 	}
