@@ -22,6 +22,10 @@ spring:
 mybatis:
   type-aliases-package: com.rina.domain
   mapper-locations: classpath:com/rina/mapper/*.xml
+  configuration:
+    # 开启分步查询的延迟加载
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
 
 pagehelper:
   helper-dialect: mysql
