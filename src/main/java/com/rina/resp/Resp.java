@@ -45,11 +45,11 @@ public class Resp implements Serializable {
 		return resp;
 	}
 
-//	public static Resp failed() {
-//		final Resp resp = new Resp();
-//		resp.setByResultCode(ResultCode.NOT_FOUND);
-//		return resp;
-//	}
+	public static Resp failed() {
+		final Resp resp = new Resp();
+		resp.setByResultCode(ResultCode.NOT_FOUND);
+		return resp;
+	}
 
 	public static Resp failed(ResultCode resultCode) {
 		final Resp resp = new Resp();
