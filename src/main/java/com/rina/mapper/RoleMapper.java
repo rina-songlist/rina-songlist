@@ -21,4 +21,11 @@ public interface RoleMapper {
     List<Role> selectAll();
 
     int updateByPrimaryKey(Role record);
+
+    /**
+     * 通过roleID查看完整role信息
+     * @param roleId
+     * @return
+     */
+    Role findRoleNameById(Long roleId);
 }
