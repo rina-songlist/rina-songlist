@@ -146,8 +146,7 @@
 				</executions>
 				<configuration>
 					<repository>rina/${project.artifactId}</repository>
-					<!-- <tag>${project.version}</tag> -->
-					<tag>latest</tag>
+					<tag>${project.version}</tag>
 					<buildArgs>
 						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
 					</buildArgs>
