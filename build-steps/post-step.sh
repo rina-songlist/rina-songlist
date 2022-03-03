@@ -7,8 +7,11 @@ container_name="rina-songlist"
 
 echo "开始部署"
 # 查看当前版本
-this_version=`cat pom.xml | grep "version" | awk 'NR==3{print}' | sed 's/<version>//g' | sed 's/<\/version>//g' | sed 's/[[:space:]]//g'`
+this_version=`cat ../pom.xml | grep "version" | awk 'NR==3{print}' | sed 's/<version>//g' | sed 's/<\/version>//g' | sed 's/[[:space:]]//g'`
 echo "$this_version"
+
+# 登陆私服
+docker login -u jenkins --password-stdin
 
 # 更改tag
 docker tag "$image_name":"$this_version" "$image_name":latest
