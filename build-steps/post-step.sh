@@ -15,14 +15,14 @@ echo "$this_version"
 cat ./build-steps/harbor-login-pwd.txt | docker login 192.168.0.9:8084 -u jenkins --password-stdin
 
 # 更改tag
-docker tag "$image_name":"$this_version" "$image_name":latest
+#docker tag "$image_name":"$this_version" "$image_name":latest
 docker tag "$image_name":"$this_version" 192.168.0.9:8084/rina/"$container_name":"$this_version"
 docker images | grep "$image_name"
 
 # 正式开始部署
-docker run -d --name $container_name --restart=unless-stopped -p 8080:8080 --env-file ./envs/test.env -v /home/arvin/docker/projects/rina-songlist/logs:/var/rina_log "$image_name":latest
+#docker run -d --name $container_name --restart=unless-stopped -p 8080:8080 --env-file ./envs/test.env -v /home/arvin/docker/projects/rina-songlist/logs:/var/rina_log "$image_name":latest
 #docker run -d --name $container_name --restart=unless-stopped -p 8080:8080 --env-file ./envs/dev.env "$image_name":latest
-docker network connect myProjects $container_name
+#docker network connect myProjects $container_name
 
 # 推送镜像
 docker push 192.168.0.9:8084/rina/"$container_name":"$this_version"
