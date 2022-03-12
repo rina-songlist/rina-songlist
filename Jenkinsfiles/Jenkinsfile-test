@@ -1,0 +1,80 @@
+// 当前版本
+version=1.1-test
+// git代码拉取相关
+gitlab_url=http://192.168.0.9:8082
+gitlab_ssh_auth=197b44e0-5710-4cd7-b453-7f397f090f58
+git_pull_url=ssh://git@192.168.0.9:2222/ArvinXY/rina-songlist.git
+// harbor镜像仓库相关
+harbor_auth=cdaf50f6-28fc-4a2f-9049-cffe3db716d9
+harbor_url=192.168.0.9:8084
+
+pipeline {
+    agent any
+
+    stages {
+        stage('remove old containers and images') {
+            steps {
+                sh '''result=$(docker ps | grep rina-songlist)
+                            if [[ "$result" != "" ]]
+                            then
+                            echo "stop rina-songlist"
+                            docker stop rina-songlist
+                            fi
+                            result1=$(docker ps -a | grep rina-songlist)
+                            if [[ "$result1" != "" ]]
+                            then
+                            echo "rm rina-songlist"
+                            docker rm rina-songlist
+                            fi
+                            result2=$(docker images | grep rina/rina-songlist)
+                            if [[ "$result2" != "" ]]
+                            then
+                            echo "rmi rina/rina-songlist:latest"
+                            docker rmi rina/rina-songlist:latest
+                            fi'''
+            }
+        }
+        stage('pull code') {
+            checkout([$class: 'GitSCM', branches: [[name: 'test']], browser: [$class: 'GitLab', repoUrl: '${gitlab_url}'], extensions: [], userRemoteConfigs: [[credentialsId: '$gitlab_ssh_auth', url: '${git_pull_url}']]])
+        }
+        stage('code checking') {
+            steps {
+                // 引入sonar-scanner工具
+                script {
+                    scannerHome = tool 'sonar-scanner'
+                }
+                withSonarQubeEnv('dell-sonarqube') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+        stage('build project') {
+            steps {
+                sh "mvn -DskipTests=true clean package"
+            }
+        }
+        stage('push images') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: '${harbor_auth}', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    sh "docker login -u ${username} -p {password} ${harbor_url}"
+                    sh "docker tag rina/rina-songlist:${version} rina/rina-songlist:latest"
+                    sh "docker tag rina/rina-songlist:${version} 192.168.0.9:8084/rina/rina-songlist:${version}"
+                    sh "docker push 192.168.0.9:8084/rina/rina-songlist:${version}"
+                }
+            }
+        }
+        stage('make container and run') {
+            steps {
+                sh "docker run -d --name rina-songlist --restart=unless-stopped -p 8080:8080 --env-file ./envs/test.env -v /home/arvin/docker/projects/rina-songlist/logs:/var/rina_log rina/rina-songlist:latest"
+                sh "docker network connect myProjects rina-songlist"
+            }
+        }
+        stage('remove useless containers and images') {
+            steps {
+                sh "docker rmi rina/rina-songlist:${version}"
+                sh "docker rmi 192.168.0.9:8084/rina/rina-songlist:${version}"
+            }
+        }
+    }
+
+}
