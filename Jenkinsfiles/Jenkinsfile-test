@@ -1,12 +1,12 @@
 // 当前版本
-version=1.1-test
+version="1.1-test"
 // git代码拉取相关
-gitlab_url=http://192.168.0.9:8082
-gitlab_ssh_auth=197b44e0-5710-4cd7-b453-7f397f090f58
-git_pull_url=ssh://git@192.168.0.9:2222/ArvinXY/rina-songlist.git
+gitlab_url="http://192.168.0.9:8082"
+gitlab_ssh_auth="197b44e0-5710-4cd7-b453-7f397f090f58"
+git_pull_url="ssh://git@192.168.0.9:2222/ArvinXY/rina-songlist.git"
 // harbor镜像仓库相关
-harbor_auth=cdaf50f6-28fc-4a2f-9049-cffe3db716d9
-harbor_url=192.168.0.9:8084
+harbor_auth="cdaf50f6-28fc-4a2f-9049-cffe3db716d9"
+harbor_url="192.168.0.9:8084"
 
 pipeline {
     agent any
