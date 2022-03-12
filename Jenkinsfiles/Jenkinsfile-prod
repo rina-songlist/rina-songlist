@@ -13,7 +13,7 @@ pipeline {
 
     stages {
         stage('pull code') {
-            checkout([$class: 'GitSCM', branches: [[name: 'test']], browser: [$class: 'GitLab', repoUrl: '${gitlab_url}'], extensions: [], userRemoteConfigs: [[credentialsId: '$gitlab_ssh_auth', url: '${git_pull_url}']]])
+            checkout([$class: 'GitSCM', branches: [[name: 'master']], browser: [$class: 'GitLab', repoUrl: '${gitlab_url}'], extensions: [], userRemoteConfigs: [[credentialsId: '$gitlab_ssh_auth', url: '${git_pull_url}']]])
         }
         stage('code checking') {
             steps {
