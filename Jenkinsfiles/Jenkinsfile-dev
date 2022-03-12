@@ -11,7 +11,9 @@ pipeline {
 
     stages {
         stage('pull code') {
-            checkout([$class: 'GitSCM', branches: [[name: 'dev']], browser: [$class: 'GitLab', repoUrl: '${gitlab_url}'], extensions: [], userRemoteConfigs: [[credentialsId: '$gitlab_ssh_auth', url: '${git_pull_url}']]])
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: 'dev']], browser: [$class: 'GitLab', repoUrl: '${gitlab_url}'], extensions: [], userRemoteConfigs: [[credentialsId: '$gitlab_ssh_auth', url: '${git_pull_url}']]])
+            }
         }
         stage('code checking') {
             steps {
