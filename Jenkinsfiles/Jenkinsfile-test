@@ -109,7 +109,7 @@ pipeline {
                     "### [${env.JOB_NAME}](${env.JOB_URL}) ",
                     '---',
                     "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
-                    '- 状态：<font color=#52c41a >失败</font>',
+                    '- 状态：<font color=#52c41a >成功</font>',
                     "- 持续时间：${currentBuild.durationString}".split("and counting")[0],
                     "- 执行人：${currentBuild.buildCauses.shortDescription}",
                 ]
