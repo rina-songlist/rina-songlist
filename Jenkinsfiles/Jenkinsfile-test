@@ -82,5 +82,39 @@ pipeline {
             }
         }
     }
+    post {
+        failure {
+            dingtalk (
+                robot: "6478e296-12e7-4b28-ac72-aad1e7ab23b5",
+                type:'ACTION_CARD',
+                atAll: true,
+                title: "构建失败：${env.JOB_NAME}",
+                text: [
+                    "### [${env.JOB_NAME}](${env.JOB_URL}) ",
+                    '---',
+                    "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
+                    '- 状态：<font color=#EE0000 >失败</font>',
+                    "- 持续时间：${currentBuild.durationString}".split("and counting")[0],
+                    "- 执行人：${currentBuild.buildCauses.shortDescription}",
+                ]
+           )
+        }
+        success {
+            dingtalk (
+                robot: "6478e296-12e7-4b28-ac72-aad1e7ab23b5",
+                type:'ACTION_CARD',
+                atAll: true,
+                title: "构建成功：${env.JOB_NAME}",
+                text: [
+                    "### [${env.JOB_NAME}](${env.JOB_URL}) ",
+                    '---',
+                    "- 任务：[${currentBuild.displayName}](${env.BUILD_URL})",
+                    '- 状态：<font color=#52c41a >失败</font>',
+                    "- 持续时间：${currentBuild.durationString}".split("and counting")[0],
+                    "- 执行人：${currentBuild.buildCauses.shortDescription}",
+                ]
+           )
+        }
+    }
 
 }
