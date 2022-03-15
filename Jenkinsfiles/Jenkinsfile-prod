@@ -36,7 +36,7 @@ pipeline {
         stage('push images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${harbor_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
-                    sh "docker login -u ${username} -p {password} ${harbor_url}"
+                    sh "docker login -u ${username} -p ${password} ${harbor_url}"
                     sh "docker tag rina/rina-songlist:${version} 192.168.0.9:8084/rina/rina-songlist:${version}"
                     sh "docker push 192.168.0.9:8084/rina/rina-songlist:${version}"
                 }

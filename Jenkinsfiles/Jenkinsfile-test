@@ -14,24 +14,28 @@ pipeline {
     stages {
         stage('remove old containers and images') {
             steps {
-                sh '''result=$(docker ps | grep rina-songlist)
-                            if [[ "$result" != "" ]]
-                            then
-                            echo "stop rina-songlist"
-                            docker stop rina-songlist
-                            fi
-                            result1=$(docker ps -a | grep rina-songlist)
-                            if [[ "$result1" != "" ]]
-                            then
-                            echo "rm rina-songlist"
-                            docker rm rina-songlist
-                            fi
-                            result2=$(docker images | grep rina/rina-songlist)
-                            if [[ "$result2" != "" ]]
-                            then
-                            echo "rmi rina/rina-songlist:latest"
-                            docker rmi rina/rina-songlist:latest
-                            fi'''
+                script {
+                    // 停止老版本的容器
+                    def result1 = sh "docker ps | grep rina-songlist"
+                    if (result1 != "") {
+                        sh "echo 'stop rina-songlist'"
+                        sh "docker stop rina-songlist"
+                    }
+
+                    // 删除老版本的容器
+                    def result2 = sh "docker ps -a | grep rina-songlist"
+                    if (result2 != "") {
+                        sh "echo 'rm rina-songlist'"
+                        sh "docker rm rina-songlist"
+                    }
+
+                    // 删除老版本的镜像
+                    def result3 = sh "docker images | grep rina/rina-songlist"
+                    if (result3 != "") {
+                        sh "echo 'rmi rina/rina-songlist:latest'"
+                        sh "docker rmi rina/rina-songlist:latest"
+                    }
+                }
             }
         }
         stage('pull code') {
@@ -58,7 +62,7 @@ pipeline {
         stage('push images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${harbor_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
-                    sh "docker login -u ${username} -p {password} ${harbor_url}"
+                    sh "docker login -u ${username} -p ${password} ${harbor_url}"
                     sh "docker tag rina/rina-songlist:${version} rina/rina-songlist:latest"
                     sh "docker tag rina/rina-songlist:${version} 192.168.0.9:8084/rina/rina-songlist:${version}"
                     sh "docker push 192.168.0.9:8084/rina/rina-songlist:${version}"
