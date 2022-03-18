@@ -6,9 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * 自定义拦截器的配置文件
  *
@@ -24,7 +21,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(authInfoInterceptor)
-				.addPathPatterns("/private/**")
-				.excludePathPatterns("/private/login");
+				.addPathPatterns("/private/system/**");
+//				.excludePathPatterns("/private/login");
 	}
 }
