@@ -38,7 +38,7 @@ public class MdcScope implements AutoCloseable {
 			MDC.remove(key);
 			MDC.put(key, value);
 		}
-		log.error("当前key是空值！key为：" + key);
+		log.info("当前key已存入！key为：" + key);
 		return this;
 	}
 }
