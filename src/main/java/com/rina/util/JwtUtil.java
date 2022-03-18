@@ -49,7 +49,7 @@ public class JwtUtil {
 		return Jwts.builder()
 				.setId("rina")
 				.claim("authorities", userDetailsVo.getUserName())
-				.setSubject(userDetailsVo.getRoleName())
+				.setSubject(String.valueOf(userDetailsVo.getRoleId()))
 				.setIssuedAt(new Date(now))
 				.setExpiration(new Date(now + expireTime))
 				.signWith(KEY, SignatureAlgorithm.HS512)
