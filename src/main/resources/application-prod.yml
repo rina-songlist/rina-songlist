@@ -4,3 +4,17 @@ logging:
   level:
     com:
       rina: error
+
+#生产模式下禁用swagger-ui
+springfox:
+  documentation:
+    enabled: false
+    auto-startup: false
+
+#生产模式下禁用devtools
+spring:
+  profiles:
+    - prod
+  devtools:
+    restart:
+      enabled: false
