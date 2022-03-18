@@ -9,10 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -34,11 +31,12 @@ public class UserController {
 	@ApiOperation(value = "后台登陆接口", notes = "无需授权")
 	public Resp login(@RequestBody(required = true) @ApiParam(value = "用户名/密码", required = true) UserLoginDto userLoginDto,
 	                  final HttpServletResponse response) {
-		final UsualResp<String> login = userService.login(userLoginDto.getUsername(), userLoginDto.getPassword());
+		final Resp login = userService.login(userLoginDto.getUsername(), userLoginDto.getPassword());
 		if (!login.getCode().equals(ResultCode.OK.getCode())) {
 			return Resp.failed();
 		}
-		response.setHeader("Authorization", login.getData());
+		UsualResp<String> completeLoginData = (UsualResp<String>) login;
+		response.setHeader("Authorization", completeLoginData.getData());
 		return Resp.succeed();
 	}
 
