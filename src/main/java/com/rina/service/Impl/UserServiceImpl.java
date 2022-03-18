@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	private final JwtUtil jwtUtil;
 
 	@Override
-	public UsualResp<String> login(String username, String password) {
+	public Resp login(String username, String password) {
 		String token = null;
 		try {
 			final User user = userMapper.login(username);
@@ -38,15 +38,15 @@ public class UserServiceImpl implements UserService {
 			if (BCrypt.checkpw(password, user.getPassword())) {
 				final UserDetailsVo userDetailsVo = new UserDetailsVo(
 						user.getUserName(),
-						userRoleMapper.findRoleByUser(user.getUserId()).getRole().getRoleName()
+						userRoleMapper.findRoleByUser(user.getUserId()).getRoleId()
 				);
 				token = jwtUtil.createJwtToken(userDetailsVo);
 			} else {
-				return (UsualResp<String>) Resp.failed();
+				return Resp.failed();
 			}
 		} catch (Exception e) {
 			log.error("查询参数有误 {}", e.getLocalizedMessage());
-			return (UsualResp<String>) Resp.failed();
+			return Resp.failed();
 		}
 
 		return UsualResp.succeed(ResultCode.OK, token);
