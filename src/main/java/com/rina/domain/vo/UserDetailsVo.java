@@ -27,6 +27,6 @@ public class UserDetailsVo implements Serializable {
 	/**
 	 * 权限名
 	 */
-	private String roleName;
+	private Long roleId;
 
 }
