@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022/02/09
  */
 @RestController
-@RequestMapping("/song-list")
 @RequiredArgsConstructor
 @Api(tags = "歌单展示")
 public class SongListController {
 
 	private final SongListService songListService;
 
-	@GetMapping("/public-list")
+	@GetMapping("/song-list/public-list")
 	@ApiOperation(value = "普通用户所看到的歌单信息", notes = "无需鉴权")
 	public Resp publicUserSongList(@RequestParam(required = true) @ApiParam(value = "页面展示的数据量", required = true) Integer pageSize,
 	                               @RequestParam(required = true) @ApiParam(value = "当前页数", required = true) Integer pageNum,
