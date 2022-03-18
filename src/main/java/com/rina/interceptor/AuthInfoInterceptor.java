@@ -42,7 +42,7 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 			if (null != token) {
 				if (jwtUtil.validateToken(token)) {
 					// 解析出当前用户的简要信息
-					final String roleName = jwtUtil.parseClaims(token)
+					final String roleId = jwtUtil.parseClaims(token)
 							.map(Claims::getSubject)
 							.orElse(null);
 					final String userName = jwtUtil.parseClaims(token)
@@ -50,7 +50,7 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 							.orElse(null);
 
 					// 把用户信息写入MDC
-					mdcScope.put("roleName", roleName);
+					mdcScope.put("roleId", roleId);
 					mdcScope.put("userName", userName);
 					log.info("当前用户信息已写入MDC");
 					return true;
