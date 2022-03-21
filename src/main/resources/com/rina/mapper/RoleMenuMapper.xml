@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rina.mapper.RoleMenuMapper">
+	<resultMap id="BaseResultMap" type="com.rina.domain.RoleMenu">
+		<id column="role_id" jdbcType="BIGINT" property="roleId"/>
+		<id column="menu_id" jdbcType="BIGINT" property="menuId"/>
+		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete
+		from role_menu
+		where role_id = #{roleId,jdbcType=BIGINT}
+		  and menu_id = #{menuId,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.rina.domain.RoleMenu">
+		insert into role_menu (role_id, menu_id, create_by,
+		                       create_time, update_by, update_time)
+		values (#{roleId,jdbcType=BIGINT}, #{menuId,jdbcType=BIGINT}, #{createBy,jdbcType=VARCHAR},
+		        #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.rina.domain.RoleMenu">
+		update role_menu
+		set create_by   = #{createBy,jdbcType=VARCHAR},
+		    create_time = #{createTime,jdbcType=TIMESTAMP},
+		    update_by   = #{updateBy,jdbcType=VARCHAR},
+		    update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where role_id = #{roleId,jdbcType=BIGINT}
+		  and menu_id = #{menuId,jdbcType=BIGINT}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+		select role_id, menu_id, create_by, create_time, update_by, update_time
+		from role_menu
+		where role_id = #{roleId,jdbcType=BIGINT}
+		  and menu_id = #{menuId,jdbcType=BIGINT}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select role_id, menu_id, create_by, create_time, update_by, update_time
+		from role_menu
+	</select>
+
+
+	<resultMap id="roleToMap" type="com.rina.domain.RoleMenu">
+		<id column="role_id" jdbcType="BIGINT" property="roleId"/>
+		<id column="menu_id" jdbcType="BIGINT" property="menuId"/>
+		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+		<collection property="menu"
+		            column="menu_id"
+		            ofType="com.rina.domain.Menu"
+		            select="com.rina.mapper.MenuMapper.findMenuById" />
+	</resultMap>
+	<select id="findMenuByRole" parameterType="java.lang.Long" resultMap="roleToMap">
+		select role_id, menu_id, create_by, create_time, update_by, update_time
+		from role_menu
+		where role_id = #{roleId,jdbcType=BIGINT}
+	</select>
+</mapper>
