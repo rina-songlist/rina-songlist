@@ -1,5 +1,7 @@
 package com.rina.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rina.config.AppProperties;
 import com.rina.domain.vo.UserDetailsVo;
 import io.jsonwebtoken.*;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class JwtUtil {
 
 	private final AppProperties appProperties;
+	private final ObjectMapper objectMapper;
 
 	/**
 	 * 使用的加密算法
@@ -36,7 +39,7 @@ public class JwtUtil {
 	 * @param userDetailsVo 简略化的user信息
 	 * @return 加密后的token
 	 */
-	public String createJwtToken(UserDetailsVo userDetailsVo){
+	public String createJwtToken(UserDetailsVo userDetailsVo) throws JsonProcessingException {
 		final long now = System.currentTimeMillis();
 
 		// 将自定义的过期时间解析并换算为long
@@ -49,7 +52,7 @@ public class JwtUtil {
 		return Jwts.builder()
 				.setId("rina")
 				.claim("authorities", userDetailsVo.getUserName())
-				.setSubject(String.valueOf(userDetailsVo.getRoleId()))
+				.setSubject(objectMapper.writeValueAsString(userDetailsVo))
 				.setIssuedAt(new Date(now))
 				.setExpiration(new Date(now + expireTime))
 				.signWith(KEY, SignatureAlgorithm.HS512)
@@ -83,7 +86,7 @@ public class JwtUtil {
 		try {
 			final Claims claims = Jwts.parserBuilder().setSigningKey(KEY).build()
 					.parseClaimsJws(token).getBody();
-			return Optional.of(claims);
+			return Optional.ofNullable(claims);
 		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
 			return Optional.empty();
 		}
