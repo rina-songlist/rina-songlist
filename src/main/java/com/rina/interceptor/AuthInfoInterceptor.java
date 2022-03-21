@@ -1,18 +1,22 @@
 package com.rina.interceptor;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rina.util.GuavaCacheUtil;
+import com.rina.domain.vo.UserDetailsVo;
 import com.rina.enums.ResultCode;
 import com.rina.resp.Resp;
 import com.rina.util.JwtUtil;
-import com.rina.util.MdcScope;
-import io.jsonwebtoken.Claims;
+import com.rina.util.MyThreadLocal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 /**
  * 用户信息拦截器
@@ -27,6 +31,9 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 
 	private final JwtUtil jwtUtil;
 	private final ObjectMapper objectMapper;
+	private final GuavaCacheUtil cache;
+
+	private UserDetailsVo userDetails = null;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -38,31 +45,39 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 
 		final String responseBody = objectMapper.writeValueAsString(Resp.failed(ResultCode.UNAUTHORIZED));
 
-		try (MdcScope mdcScope = new MdcScope()) {
-			if (null != token) {
+		out:
+		if (null != token) {
+			if (cache.get(token) == null) {
 				if (jwtUtil.validateToken(token)) {
 					// 解析出当前用户的简要信息
-					final String roleId = jwtUtil.parseClaims(token)
-							.map(Claims::getSubject)
-							.orElse(null);
-					final String userName = jwtUtil.parseClaims(token)
-							.map(claims -> claims.get("authorities", String.class))
-							.orElse(null);
-
+					jwtUtil.parseClaims(token)
+							.ifPresent(claims -> {
+								try {
+									userDetails = objectMapper.readValue(claims.getSubject(), UserDetailsVo.class);
+								} catch (JsonProcessingException e) {
+									log.error("jackson反序列化出错：{}", e.getLocalizedMessage());
+								}
+							});
 					// 把用户信息写入MDC
-					mdcScope.put("roleId", roleId);
-					mdcScope.put("userName", userName);
+					cache.put(token, userDetails);
 					log.info("当前用户信息已写入MDC");
-					return true;
+				} else {
+					break out;
 				}
-			} else {
-				log.error("当前用户未携带token");
 			}
-		} catch (Exception e) {
-			log.error("MDC注入发生错误 {}", e.getLocalizedMessage());
+			userDetails = Optional.ofNullable(userDetails).orElse(cache.get(token));
+			MyThreadLocal.set(userDetails);
+			return true;
+		} else {
+			log.error("当前用户未携带token");
 		}
 
 		response.getWriter().append(responseBody);
 		return false;
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+		MyThreadLocal.unset();
 	}
 }
