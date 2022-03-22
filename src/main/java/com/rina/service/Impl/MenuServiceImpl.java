@@ -1,5 +1,7 @@
 package com.rina.service.Impl;
 
+import com.rina.domain.Menu;
+import com.rina.domain.RoleMenu;
 import com.rina.domain.dto.MenuDto;
 import com.rina.enums.ResultCode;
 import com.rina.mapper.MenuMapper;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +45,7 @@ public class MenuServiceImpl implements MenuService {
 			return Resp.failed();
 		} else {
 			List<MenuDto> treeMenus = TreeUtil.list2tree(menuDtos, MenuDto::getId, MenuDto::getParentId, MenuDto::getOrderValue, MenuDto::getChildren, MenuDto::setChildren);
-			return UsualResp.succeed(ResultCode.OK, treeMenus);
+			return UsualResp.succeed(treeMenus);
 		}
 	}
 
@@ -54,8 +57,93 @@ public class MenuServiceImpl implements MenuService {
 			log.error("数据库查询错误");
 			return Resp.failed();
 		} else {
-			return UsualResp.succeed(ResultCode.OK, menuDtos);
+			return UsualResp.succeed(menuDtos);
 		}
+	}
+
+	@Override
+	public Resp getSingleMenu(Long menuId) {
+		final Menu menu = menuMapper.selectByPrimaryKey(menuId);
+
+		if (menu == null) {
+			return Resp.failed();
+		}
+		final MenuDto menuDto = MenuDto.builder()
+				.id(menu.getMenuId())
+				.name(menu.getMenuName())
+				.icon(menu.getMenuIcon())
+				.url(menu.getMenuUrl())
+				.parentId(menu.getMenuParentId())
+				.orderValue(menu.getMenuOrderValue())
+				.createBy(menu.getCreateBy())
+				.updateBy(menu.getUpdateBy())
+				.build();
+
+		return UsualResp.succeed(menuDto);
+	}
+
+	@Override
+	public Resp editMenu(MenuDto menuDto) {
+		final String currentUser = MyThreadLocal.get().getUserName();
+
+		int menuResult = 0;
+		int roleResult = 0;
+		if (menuDto.getId() == null) {
+			// 添加新的的菜单
+			final Menu menu = Menu.builder()
+					.menuName(menuDto.getName())
+					.menuIcon(menuDto.getIcon())
+					.menuUrl(menuDto.getUrl())
+					.menuParentId(menuDto.getParentId())
+					.menuOrderValue(menuDto.getOrderValue())
+					.createBy(currentUser)
+					.createTime(new Date())
+					.updateBy(currentUser)
+					.updateTime(new Date())
+					.build();
+			menuResult = menuMapper.insert(menu);
+
+			// 将最新菜单加入管理员的权限组
+			final Long menuId = menuMapper.getNewestMenuId();
+			final RoleMenu roleMenu = RoleMenu.builder()
+					.roleId(1L)
+					.menuId(menuId)
+					.createBy(currentUser)
+					.createTime(new Date())
+					.updateBy(currentUser)
+					.updateTime(new Date())
+					.build();
+			roleResult = roleMenuMapper.insert(roleMenu);
+		} else {
+			// 编辑指定菜单
+			Menu menu = menuMapper.findMenuById(menuDto.getId());
+			menu = menu.withMenuName(menuDto.getName());
+			menu = menu.withMenuIcon(menuDto.getIcon());
+			menu = menu.withMenuUrl(menuDto.getUrl());
+			menu = menu.withMenuParentId(menuDto.getParentId());
+			menu = menu.withMenuOrderValue(menuDto.getOrderValue());
+			menu = menu.withUpdateBy(currentUser);
+			menu = menu.withUpdateTime(new Date());
+
+			menuResult = menuMapper.updateByPrimaryKey(menu);
+			roleResult = 1;
+		}
+
+		if (menuResult == 0 && roleResult == 0) {
+			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
+		}
+		return Resp.succeed(ResultCode.CREATED);
+	}
+
+	@Override
+	public Resp deleteMenu(Long menuId) {
+		final int menuResult = menuMapper.deleteByPrimaryKey(menuId);
+		final int roleResult = roleMenuMapper.deleteByMenuId(menuId);
+
+		if (menuResult == 0 && roleResult == 0) {
+			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
+		}
+		return Resp.succeed(ResultCode.DELETED);
 	}
 
 	/**
@@ -69,12 +157,14 @@ public class MenuServiceImpl implements MenuService {
 					.stream().map(x -> MenuDto.builder()
 							.id(x.getMenuId())
 							.name(x.getMenuName())
+							.icon(x.getMenuIcon())
 							.url(x.getMenuUrl())
 							.parentId(x.getMenuParentId())
 							.orderValue(x.getMenuOrderValue())
 							.createBy(x.getCreateBy())
 							.updateBy(x.getUpdateBy())
-							.build()).collect(Collectors.toList());
+							.build())
+					.collect(Collectors.toList());
 		} else {
 			return roleMenuMapper.findMenuByRole(roleId)
 					.stream().map(x -> MenuDto.builder()
