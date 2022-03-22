@@ -83,4 +83,8 @@
 		from menu
 		where menu_id = #{menuId,jdbcType=BIGINT}
 	</select>
+
+	<select id="getNewestMenuId" resultType="java.lang.Long">
+		select MAX(menu_id) from menu
+	</select>
 </mapper>

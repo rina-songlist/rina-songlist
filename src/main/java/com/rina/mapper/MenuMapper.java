@@ -28,4 +28,10 @@ public interface MenuMapper {
      * @return 当前菜单
      */
     Menu findMenuById(Long menuId);
+
+    /**
+     * 获取最新添加的菜单的ID
+     * @return 菜单ID
+     */
+    Long getNewestMenuId();
 }
