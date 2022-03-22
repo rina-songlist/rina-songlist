@@ -48,7 +48,7 @@ public class SwaggerConfig {
 		return Collections.singletonList(
 				SecurityContext.builder()
 						.securityReferences(defaultAuth())
-						.forPaths(PathSelectors.ant("/private/system/*"))
+						.forPaths(PathSelectors.ant("/private/system/**"))
 						.build()
 		);
 	}
