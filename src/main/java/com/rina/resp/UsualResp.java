@@ -28,4 +28,11 @@ public class UsualResp<T> extends Resp implements Serializable {
 		resp.setData(data);
 		return resp;
 	}
+
+	public static <T> UsualResp<T> succeed(T data) {
+		final UsualResp<T> resp = new UsualResp<>();
+		resp.setByResultCode(ResultCode.OK);
+		resp.setData(data);
+		return resp;
+	}
 }
