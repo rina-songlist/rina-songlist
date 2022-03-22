@@ -29,4 +29,11 @@ public interface RoleMenuMapper {
      * @return 菜单的集合
      */
     List<RoleMenu> findMenuByRole(Long roleId);
+
+    /**
+     * 通过菜单ID删除
+     * @param menuId 菜单ID
+     * @return
+     */
+    int deleteByMenuId(Long menuId);
 }

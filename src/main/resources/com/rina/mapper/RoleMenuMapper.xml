@@ -59,4 +59,9 @@
 		from role_menu
 		where role_id = #{roleId,jdbcType=BIGINT}
 	</select>
+
+	<delete id="deleteByMenuId" parameterType="java.lang.Long">
+		delete from role_menu
+		where menu_id = #{menuId,jdbcType=BIGINT}
+	</delete>
 </mapper>
