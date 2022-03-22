@@ -2,7 +2,6 @@ package com.rina.service.Impl;
 
 import com.rina.domain.User;
 import com.rina.domain.vo.UserDetailsVo;
-import com.rina.enums.ResultCode;
 import com.rina.mapper.UserMapper;
 import com.rina.mapper.UserRoleMapper;
 import com.rina.resp.Resp;
@@ -15,7 +14,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 /**
- * 用户管理和登陆相关的服务
+ * 用户管理和登陆相关的service
  *
  * @author arvin
  * @date 2022/02/28
@@ -49,6 +48,6 @@ public class UserServiceImpl implements UserService {
 			return Resp.failed();
 		}
 
-		return UsualResp.succeed(ResultCode.OK, token);
+		return UsualResp.succeed(token);
 	}
 }
