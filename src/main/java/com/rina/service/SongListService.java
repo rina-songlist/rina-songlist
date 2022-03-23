@@ -8,7 +8,7 @@ import com.rina.resp.Resp;
  * @author arvin
  * @date 2022/02/07
  */
-public interface SongListService {
+public interface SongListService extends PublicService{
 
 	/**
 	 * 查询歌单

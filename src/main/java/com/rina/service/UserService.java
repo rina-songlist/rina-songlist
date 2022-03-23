@@ -8,7 +8,7 @@ import com.rina.resp.Resp;
  * @author arvin
  * @date 2022/02/28
  */
-public interface UserService {
+public interface UserService extends PublicService{
 
 	Resp login(String username, String password);
 

@@ -9,7 +9,7 @@ import com.rina.resp.Resp;
  * @author arvin
  * @date 2022/03/15
  */
-public interface MenuService {
+public interface MenuService extends PublicService{
 
 	/**
 	 * 树形查询菜单
