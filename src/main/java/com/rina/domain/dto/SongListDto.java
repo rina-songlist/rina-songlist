@@ -1,6 +1,7 @@
 package com.rina.domain.dto;
 
 import lombok.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
+@ApiIgnore
 public class SongListDto implements Serializable {
 
 	private static final long serialVersionUID = -5350617301641447106L;

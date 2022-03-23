@@ -2,6 +2,7 @@ package com.rina.resp;
 
 import com.rina.enums.ResultCode;
 import lombok.Data;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.Serializable;
 
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @date 2022/02/07
  */
 @Data
+@ApiIgnore
 public class Resp implements Serializable {
 
 	private static final long serialVersionUID = 167542788756270620L;

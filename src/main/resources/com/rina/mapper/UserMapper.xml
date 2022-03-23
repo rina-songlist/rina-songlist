@@ -71,4 +71,8 @@
 		from user
 		where user_name = #{username,jdbcType=VARCHAR}
 	</select>
+
+	<select id="getNewestUserId" resultType="java.lang.Long">
+		select MAX(user_id) from user
+	</select>
 </mapper>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.rina.mapper.UserRoleMapper">
-	<resultMap id="BaseResultMap" type="com.rina.domain.UserRole">
+<mapper namespace="com.rina.mapper.RoleUserMapper">
+	<resultMap id="BaseResultMap" type="com.rina.domain.RoleUser">
 		<id column="role_id" jdbcType="BIGINT" property="roleId"/>
 		<id column="user_id" jdbcType="BIGINT" property="userId"/>
 		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
@@ -11,18 +11,18 @@
 	</resultMap>
 	<delete id="deleteByPrimaryKey" parameterType="map">
 		delete
-		from user_role
+		from role_user
 		where role_id = #{roleId,jdbcType=BIGINT}
 		  and user_id = #{userId,jdbcType=BIGINT}
 	</delete>
-	<insert id="insert" parameterType="com.rina.domain.UserRole">
-		insert into user_role (role_id, user_id, create_by,
+	<insert id="insert" parameterType="com.rina.domain.RoleUser">
+		insert into role_user (role_id, user_id, create_by,
 		                       create_time, update_by, update_time)
 		values (#{roleId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{createBy,jdbcType=VARCHAR},
 		        #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
 	</insert>
-	<update id="updateByPrimaryKey" parameterType="com.rina.domain.UserRole">
-		update user_role
+	<update id="updateByPrimaryKey" parameterType="com.rina.domain.RoleUser">
+		update role_user
 		set create_by   = #{createBy,jdbcType=VARCHAR},
 		    create_time = #{createTime,jdbcType=TIMESTAMP},
 		    update_by   = #{updateBy,jdbcType=VARCHAR},
@@ -32,17 +32,17 @@
 	</update>
 	<select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
 		select role_id, user_id, create_by, create_time, update_by, update_time
-		from user_role
+		from role_user
 		where role_id = #{roleId,jdbcType=BIGINT}
 		  and user_id = #{userId,jdbcType=BIGINT}
 	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
 		select role_id, user_id, create_by, create_time, update_by, update_time
-		from user_role
+		from role_user
 	</select>
 
 
-	<resultMap id="UserToRole" type="com.rina.domain.UserRole">
+	<resultMap id="UserToRole" type="com.rina.domain.RoleUser">
 		<id column="role_id" jdbcType="BIGINT" property="roleId"/>
 		<id column="user_id" jdbcType="BIGINT" property="userId"/>
 		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
@@ -56,7 +56,12 @@
 	</resultMap>
 	<select id="findRoleByUser" parameterType="java.lang.Long" resultMap="UserToRole">
 		select role_id, user_id, create_by, create_time, update_by, update_time
-		from user_role
+		from role_user
 		where user_id = #{userId,jdbcType=BIGINT}
 	</select>
+
+	<delete id="deleteByUserId" parameterType="java.lang.Long">
+		delete from role_user
+		where user_id = #{userId,jdbcType=BIGINT}
+	</delete>
 </mapper>

@@ -28,4 +28,10 @@ public interface UserMapper {
      * @return
      */
     User login(String username);
+
+    /**
+     * 获取最新的用户ID
+     * @return 用户ID
+     */
+    Long getNewestUserId();
 }

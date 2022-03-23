@@ -41,7 +41,7 @@ public class MenuController {
 	}
 
 	@PutMapping("/menu")
-	@ApiOperation(value = "添加/编辑单一菜单", notes = "需要授权")
+	@ApiOperation(value = "添加/编辑单一菜单", notes = "需要授权，添加菜单时默认只有菜单权限")
 	public Resp editMenu(@RequestBody(required = true) @ApiParam(value = "菜单详情", required = true) MenuDto menuDto) {
 		return menuService.editMenu(menuDto);
 	}

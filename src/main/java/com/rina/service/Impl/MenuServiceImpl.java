@@ -3,13 +3,13 @@ package com.rina.service.Impl;
 import com.rina.domain.Menu;
 import com.rina.domain.RoleMenu;
 import com.rina.domain.dto.MenuDto;
-import com.rina.enums.ResultCode;
 import com.rina.mapper.MenuMapper;
 import com.rina.mapper.RoleMenuMapper;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.MenuService;
 import com.rina.util.MyThreadLocal;
+import com.rina.util.RespUtils;
 import com.rina.util.TreeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class MenuServiceImpl implements MenuService {
 		final List<MenuDto> menuDtos = queryMenus2menuDtos(roleId);
 
 		if (menuDtos == null) {
-			log.error("数据库查询错误");
+			log.error("数据库操作错误");
 			return Resp.failed();
 		} else {
 			List<MenuDto> treeMenus = TreeUtil.list2tree(menuDtos, MenuDto::getId, MenuDto::getParentId, MenuDto::getOrderValue, MenuDto::getChildren, MenuDto::setChildren);
@@ -53,12 +53,7 @@ public class MenuServiceImpl implements MenuService {
 	public Resp listMenus() {
 		final List<MenuDto> menuDtos = queryMenus2menuDtos(null);
 
-		if (menuDtos == null) {
-			log.error("数据库查询错误");
-			return Resp.failed();
-		} else {
-			return UsualResp.succeed(menuDtos);
-		}
+		return RespUtils.queryData(menuDtos);
 	}
 
 	@Override
@@ -66,6 +61,7 @@ public class MenuServiceImpl implements MenuService {
 		final Menu menu = menuMapper.getOneMenu(menuId);
 
 		if (menu == null) {
+			log.info("查询数据不存在");
 			return Resp.failed();
 		}
 		final MenuDto menuDto = MenuDto.builder()
@@ -117,11 +113,21 @@ public class MenuServiceImpl implements MenuService {
 		} else {
 			// 编辑指定菜单
 			Menu menu = menuMapper.findMenuById(menuDto.getId());
-			menu = menu.withMenuName(menuDto.getName());
-			menu = menu.withMenuIcon(menuDto.getIcon());
-			menu = menu.withMenuUrl(menuDto.getUrl());
+
+			// 更新前做数据可用性检查
+			if (dataUsableCheck(menuDto.getName())) {
+				menu = menu.withMenuName(menuDto.getName());
+			}
+			if (dataUsableCheck(menuDto.getIcon())) {
+				menu = menu.withMenuIcon(menuDto.getIcon());
+			}
+			if (dataUsableCheck(menuDto.getUrl())) {
+				menu = menu.withMenuUrl(menuDto.getUrl());
+			}
 			menu = menu.withMenuParentId(menuDto.getParentId());
-			menu = menu.withMenuOrderValue(menuDto.getOrderValue());
+			if (dataUsableCheck(menuDto.getOrderValue())) {
+				menu = menu.withMenuOrderValue(menuDto.getOrderValue());
+			}
 			menu = menu.withUpdateBy(currentUser);
 			menu = menu.withUpdateTime(new Date());
 
@@ -129,10 +135,7 @@ public class MenuServiceImpl implements MenuService {
 			roleResult = 1;
 		}
 
-		if (menuResult == 0 && roleResult == 0) {
-			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
-		}
-		return Resp.succeed(ResultCode.CREATED);
+		return RespUtils.editData(menuResult, roleResult);
 	}
 
 	@Override
@@ -140,10 +143,7 @@ public class MenuServiceImpl implements MenuService {
 		final int menuResult = menuMapper.deleteOneMenu(menuId);
 		final int roleResult = roleMenuMapper.deleteByMenuId(menuId);
 
-		if (menuResult == 0 && roleResult == 0) {
-			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
-		}
-		return Resp.succeed(ResultCode.DELETED);
+		return RespUtils.deleteData(menuResult, roleResult);
 	}
 
 	/**

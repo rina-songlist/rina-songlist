@@ -11,14 +11,14 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @date 2022/02/28
  */
 @SpringBootTest
-public class UserRoleMapperTests {
+public class RoleUserMapperTests {
 
 	@Autowired
-	private UserRoleMapper userRoleMapper;
+	private RoleUserMapper roleUserMapper;
 
 	@Test
 	public void TestFindRoleByUser(){
-		System.out.println(userRoleMapper.findRoleByUser(1L));
+		System.out.println(roleUserMapper.findRoleByUser(1L));
 	}
 
 }
