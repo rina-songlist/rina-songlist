@@ -63,7 +63,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Resp getSingleMenu(Long menuId) {
-		final Menu menu = menuMapper.selectByPrimaryKey(menuId);
+		final Menu menu = menuMapper.getOneMenu(menuId);
 
 		if (menu == null) {
 			return Resp.failed();
@@ -125,7 +125,7 @@ public class MenuServiceImpl implements MenuService {
 			menu = menu.withUpdateBy(currentUser);
 			menu = menu.withUpdateTime(new Date());
 
-			menuResult = menuMapper.updateByPrimaryKey(menu);
+			menuResult = menuMapper.updateOneMenuByMenuId(menu);
 			roleResult = 1;
 		}
 
@@ -137,7 +137,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Resp deleteMenu(Long menuId) {
-		final int menuResult = menuMapper.deleteByPrimaryKey(menuId);
+		final int menuResult = menuMapper.deleteOneMenu(menuId);
 		final int roleResult = roleMenuMapper.deleteByMenuId(menuId);
 
 		if (menuResult == 0 && roleResult == 0) {
@@ -153,7 +153,7 @@ public class MenuServiceImpl implements MenuService {
 	 */
 	private List<MenuDto> queryMenus2menuDtos(Long roleId) {
 		if (roleId == null) {
-			return menuMapper.selectAll()
+			return menuMapper.getAllMenus()
 					.stream().map(x -> MenuDto.builder()
 							.id(x.getMenuId())
 							.name(x.getMenuName())
