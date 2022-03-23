@@ -1,17 +1,25 @@
 package com.rina.service.Impl;
 
+import com.rina.domain.RoleUser;
 import com.rina.domain.User;
+import com.rina.domain.dto.UserDto;
 import com.rina.domain.vo.UserDetailsVo;
 import com.rina.mapper.UserMapper;
-import com.rina.mapper.UserRoleMapper;
+import com.rina.mapper.RoleUserMapper;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.UserService;
 import com.rina.util.JwtUtil;
+import com.rina.util.MyThreadLocal;
+import com.rina.util.RespUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户管理和登陆相关的service
@@ -25,7 +33,7 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
 	private final UserMapper userMapper;
-	private final UserRoleMapper userRoleMapper;
+	private final RoleUserMapper roleUserMapper;
 	private final JwtUtil jwtUtil;
 
 	@Override
@@ -37,7 +45,7 @@ public class UserServiceImpl implements UserService {
 			if (BCrypt.checkpw(password, user.getPassword())) {
 				final UserDetailsVo userDetailsVo = new UserDetailsVo(
 						user.getUserName(),
-						userRoleMapper.findRoleByUser(user.getUserId()).getRoleId()
+						roleUserMapper.findRoleByUser(user.getUserId()).getRoleId()
 				);
 				token = jwtUtil.createJwtToken(userDetailsVo);
 			} else {
@@ -49,5 +57,103 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return UsualResp.succeed(token);
+	}
+
+	@Override
+	public Resp listUsers() {
+		final List<UserDto> userDtos = userMapper.selectAll()
+				.stream().map(x -> UserDto.builder()
+						.id(x.getUserId())
+						.userName(x.getUserName())
+						.status(x.getStatus())
+						.createBy(x.getCreateBy())
+						.updateBy(x.getUpdateBy())
+						.build())
+				.peek(x -> x.setRoleName(roleUserMapper.findRoleByUser(x.getId())
+						.getRole().getRoleName()))
+				.collect(Collectors.toList());
+
+		return RespUtils.queryData(userDtos);
+	}
+
+	@Override
+	public Resp getSingleUser(Long userId) {
+		final User user = userMapper.selectByPrimaryKey(userId);
+
+		if (user == null) {
+			log.error("查询数据不存在");
+			return Resp.failed();
+		}
+
+		final UserDto userDto = UserDto.builder()
+				.id(userId)
+				.userName(user.getUserName())
+				.status(user.getStatus())
+				.roleName(roleUserMapper.findRoleByUser(userId)
+						.getRole().getRoleName())
+				.createBy(user.getCreateBy())
+				.updateBy(user.getUpdateBy())
+				.build();
+
+		return UsualResp.succeed(userDto);
+	}
+
+	@Override
+	public Resp editUser(UserDto userDto) {
+		final String currentUser = MyThreadLocal.get().getUserName();
+
+		int userResult = 0;
+		int roleResult = 0;
+		if (userDto.getId() == null) {
+			// 添加一个用户
+			final User user = User.builder()
+					.userName(userDto.getUserName())
+					.password(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()))
+					.status(userDto.getStatus())
+					.createBy(currentUser)
+					.createTime(new Date())
+					.updateBy(currentUser)
+					.updateTime(new Date())
+					.build();
+			userResult = userMapper.insert(user);
+
+			final Long userId = userMapper.getNewestUserId();
+			final RoleUser roleUser = RoleUser.builder()
+					.roleId(2L)
+					.userId(userId)
+					.createBy(currentUser)
+					.createTime(new Date())
+					.updateBy(currentUser)
+					.updateTime(new Date())
+					.build();
+			roleResult = roleUserMapper.insert(roleUser);
+		} else {
+			// 更改一个用户
+			User user = userMapper.selectByPrimaryKey(userDto.getId());
+
+			// 更新前做数据可用性检查
+			if (dataUsableCheck(userDto.getUserName())) {
+				user = user.withUserName(userDto.getUserName());
+			}
+			if (dataUsableCheck(userDto.getPassword())) {
+				user = user.withPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()));
+			}
+			user = user.withStatus(userDto.getStatus());
+			user = user.withUpdateBy(currentUser);
+			user = user.withUpdateTime(new Date());
+
+			userResult = userMapper.updateByPrimaryKey(user);
+			roleResult = 1;
+		}
+
+		return RespUtils.editData(userResult, roleResult);
+	}
+
+	@Override
+	public Resp deleteUser(Long userId) {
+		final int userResult = userMapper.deleteByPrimaryKey(userId);
+		final int roleResult = roleUserMapper.deleteByUserId(userId);
+
+		return RespUtils.deleteData(userResult, roleResult);
 	}
 }
