@@ -17,17 +17,6 @@ pipeline {
                 checkout([$class: 'GitSCM', branches: [[name: 'master']], browser: [$class: 'GitLab', repoUrl: "${gitlab_url}"], extensions: [], userRemoteConfigs: [[credentialsId: "${gitlab_ssh_auth}", url: "${git_pull_url}"]]])
             }
         }
-        stage('code checking') {
-            steps {
-                // 引入sonar-scanner工具
-                script {
-                    scannerHome = tool 'sonar-scanner'
-                }
-                withSonarQubeEnv('dell-sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
         stage('build project') {
             steps {
                 sh "mvn -DskipTests=true clean package"
