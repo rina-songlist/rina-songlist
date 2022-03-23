@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * user_role表所对应的实体类
+ * role_user表所对应的实体类
  *
  * @author arvin
  */
@@ -15,7 +15,7 @@ import java.util.Date;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRole implements Serializable {
+public class RoleUser implements Serializable {
 
     private static final long serialVersionUID = 457992597942856703L;
 
