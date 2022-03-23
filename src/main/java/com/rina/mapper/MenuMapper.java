@@ -12,15 +12,40 @@ import java.util.List;
  */
 @Mapper
 public interface MenuMapper {
-    int deleteByPrimaryKey(Long menuId);
 
-    int insert(Menu record);
+    /**
+     * 删除一个菜单
+     * @param menuId 菜单ID
+     * @return
+     */
+    int deleteOneMenu(Long menuId);
 
-    Menu selectByPrimaryKey(Long menuId);
+    /**
+     * 添加一个新菜单
+     * @param menu 菜单详情
+     * @return
+     */
+    int insert(Menu menu);
 
-    List<Menu> selectAll();
+    /**
+     * 通过菜单ID获取一个菜单
+     * @param menuId 菜单ID
+     * @return
+     */
+    Menu getOneMenu(Long menuId);
 
-    int updateByPrimaryKey(Menu record);
+    /**
+     * 获取所有菜单
+     * @return
+     */
+    List<Menu> getAllMenus();
+
+    /**
+     * 通过菜单ID更新一个菜单
+     * @param menu 菜单详情
+     * @return
+     */
+    int updateOneMenuByMenuId(Menu menu);
 
     /**
      * 通过菜单ID查询当前菜单

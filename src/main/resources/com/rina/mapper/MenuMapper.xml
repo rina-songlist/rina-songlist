@@ -13,7 +13,7 @@
 		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
 	</resultMap>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	<delete id="deleteOneMenu" parameterType="java.lang.Long">
 		delete
 		from menu
 		where menu_id = #{menuId,jdbcType=BIGINT}
@@ -28,7 +28,7 @@
 		        #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
 		        #{updateTime,jdbcType=TIMESTAMP})
 	</insert>
-	<update id="updateByPrimaryKey" parameterType="com.rina.domain.Menu">
+	<update id="updateOneMenuByMenuId" parameterType="com.rina.domain.Menu">
 		update menu
 		set menu_name        = #{menuName,jdbcType=VARCHAR},
 		    menu_icon        = #{menuIcon,jdbcType=VARCHAR},
@@ -41,7 +41,7 @@
 		    update_time      = #{updateTime,jdbcType=TIMESTAMP}
 		where menu_id = #{menuId,jdbcType=BIGINT}
 	</update>
-	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	<select id="getOneMenu" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select menu_id,
 		       menu_name,
 		       menu_icon,
@@ -55,7 +55,7 @@
 		from menu
 		where menu_id = #{menuId,jdbcType=BIGINT}
 	</select>
-	<select id="selectAll" resultMap="BaseResultMap">
+	<select id="getAllMenus" resultMap="BaseResultMap">
 		select menu_id,
 		       menu_name,
 		       menu_icon,
