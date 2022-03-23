@@ -117,11 +117,21 @@ public class MenuServiceImpl implements MenuService {
 		} else {
 			// 编辑指定菜单
 			Menu menu = menuMapper.findMenuById(menuDto.getId());
-			menu = menu.withMenuName(menuDto.getName());
-			menu = menu.withMenuIcon(menuDto.getIcon());
-			menu = menu.withMenuUrl(menuDto.getUrl());
+
+			// 更新前做数据可用性检查
+			if (dataUsableCheck(menuDto.getName())) {
+				menu = menu.withMenuName(menuDto.getName());
+			}
+			if (dataUsableCheck(menuDto.getIcon())) {
+				menu = menu.withMenuIcon(menuDto.getIcon());
+			}
+			if (dataUsableCheck(menuDto.getUrl())) {
+				menu = menu.withMenuUrl(menuDto.getUrl());
+			}
 			menu = menu.withMenuParentId(menuDto.getParentId());
-			menu = menu.withMenuOrderValue(menuDto.getOrderValue());
+			if (dataUsableCheck(menuDto.getOrderValue())) {
+				menu = menu.withMenuOrderValue(menuDto.getOrderValue());
+			}
 			menu = menu.withUpdateBy(currentUser);
 			menu = menu.withUpdateTime(new Date());
 
