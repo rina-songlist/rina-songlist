@@ -15,7 +15,12 @@ import java.util.List;
 public interface RoleMenuMapper {
     int deleteByPrimaryKey(@Param("roleId") Long roleId, @Param("menuId") Long menuId);
 
-    int insert(RoleMenu record);
+    /**
+     * 添加一个新菜单权限
+     * @param roleMenu 菜单权限详情
+     * @return
+     */
+    int insert(RoleMenu roleMenu);
 
     RoleMenu selectByPrimaryKey(@Param("roleId") Long roleId, @Param("menuId") Long menuId);
 
