@@ -46,7 +46,7 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 		final String responseBody = objectMapper.writeValueAsString(Resp.failed(ResultCode.UNAUTHORIZED));
 
 		out:
-		if (null != token) {
+		if (null != token && !"".equals(token) && !"undefined".equals(token)) {
 			if (cache.get(token) == null) {
 				if (jwtUtil.validateToken(token)) {
 					// 解析出当前用户的简要信息
