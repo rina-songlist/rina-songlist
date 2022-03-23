@@ -31,7 +31,8 @@ public interface MenuService extends PublicService{
 	Resp getSingleMenu(Long menuId);
 
 	/**
-	 * 添加(更改)一个新的菜单
+	 * 添加(更改)一个的菜单
+	 * 注：添加菜单时默认只有菜单权限
 	 * @param menuDto 菜单内容
 	 * @return
 	 */
