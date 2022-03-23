@@ -2,6 +2,7 @@ package com.rina.domain.dto;
 
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -28,11 +29,13 @@ public class MenuDto implements Serializable {
 	/**
 	 * 菜单名
 	 */
+	@NotNull
 	private String name;
 
 	/**
 	 * 菜单对应图标
 	 */
+	@NotNull
 	private String icon;
 
 	/**
@@ -48,6 +51,7 @@ public class MenuDto implements Serializable {
 	/**
 	 * 当前层级的排序顺序
 	 */
+	@NotNull
 	private Long orderValue;
 
 	/**
