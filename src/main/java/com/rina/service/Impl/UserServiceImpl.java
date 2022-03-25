@@ -104,6 +104,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Resp editUser(UserDto userDto) {
 		final String currentUser = MyThreadLocal.get().getUserName();
+		log.info("当前用户为：{}", currentUser);
 
 		int userResult = 0;
 		int roleResult = 0;
