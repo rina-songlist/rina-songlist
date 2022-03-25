@@ -81,6 +81,7 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public Resp editMenu(MenuDto menuDto) {
 		final String currentUser = MyThreadLocal.get().getUserName();
+		log.info("当前用户为：{}", currentUser);
 
 		int menuResult = 0;
 		int roleResult = 0;
