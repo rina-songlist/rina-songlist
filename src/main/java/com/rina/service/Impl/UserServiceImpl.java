@@ -4,8 +4,7 @@ import com.rina.domain.RoleUser;
 import com.rina.domain.User;
 import com.rina.domain.dto.UserDto;
 import com.rina.domain.vo.UserDetailsVo;
-import com.rina.mapper.UserMapper;
-import com.rina.mapper.RoleUserMapper;
+import com.rina.mapper.*;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.UserService;
@@ -34,6 +33,10 @@ public class UserServiceImpl implements UserService {
 
 	private final UserMapper userMapper;
 	private final RoleUserMapper roleUserMapper;
+	private final MenuMapper menuMapper;
+	private final RoleMapper roleMapper;
+	private final RoleMenuMapper roleMenuMapper;
+	private final SongListMapper songListMapper;
 	private final JwtUtil jwtUtil;
 
 	@Override
@@ -61,7 +64,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp listUsers() {
-		final List<UserDto> userDtos = userMapper.selectAll()
+		final List<UserDto> userDtos = userMapper.getAllUsers()
 				.stream().map(x -> UserDto.builder()
 						.id(x.getUserId())
 						.userName(x.getUserName())
@@ -78,7 +81,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp getSingleUser(Long userId) {
-		final User user = userMapper.selectByPrimaryKey(userId);
+		final User user = userMapper.getOneUser(userId);
 
 		if (user == null) {
 			log.error("查询数据不存在");
@@ -129,7 +132,7 @@ public class UserServiceImpl implements UserService {
 			roleResult = roleUserMapper.insert(roleUser);
 		} else {
 			// 更改一个用户
-			User user = userMapper.selectByPrimaryKey(userDto.getId());
+			User user = userMapper.getOneUser(userDto.getId());
 
 			// 更新前做数据可用性检查
 			if (dataUsableCheck(userDto.getUserName())) {
@@ -142,8 +145,13 @@ public class UserServiceImpl implements UserService {
 			user = user.withUpdateBy(currentUser);
 			user = user.withUpdateTime(new Date());
 
-			userResult = userMapper.updateByPrimaryKey(user);
-			roleResult = 1;
+			userResult = userMapper.updateOneUserByUserId(user);
+			userMapper.updateEditorName(currentUser);
+			roleResult = roleUserMapper.updateEditorName(currentUser);
+			menuMapper.updateEditorName(currentUser);
+			roleMapper.updateEditorName(currentUser);
+			roleMenuMapper.updateEditorName(currentUser);
+			songListMapper.updateEditorName(currentUser);
 		}
 
 		return RespUtils.editData(userResult, roleResult);
@@ -151,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp deleteUser(Long userId) {
-		final int userResult = userMapper.deleteByPrimaryKey(userId);
+		final int userResult = userMapper.deleteOneUser(userId);
 		final int roleResult = roleUserMapper.deleteByUserId(userId);
 
 		return RespUtils.deleteData(userResult, roleResult);
