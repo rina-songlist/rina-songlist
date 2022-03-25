@@ -1,3 +1,37 @@
+-- ----------------------------
+-- Table structure for menu
+-- ----------------------------
+
+INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, '系统管理', 'iconfont icon-activity', '', NULL, 1, 'admin', '0004-02-20 02:38:38', 'admin', '0004-02-20 02:38:38');
+INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, '用户展示', 'iconfont icon-createtask', NULL, NULL, 2, 'admin', '2022-02-19 17:46:32', 'admin', '2022-02-19 17:46:32');
+INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (3, '用户管理', 'iconfont icon-workbench', 'system/users', 1, 1, 'admin', '2022-02-19 17:47:45', 'admin', '2022-02-19 17:47:45');
+INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (4, '角色管理', 'iconfont icon-group', 'system/role', 1, 2, 'admin', '2022-02-19 17:52:20', 'admin', '2022-02-19 17:52:20');
+INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (5, '菜单管理', 'iconfont icon-workbench', 'system/menu', 1, 3, 'admin', '2022-02-19 17:52:47', 'admin', '2022-02-19 17:52:47');
+
+-- ----------------------------
+-- Table structure for role
+-- ----------------------------
+INSERT INTO `role` (`role_id`, `role_name`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 'admin', 'admin', '0004-02-09 09:54:25', 'admin', '0004-02-09 09:54:25');
+INSERT INTO `role` (`role_id`, `role_name`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 'guest', 'admin', '2022-03-23 16:11:40', 'admin', '2022-03-23 16:11:40');
+
+-- ----------------------------
+-- Table structure for role_menu
+-- ----------------------------
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 1, 'admin', '2022-03-15 08:35:03', 'admin', '2022-03-15 08:35:03');
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 2, 'admin', '2022-03-15 08:35:08', 'admin', '2022-03-15 08:35:08');
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 3, 'admin', '2022-03-15 08:35:14', 'admin', '2022-03-15 08:35:14');
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 4, 'admin', '2022-03-15 08:35:19', 'admin', '2022-03-15 08:35:19');
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 5, 'admin', '2022-03-15 08:35:23', 'admin', '2022-03-15 08:35:23');
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 6, 'admin', '2022-03-15 08:35:28', 'admin', '2022-03-15 08:35:28');
+
+-- ----------------------------
+-- Table structure for role_user
+-- ----------------------------
+INSERT INTO `role_user` (`role_id`, `user_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 1, 'admin', '0004-02-09 09:54:25', 'admin', '0004-02-09 09:54:25');
+
+-- ----------------------------
+-- Table structure for song_list
+-- ----------------------------
 INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, create_by, create_time, update_by, update_time) VALUES (1, '残酷な天使のテーゼ', '高橋洋子', '日文', 'admin', '2022-02-06 06:47:07', 'admin', '2022-02-06 06:47:07');
 INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, create_by, create_time, update_by, update_time) VALUES (2, 'Oblivious', 'Kalafina', '日文', 'admin', '2022-02-06 06:47:07', 'admin', '2022-02-06 06:47:07');
 INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, create_by, create_time, update_by, update_time) VALUES (3, 'あなたがいた森', '樹海', '日文', 'admin', '2022-02-06 06:47:07', 'admin', '2022-02-06 06:47:07');
@@ -228,3 +262,8 @@ INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, crea
 INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, create_by, create_time, update_by, update_time) VALUES (228, 'とおせんぼ', 'vocaloid', '日文', 'admin', '2022-02-06 06:47:08', 'admin', '2022-02-06 06:47:08');
 INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, create_by, create_time, update_by, update_time) VALUES (229, 'daze', 'vocaloid', '日文', 'admin', '2022-02-06 06:47:08', 'admin', '2022-02-06 06:47:08');
 INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, create_by, create_time, update_by, update_time) VALUES (230, 'days', 'vocaloid', '日文', 'admin', '2022-02-06 06:47:08', 'admin', '2022-02-06 06:47:08');
+
+-- ----------------------------
+-- Table structure for user
+-- ----------------------------
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `status`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 'admin', '$2a$10$THJaKjA.PHhMXwNvDasp3egCjsJe8OGXlA96D7BIUaRGEGPk8EkF.', 1, 'admin', '0004-02-09 09:54:25', 'admin', '0004-02-09 09:54:25');
