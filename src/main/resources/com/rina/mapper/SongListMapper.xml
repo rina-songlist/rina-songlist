@@ -11,7 +11,7 @@
 		<result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
 	</resultMap>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	<delete id="deleteOneSong" parameterType="java.lang.Long">
 		delete
 		from song_list
 		where song_id = #{songId,jdbcType=BIGINT}
@@ -24,7 +24,7 @@
 		        #{songLanguage,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		        #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
 	</insert>
-	<update id="updateByPrimaryKey" parameterType="com.rina.domain.SongList">
+	<update id="updateOneSongBySongId" parameterType="com.rina.domain.SongList">
 		update song_list
 		set song_name     = #{songName,jdbcType=VARCHAR},
 		    song_artist   = #{songArtist,jdbcType=VARCHAR},
@@ -35,7 +35,7 @@
 		    update_time   = #{updateTime,jdbcType=TIMESTAMP}
 		where song_id = #{songId,jdbcType=BIGINT}
 	</update>
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+	<select id="getOneSongBySongId" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select song_id,
 		       song_name,
 		       song_artist,
