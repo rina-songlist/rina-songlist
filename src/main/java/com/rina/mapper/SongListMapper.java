@@ -11,15 +11,36 @@ import java.util.List;
  */
 @Mapper
 public interface SongListMapper {
-    int deleteByPrimaryKey(Long songId);
 
-    int insert(SongList record);
+    /**
+     * 通过歌曲ID删除一首歌
+     * @param songId 歌曲ID
+     * @return
+     */
+    int deleteOneSong(Long songId);
 
-    SongList selectByPrimaryKey(Long songId);
+    /**
+     * 添加一首歌
+     * @param songList 歌单详情
+     * @return
+     */
+    int insert(SongList songList);
+
+    /**
+     * 通过歌曲ID获取一首歌
+     * @param songId 歌曲ID
+     * @return
+     */
+    SongList getOneSongBySongId(Long songId);
 
     List<SongList> selectAll();
 
-    int updateByPrimaryKey(SongList record);
+    /**
+     * 通过歌曲ID更新一首歌
+     * @param songList 歌单详情
+     * @return
+     */
+    int updateOneSongBySongId(SongList songList);
 
     /**
      * 条件搜索歌单
