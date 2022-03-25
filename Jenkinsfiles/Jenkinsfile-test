@@ -1,5 +1,5 @@
 // 当前版本
-version="1.1-test"
+version="1.2-test"
 // git代码拉取相关
 gitlab_url="http://192.168.0.9:8082"
 gitlab_ssh_auth="197b44e0-5710-4cd7-b453-7f397f090f58"
