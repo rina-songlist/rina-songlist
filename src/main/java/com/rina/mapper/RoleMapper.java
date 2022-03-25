@@ -28,4 +28,11 @@ public interface RoleMapper {
      * @return
      */
     Role findRoleNameById(Long roleId);
+
+    /**
+     * 用户名更新时更新表中的创建者和更新者
+     * @param newEditor 新的用户名
+     * @return
+     */
+    int updateEditorName(String newEditor);
 }

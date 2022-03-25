@@ -87,4 +87,13 @@
 	<select id="getNewestMenuId" resultType="java.lang.Long">
 		select MAX(menu_id) from menu
 	</select>
+
+	<update id="updateEditorName" parameterType="java.lang.String">
+		update menu
+		set create_by = #{newEditor,jdbcType=VARCHAR}
+		where create_by = #{newEditor,jdbcType=VARCHAR};
+		update menu
+		set update_by = #{newEditor,jdbcType=VARCHAR}
+		where update_by = #{newEditor,jdbcType=VARCHAR};
+	</update>
 </mapper>

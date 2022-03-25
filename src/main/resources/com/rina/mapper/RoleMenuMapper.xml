@@ -64,4 +64,13 @@
 		delete from role_menu
 		where menu_id = #{menuId,jdbcType=BIGINT}
 	</delete>
+
+	<update id="updateEditorName" parameterType="java.lang.String">
+		update role_menu
+		set create_by = #{newEditor,jdbcType=VARCHAR}
+		where create_by = #{newEditor,jdbcType=VARCHAR};
+		update role_menu
+		set update_by = #{newEditor,jdbcType=VARCHAR}
+		where update_by = #{newEditor,jdbcType=VARCHAR};
+	</update>
 </mapper>

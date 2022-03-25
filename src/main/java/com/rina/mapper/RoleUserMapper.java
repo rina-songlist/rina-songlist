@@ -15,7 +15,12 @@ import java.util.List;
 public interface RoleUserMapper {
     int deleteByPrimaryKey(@Param("roleId") Long roleId, @Param("userId") Long userId);
 
-    int insert(RoleUser record);
+    /**
+     * 添加一个新的用户权限
+     * @param roleUser 用户权限详情
+     * @return
+     */
+    int insert(RoleUser roleUser);
 
     RoleUser selectByPrimaryKey(@Param("roleId") Long roleId, @Param("userId") Long userId);
 
@@ -29,6 +34,13 @@ public interface RoleUserMapper {
      * @return
      */
     RoleUser findRoleByUser(Long userId);
+
+    /**
+     * 用户名更新时更新表中的创建者和更新者
+     * @param newEditor 新的用户名
+     * @return
+     */
+    int updateEditorName(String newEditor);
 
     /**
      * 通过用户ID删除

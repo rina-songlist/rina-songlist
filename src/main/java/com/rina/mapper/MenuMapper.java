@@ -59,4 +59,11 @@ public interface MenuMapper {
      * @return 菜单ID
      */
     Long getNewestMenuId();
+
+    /**
+     * 用户名更新时更新表中的创建者和更新者
+     * @param newEditor 新的用户名
+     * @return
+     */
+    int updateEditorName(String newEditor);
 }

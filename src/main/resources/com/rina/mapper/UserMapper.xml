@@ -11,7 +11,7 @@
 		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
 		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
 	</resultMap>
-	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+	<delete id="deleteOneUser" parameterType="java.lang.Long">
 		delete
 		from user
 		where user_id = #{userId,jdbcType=BIGINT}
@@ -24,7 +24,7 @@
 		        #{status,jdbcType=BIT}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		        #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
 	</insert>
-	<update id="updateByPrimaryKey" parameterType="com.rina.domain.User">
+	<update id="updateOneUserByUserId" parameterType="com.rina.domain.User">
 		update user
 		set user_name   = #{userName,jdbcType=VARCHAR},
 		    password    = #{password,jdbcType=VARCHAR},
@@ -35,7 +35,7 @@
 		    update_time = #{updateTime,jdbcType=TIMESTAMP}
 		where user_id = #{userId,jdbcType=BIGINT}
 	</update>
-	<select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+	<select id="getOneUser" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select user_id,
 		       user_name,
 		       password,
@@ -47,7 +47,7 @@
 		from user
 		where user_id = #{userId,jdbcType=BIGINT}
 	</select>
-	<select id="selectAll" resultMap="BaseResultMap">
+	<select id="getAllUsers" resultMap="BaseResultMap">
 		select user_id,
 		       user_name,
 		       password,
@@ -75,4 +75,13 @@
 	<select id="getNewestUserId" resultType="java.lang.Long">
 		select MAX(user_id) from user
 	</select>
+
+	<update id="updateEditorName" parameterType="java.lang.String">
+		update user
+		set create_by = #{newEditor,jdbcType=VARCHAR}
+		where create_by = #{newEditor,jdbcType=VARCHAR};
+		update user
+		set update_by = #{newEditor,jdbcType=VARCHAR}
+		where update_by = #{newEditor,jdbcType=VARCHAR};
+	</update>
 </mapper>

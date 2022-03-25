@@ -12,19 +12,44 @@ import java.util.List;
  */
 @Mapper
 public interface UserMapper {
-    int deleteByPrimaryKey(Long userId);
 
-    int insert(User record);
+    /**
+     * 删除一个用户
+     * @param userId 用户ID
+     * @return
+     */
+    int deleteOneUser(Long userId);
 
-    User selectByPrimaryKey(Long userId);
+    /**
+     * 添加一个用户
+     * @param user 用户详情
+     * @return
+     */
+    int insert(User user);
 
-    List<User> selectAll();
+    /**
+     * 通过用户ID获取一个用户
+     * @param userId 用户ID
+     * @return
+     */
+    User getOneUser(Long userId);
 
-    int updateByPrimaryKey(User record);
+    /**
+     * 获取所有用户
+     * @return
+     */
+    List<User> getAllUsers();
+
+    /**
+     * 通过用户ID更新一个用户信息
+     * @param user 用户详情
+     * @return
+     */
+    int updateOneUserByUserId(User user);
 
     /**
      * 通过用户名查询用户信息（主要是登陆时使用）
-     * @param username
+     * @param username 用户名
      * @return
      */
     User login(String username);
@@ -34,4 +59,11 @@ public interface UserMapper {
      * @return 用户ID
      */
     Long getNewestUserId();
+
+    /**
+     * 用户名更新时更新表中的创建者和更新者
+     * @param newEditor 新的用户名
+     * @return
+     */
+    int updateEditorName(String newEditor);
 }

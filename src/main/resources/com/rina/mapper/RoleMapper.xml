@@ -44,4 +44,13 @@
 		from role
 		where role_id = #{role_id,jdbcType=BIGINT}
 	</select>
+
+	<update id="updateEditorName" parameterType="java.lang.String">
+		update role
+		set create_by = #{newEditor,jdbcType=VARCHAR}
+		where create_by = #{newEditor,jdbcType=VARCHAR};
+		update role
+		set update_by = #{newEditor,jdbcType=VARCHAR}
+		where update_by = #{newEditor,jdbcType=VARCHAR};
+	</update>
 </mapper>
