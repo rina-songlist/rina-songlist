@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
@@ -34,6 +35,7 @@ public class MenuDto implements Serializable {
 	 * 菜单名
 	 */
 	@NotNull
+	@NotBlank
 	@ApiModelProperty(value = "菜单ID", required = false, example = "1")
 	private String name;
 
@@ -41,6 +43,7 @@ public class MenuDto implements Serializable {
 	 * 菜单对应图标
 	 */
 	@NotNull
+	@NotBlank
 	@ApiModelProperty(value = "菜单ID", required = false, example = "1")
 	private String icon;
 
@@ -60,6 +63,7 @@ public class MenuDto implements Serializable {
 	 * 当前层级的排序顺序
 	 */
 	@NotNull
+	@NotBlank
 	@ApiModelProperty(value = "当前层级的排序顺序", required = true, example = "1")
 	private Long orderValue;
 
