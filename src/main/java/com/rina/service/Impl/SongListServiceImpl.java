@@ -98,7 +98,7 @@ public class SongListServiceImpl implements SongListService {
 
 	@Override
 	public Resp getSingleSong(Long songId) {
-		final SongList songList = songListMapper.selectByPrimaryKey(songId);
+		final SongList songList = songListMapper.getOneSongBySongId(songId);
 
 		if (songList == null) {
 			log.error("查询数据不存在");
@@ -134,7 +134,7 @@ public class SongListServiceImpl implements SongListService {
 			songListResult = songListMapper.insert(songList);
 		} else {
 			// 编辑一条歌单
-			SongList songList = songListMapper.selectByPrimaryKey(songListDto.getId());
+			SongList songList = songListMapper.getOneSongBySongId(songListDto.getId());
 
 			// 判空处理
 			if (dataUsableCheck(songListDto.getName())) {
@@ -149,7 +149,7 @@ public class SongListServiceImpl implements SongListService {
 			songList = songList.withUpdateBy(currentUser);
 			songList = songList.withUpdateTime(new Date());
 
-			songListResult = songListMapper.updateByPrimaryKey(songList);
+			songListResult = songListMapper.updateOneSongBySongId(songList);
 		}
 
 		return RespUtils.editData(songListResult);
@@ -157,7 +157,7 @@ public class SongListServiceImpl implements SongListService {
 
 	@Override
 	public Resp deleteSongList(Long songId) {
-		final int songListResult = songListMapper.deleteByPrimaryKey(songId);
+		final int songListResult = songListMapper.deleteOneSong(songId);
 
 		return RespUtils.deleteData(songListResult);
 	}
