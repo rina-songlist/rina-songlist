@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import lombok.experimental.SuperBuilder;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -35,6 +37,8 @@ public class SongListDto implements Serializable {
 	/**
 	 * 歌曲名
 	 */
+	@NotNull
+	@NotBlank
 	@ApiModelProperty(value = "歌曲名", required = true, example = "test")
 	private String name;
 
@@ -47,6 +51,8 @@ public class SongListDto implements Serializable {
 	/**
 	 * 语言
 	 */
+	@NotNull
+	@NotBlank
 	@ApiModelProperty(value = "语言", required = true, example = "JPN")
 	private String language;
 
