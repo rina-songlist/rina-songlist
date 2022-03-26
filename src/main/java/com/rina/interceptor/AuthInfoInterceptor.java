@@ -2,14 +2,15 @@ package com.rina.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rina.util.GuavaCacheUtil;
 import com.rina.domain.vo.UserDetailsVo;
 import com.rina.enums.ResultCode;
 import com.rina.resp.Resp;
+import com.rina.util.GuavaCacheUtil;
 import com.rina.util.JwtUtil;
 import com.rina.util.MyThreadLocal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -40,6 +41,15 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json; charset=UTF-8");
+
+		String origin  = request.getHeader(HttpHeaders.ORIGIN);
+		if (origin != null) {
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD");
+			//这里设置允许的自定义header参数
+			response.setHeader("Access-Control-Allow-Headers", "Authorization");
+			response.setHeader("Access-Control-Max-Age", "3600");
+		}
 
 		final String token = request.getHeader("Authorization");
 
@@ -79,7 +89,5 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
 		MyThreadLocal.unset();
-		response.setHeader("Access-Control-Allow-Origin", "*");
-		response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
 	}
 }
