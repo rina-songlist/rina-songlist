@@ -20,6 +20,13 @@ public interface UserService extends PublicService{
 	Resp login(String username, String password);
 
 	/**
+	 * 更新token
+	 * @param newUserName 新的用户名
+	 * @return
+	 */
+	Resp updateToken(String newUserName);
+
+	/**
 	 * 获取所有用户
 	 * @return
 	 */

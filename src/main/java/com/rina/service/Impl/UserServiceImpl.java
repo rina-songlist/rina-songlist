@@ -1,9 +1,11 @@
 package com.rina.service.Impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rina.domain.RoleUser;
 import com.rina.domain.User;
 import com.rina.domain.dto.UserDto;
 import com.rina.domain.vo.UserDetailsVo;
+import com.rina.enums.ResultCode;
 import com.rina.mapper.*;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
@@ -54,9 +56,24 @@ public class UserServiceImpl implements UserService {
 			} else {
 				return Resp.failed();
 			}
-		} catch (Exception e) {
-			log.error("查询参数有误 {}", e.getLocalizedMessage());
-			return Resp.failed();
+		} catch (JsonProcessingException e) {
+			log.error("Json解析错误：{}", e.getLocalizedMessage());
+			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
+		}
+
+		return UsualResp.succeed(token);
+	}
+
+	@Override
+	public Resp updateToken(String newUserName) {
+		final Long currentRole = MyThreadLocal.get().getRoleId();
+
+		String token = null;
+		try {
+			token = jwtUtil.createJwtToken(new UserDetailsVo(newUserName, currentRole));
+		} catch (JsonProcessingException e) {
+			log.error("Json解析错误：{}", e.getLocalizedMessage());
+			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
 		}
 
 		return UsualResp.succeed(token);
