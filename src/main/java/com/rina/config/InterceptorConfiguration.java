@@ -47,6 +47,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 		config.addAllowedHeader("*");
 		// 设置访问源请求方法
 		config.addAllowedMethod("*");
+		config.addExposedHeader("*");
 		// 有效期 1800秒
 		config.setMaxAge(3600L);
 		// 添加映射路径，拦截一切请求
