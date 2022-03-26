@@ -45,9 +45,9 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 		String origin  = request.getHeader(HttpHeaders.ORIGIN);
 		if (origin != null) {
 			response.setHeader("Access-Control-Allow-Origin", "*");
-			response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD");
-			//这里设置允许的自定义header参数
-			response.setHeader("Access-Control-Allow-Headers", "Authorization");
+			response.setHeader("Access-Control-Allow-Methods", "*");
+			response.setHeader("Access-Control-Allow-Headers", "*");
+			response.setHeader("Access-Control-Allow-Credentials", "true");
 			response.setHeader("Access-Control-Max-Age", "3600");
 		}
 
