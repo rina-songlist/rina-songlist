@@ -1,5 +1,6 @@
 package com.rina.config;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
@@ -26,10 +27,13 @@ public class CorsConfig {
 //	}
 
 	@Bean
-	public CorsFilter corsFilter() {
+	public FilterRegistrationBean corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", corsConfig());
-		return new CorsFilter(source);
+		FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+		//*****这里设置了优先级*****
+		bean.setOrder(1);
+		return bean;
 	}
 
 	private CorsConfiguration corsConfig() {
