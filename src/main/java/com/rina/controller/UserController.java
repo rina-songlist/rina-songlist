@@ -31,11 +31,23 @@ public class UserController {
 	@ApiOperation(value = "后台登陆接口", notes = "无需授权")
 	public Resp login(@RequestBody(required = true) @ApiParam(value = "用户名/密码", required = true) UserLoginDto userLoginDto,
 	                  final HttpServletResponse response) {
-		final Resp login = userService.login(userLoginDto.getUsername(), userLoginDto.getPassword());
-		if (!login.getCode().equals(ResultCode.OK.getCode())) {
+		final Resp resp = userService.login(userLoginDto.getUsername(), userLoginDto.getPassword());
+		return setResponseHead(response, resp);
+	}
+
+	@GetMapping("/private/system/user/update")
+	@ApiOperation(value = "token更新接口", notes = "需要授权")
+	public Resp updateToken(@RequestParam(required = true) @ApiParam(value = "新用户名", required = true) String username,
+	                  final HttpServletResponse response) {
+		final Resp resp = userService.updateToken(username);
+		return setResponseHead(response, resp);
+	}
+
+	private Resp setResponseHead(HttpServletResponse response, Resp resp) {
+		if (!resp.getCode().equals(ResultCode.OK.getCode())) {
 			return Resp.failed();
 		}
-		UsualResp<String> completeLoginData = (UsualResp<String>) login;
+		UsualResp<String> completeLoginData = (UsualResp<String>) resp;
 		response.setHeader("Authorization", completeLoginData.getData());
 		return Resp.succeed();
 	}
