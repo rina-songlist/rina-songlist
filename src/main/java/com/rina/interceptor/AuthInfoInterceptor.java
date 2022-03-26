@@ -10,7 +10,6 @@ import com.rina.util.JwtUtil;
 import com.rina.util.MyThreadLocal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,15 +40,6 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("application/json; charset=UTF-8");
-
-		String origin  = request.getHeader(HttpHeaders.ORIGIN);
-		if (origin != null) {
-			response.setHeader("Access-Control-Allow-Origin", "*");
-			response.setHeader("Access-Control-Allow-Methods", "*");
-			response.setHeader("Access-Control-Allow-Headers", "*");
-			response.setHeader("Access-Control-Allow-Credentials", "true");
-			response.setHeader("Access-Control-Max-Age", "3600");
-		}
 
 		final String token = request.getHeader("Authorization");
 
