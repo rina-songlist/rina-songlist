@@ -60,7 +60,7 @@ pipeline {
         }
         stage('make container and run') {
             steps {
-                sh "docker run -d --name rina-songlist --restart=unless-stopped -p 8080:8080 --env-file ./envs/test.env -v /home/arvin/docker/projects/rina-songlist/logs:/var/rina_log rina/rina-songlist:latest"
+                sh "docker run -d --name rina-songlist --restart=unless-stopped -p 8080:8080 -p 5555:5555 --env-file ./envs/test.env -v /home/arvin/docker/projects/rina-songlist/logs:/var/rina_log rina/rina-songlist:latest"
                 sh "docker network connect myProjects rina-songlist"
             }
         }
