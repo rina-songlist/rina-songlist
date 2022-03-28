@@ -47,6 +47,10 @@ public class UserServiceImpl implements UserService {
 		try {
 			final User user = userMapper.login(username);
 
+			if (!user.getStatus()) {
+				return Resp.failed();
+			}
+
 			if (BCrypt.checkpw(password, user.getPassword())) {
 				final UserDetailsVo userDetailsVo = new UserDetailsVo(
 						user.getUserName(),
