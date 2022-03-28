@@ -159,15 +159,13 @@ public class UserServiceImpl implements UserService {
 			// 更新前做数据可用性检查
 			if (dataUsableCheck(userDto.getUserName()) && !user.getUserName().equals(userDto.getUserName())) {
 				userMapper.updateEditorName(user.getUserName(), userDto.getUserName());
-				roleResult = roleUserMapper.updateEditorName(user.getUserName(), userDto.getUserName());
+				roleUserMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 				menuMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 				roleMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 				roleMenuMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 				songListMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 
 				user = user.withUserName(userDto.getUserName());
-			} else {
-				roleResult = 1;
 			}
 			if (dataUsableCheck(userDto.getPassword())) {
 				user = user.withPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()));
@@ -177,6 +175,7 @@ public class UserServiceImpl implements UserService {
 			user = user.withUpdateTime(new Date());
 
 			userResult = userMapper.updateOneUserByUserId(user);
+			roleResult = 1;
 		}
 
 		return RespUtils.editData(userResult, roleResult);
