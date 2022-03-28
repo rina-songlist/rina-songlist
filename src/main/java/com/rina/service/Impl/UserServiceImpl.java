@@ -166,6 +166,8 @@ public class UserServiceImpl implements UserService {
 				songListMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 
 				user = user.withUserName(userDto.getUserName());
+			} else {
+				roleResult = 1;
 			}
 			if (dataUsableCheck(userDto.getPassword())) {
 				user = user.withPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()));
