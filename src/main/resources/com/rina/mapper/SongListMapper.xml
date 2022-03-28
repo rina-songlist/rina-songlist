@@ -95,10 +95,10 @@
 	<update id="updateEditorName" parameterType="java.lang.String">
 		update song_list
 		set create_by = #{newEditor,jdbcType=VARCHAR}
-		where create_by = #{newEditor,jdbcType=VARCHAR};
+		where create_by = #{oldEditor,jdbcType=VARCHAR};
 		update song_list
 		set update_by = #{newEditor,jdbcType=VARCHAR}
-		where update_by = #{newEditor,jdbcType=VARCHAR};
+		where update_by = #{oldEditor,jdbcType=VARCHAR};
 	</update>
 
 </mapper>
