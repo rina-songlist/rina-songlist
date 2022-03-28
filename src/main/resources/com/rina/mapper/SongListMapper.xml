@@ -92,7 +92,7 @@
 		</where>
 	</select>
 
-	<update id="updateEditorName" parameterType="java.lang.String">
+	<update id="updateEditorName">
 		update song_list
 		set create_by = #{newEditor,jdbcType=VARCHAR}
 		where create_by = #{oldEditor,jdbcType=VARCHAR};

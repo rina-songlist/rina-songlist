@@ -65,7 +65,7 @@
 		where user_id = #{userId,jdbcType=BIGINT}
 	</delete>
 
-	<update id="updateEditorName" parameterType="java.lang.String">
+	<update id="updateEditorName">
 		update role_user
 		set create_by = #{newEditor,jdbcType=VARCHAR}
 		where create_by = #{oldEditor,jdbcType=VARCHAR};

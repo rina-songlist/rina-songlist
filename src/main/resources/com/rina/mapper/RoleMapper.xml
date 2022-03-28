@@ -45,7 +45,7 @@
 		where role_id = #{role_id,jdbcType=BIGINT}
 	</select>
 
-	<update id="updateEditorName" parameterType="java.lang.String">
+	<update id="updateEditorName">
 		update role
 		set create_by = #{newEditor,jdbcType=VARCHAR}
 		where create_by = #{oldEditor,jdbcType=VARCHAR};

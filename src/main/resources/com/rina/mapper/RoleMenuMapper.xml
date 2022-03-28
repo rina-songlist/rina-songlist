@@ -65,7 +65,7 @@
 		where menu_id = #{menuId,jdbcType=BIGINT}
 	</delete>
 
-	<update id="updateEditorName" parameterType="java.lang.String">
+	<update id="updateEditorName">
 		update role_menu
 		set create_by = #{newEditor,jdbcType=VARCHAR}
 		where create_by = #{oldEditor,jdbcType=VARCHAR};

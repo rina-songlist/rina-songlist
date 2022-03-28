@@ -76,7 +76,7 @@
 		select MAX(user_id) from user
 	</select>
 
-	<update id="updateEditorName" parameterType="java.lang.String">
+	<update id="updateEditorName">
 		update user
 		set create_by = #{newEditor,jdbcType=VARCHAR}
 		where create_by = #{oldEditor,jdbcType=VARCHAR};
