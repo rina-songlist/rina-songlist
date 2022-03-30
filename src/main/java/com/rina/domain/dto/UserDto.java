@@ -53,6 +53,12 @@ public class UserDto implements Serializable {
 	private Boolean status;
 
 	/**
+	 * 权限ID
+	 */
+	@ApiModelProperty(value = "权限ID", required = false, example = "1")
+	private Long roleId;
+
+	/**
 	 * 当前用户权限名
 	 */
 	@ApiModelProperty(value = "当前用户权限名", required = true, example = "test")

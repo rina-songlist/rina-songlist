@@ -73,4 +73,14 @@
 		set update_by = #{newEditor,jdbcType=VARCHAR}
 		where update_by = #{oldEditor,jdbcType=VARCHAR};
 	</update>
+
+	<update id="changeRoleByUser" parameterType="com.rina.domain.RoleUser">
+		update role_user
+		set role_id = #{roleId,jdbcType=BIGINT},
+		    create_by   = #{createBy,jdbcType=VARCHAR},
+		    create_time = #{createTime,jdbcType=TIMESTAMP},
+		    update_by   = #{updateBy,jdbcType=VARCHAR},
+		    update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where user_id = #{userId,jdbcType=BIGINT}
+	</update>
 </mapper>

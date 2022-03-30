@@ -50,4 +50,10 @@ public interface RoleUserMapper {
      */
     int deleteByUserId(Long userId);
 
+    /**
+     * 更改用户权限
+     * @param roleUser 用户权限详情
+     * @return
+     */
+    int changeRoleByUser(RoleUser roleUser);
 }

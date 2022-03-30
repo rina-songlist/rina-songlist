@@ -3,6 +3,7 @@ package com.rina.service.Impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rina.domain.RoleUser;
 import com.rina.domain.User;
+import com.rina.domain.dto.RoleUserDto;
 import com.rina.domain.dto.UserDto;
 import com.rina.domain.vo.UserDetailsVo;
 import com.rina.enums.ResultCode;
@@ -93,8 +94,12 @@ public class UserServiceImpl implements UserService {
 						.createBy(x.getCreateBy())
 						.updateBy(x.getUpdateBy())
 						.build())
-				.peek(x -> x.setRoleName(roleUserMapper.findRoleByUser(x.getId())
-						.getRole().getRoleName()))
+				.peek(x -> {
+					x.setRoleId(roleUserMapper.findRoleByUser(x.getId())
+							.getRole().getRoleId());
+					x.setRoleName(roleUserMapper.findRoleByUser(x.getId())
+							.getRole().getRoleName());
+				})
 				.collect(Collectors.toList());
 
 		return RespUtils.queryData(userDtos);
@@ -179,6 +184,20 @@ public class UserServiceImpl implements UserService {
 		}
 
 		return RespUtils.editData(userResult, roleResult);
+	}
+
+	@Override
+	public Resp changeRole(RoleUserDto roleUserDto) {
+		final String currentUser = MyThreadLocal.get().getUserName();
+
+		RoleUser roleUser = roleUserMapper.findRoleByUser(roleUserDto.getUserId());
+
+		roleUser = roleUser.withRoleId(roleUser.getRoleId());
+		roleUser = roleUser.withUpdateBy(currentUser);
+		roleUser = roleUser.withUpdateTime(new Date());
+
+		final int changeResult = roleUserMapper.changeRoleByUser(roleUser);
+		return RespUtils.editData(changeResult);
 	}
 
 	@Override
