@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -156,9 +157,14 @@ public class MenuServiceImpl implements MenuService {
 	 */
 	private List<MenuDto> queryMenus2menuDtos(Long roleId) {
 		if (roleId == null) {
-			return menuMapper.getAllMenus()
+			List<MenuDto> menuDtos =menuMapper.getAllMenus()
 					.stream().map(setMenu2menuDto())
 					.collect(Collectors.toList());
+			menuDtos.forEach(x -> {
+				Optional.ofNullable(x.getParentId())
+						.ifPresent(parentId -> x.setParentName(menuMapper.getOneMenu(parentId).getMenuName()));
+			});
+			return menuDtos;
 		} else {
 			List<Menu> menus = roleMenuMapper.findMenuByRole(roleId)
 					.stream().map(x -> Menu.builder()
