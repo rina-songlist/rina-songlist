@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -154,7 +155,7 @@ public class MenuServiceImpl implements MenuService {
 	 */
 	private List<MenuDto> queryMenus2menuDtos(Long roleId) {
 		if (roleId == null) {
-			return menuMapper.getAllMenus()
+			final List<MenuDto> menuDtos = menuMapper.getAllMenus()
 					.stream().map(x -> MenuDto.builder()
 							.id(x.getMenuId())
 							.name(x.getMenuName())
@@ -166,6 +167,11 @@ public class MenuServiceImpl implements MenuService {
 							.updateBy(x.getUpdateBy())
 							.build())
 					.collect(Collectors.toList());
+			menuDtos.forEach(x -> {
+				Optional.ofNullable(x.getParentId())
+						.ifPresent(parentId -> x.setParentName(menuMapper.getOneMenu(parentId).getMenuName()));
+			});
+			return menuDtos;
 		} else {
 			return roleMenuMapper.findMenuByRole(roleId)
 					.stream().map(x -> MenuDto.builder()

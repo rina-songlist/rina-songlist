@@ -60,6 +60,12 @@ public class MenuDto implements Serializable {
 	private Long parentId;
 
 	/**
+	 * 父级菜单名
+	 */
+	@ApiModelProperty(value = "父级菜单名", required = false, example = "parentName")
+	private String parentName;
+
+	/**
 	 * 当前层级的排序顺序
 	 */
 	@NotNull
