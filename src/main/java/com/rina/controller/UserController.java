@@ -1,5 +1,6 @@
 package com.rina.controller;
 
+import com.rina.domain.dto.RoleUserDto;
 import com.rina.domain.dto.UserDto;
 import com.rina.domain.dto.UserLoginDto;
 import com.rina.enums.ResultCode;
@@ -68,6 +69,12 @@ public class UserController {
 	@ApiOperation(value = "添加（更改）一个用户", notes = "需要授权，添加用户时默认为访客权限")
 	public Resp editUser(@RequestBody(required = true) @ApiParam(value = "用户信息详情", required = true) UserDto userDto) {
 		return userService.editUser(userDto);
+	}
+
+	@PostMapping("/private/system/user")
+	@ApiOperation(value = "更新用户权限", notes = "需要授权")
+	public Resp changeRole(@RequestBody @ApiParam(value = "用户权限详情", required = true) RoleUserDto roleUserDto) {
+		return userService.changeRole(roleUserDto);
 	}
 
 	@DeleteMapping("/private/system/user/{id}")
