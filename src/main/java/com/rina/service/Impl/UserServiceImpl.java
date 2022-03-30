@@ -192,7 +192,7 @@ public class UserServiceImpl implements UserService {
 
 		RoleUser roleUser = roleUserMapper.findRoleByUser(roleUserDto.getUserId());
 
-		roleUser = roleUser.withRoleId(roleUser.getRoleId());
+		roleUser = roleUser.withRoleId(roleUserDto.getRoleId());
 		roleUser = roleUser.withUpdateBy(currentUser);
 		roleUser = roleUser.withUpdateTime(new Date());
 
