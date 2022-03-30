@@ -1,5 +1,6 @@
 package com.rina.service;
 
+import com.rina.domain.dto.RoleUserDto;
 import com.rina.domain.dto.UserDto;
 import com.rina.resp.Resp;
 
@@ -46,6 +47,13 @@ public interface UserService extends PublicService{
 	 * @return
 	 */
 	Resp editUser(UserDto userDto);
+
+	/**
+	 * 更改用户权限
+	 * @param roleUserDto 用户权限详情
+	 * @return
+	 */
+	Resp changeRole(RoleUserDto roleUserDto);
 
 	/**
 	 * 删除一个用户
