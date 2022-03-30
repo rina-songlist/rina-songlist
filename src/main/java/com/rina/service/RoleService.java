@@ -18,6 +18,13 @@ public interface RoleService extends PublicService{
 	Resp listRoles();
 
 	/**
+	 * 查询指定权限下的菜单
+	 * @param roleId 权限ID
+	 * @return
+	 */
+	Resp listRoleMenus(Long roleId);
+
+	/**
 	 * 获取一条权限信息
 	 * @param roleId 权限ID
 	 * @return
@@ -30,6 +37,14 @@ public interface RoleService extends PublicService{
 	 * @return
 	 */
 	Resp editRole(RoleDto roleDto);
+
+	/**
+	 * 更改可查看菜单
+	 * @param roleId 权限ID
+	 * @param newMenuIds 菜单ID
+	 * @return
+	 */
+	Resp changeMenus(Long roleId, Long... newMenuIds);
 
 	/**
 	 * 删除一条权限

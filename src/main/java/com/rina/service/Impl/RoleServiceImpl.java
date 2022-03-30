@@ -1,17 +1,23 @@
 package com.rina.service.Impl;
 
 import com.rina.domain.Role;
+import com.rina.domain.RoleMenu;
 import com.rina.domain.dto.RoleDto;
+import com.rina.enums.ResultCode;
 import com.rina.mapper.RoleMapper;
+import com.rina.mapper.RoleMenuMapper;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.RoleService;
+import com.rina.util.ListUtil;
 import com.rina.util.MyThreadLocal;
 import com.rina.util.RespUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +34,7 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
 
 	private final RoleMapper roleMapper;
+	private final RoleMenuMapper roleMenuMapper;
 
 	@Override
 	public Resp listRoles() {
@@ -40,6 +47,16 @@ public class RoleServiceImpl implements RoleService {
 						.build())
 				.collect(Collectors.toList());
 		return RespUtils.queryData(roleDtos);
+	}
+
+	@Override
+	public Resp listRoleMenus(Long roleId) {
+		List<Long> menuIdList = new ArrayList<>();
+		roleMenuMapper.findMenuByRole(roleId)
+				.forEach(x -> menuIdList.add(x.getMenuId()));
+		final Long[] menuIds = menuIdList.toArray(new Long[menuIdList.size()]);
+
+		return RespUtils.queryData(menuIds);
 	}
 
 	@Override
@@ -91,6 +108,35 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		return RespUtils.editData(roleResult);
+	}
+
+	@Override
+	public Resp changeMenus(Long roleId, Long... menuIds) {
+		final String currentUser = MyThreadLocal.get().getUserName();
+
+		final List<Long> newMenuIds = Arrays.asList(menuIds);
+		List<Long> oldMenuIds = new ArrayList<>();
+		roleMenuMapper.findMenuByRole(roleId)
+				.forEach(x -> oldMenuIds.add(x.getMenuId()));
+
+		// 添加菜单
+		final List<Long> insertMenus = ListUtil.compareLists(newMenuIds, oldMenuIds);
+		List<RoleMenu> roleMenus = new ArrayList<>();
+		insertMenus.forEach(x -> roleMenus.add(RoleMenu.builder()
+				.roleId(roleId)
+				.menuId(x)
+				.createBy(currentUser)
+				.createTime(new Date())
+				.updateBy(currentUser)
+				.updateTime(new Date())
+				.build()));
+		roleMenus.forEach(roleMenuMapper::insert);
+
+		// 删除菜单
+		final List<Long> deleteMenus = ListUtil.compareLists(oldMenuIds, newMenuIds);
+		deleteMenus.forEach(x -> roleMenuMapper.deleteByPrimaryKey(roleId, x));
+
+		return Resp.succeed(ResultCode.CREATED);
 	}
 
 	@Override
