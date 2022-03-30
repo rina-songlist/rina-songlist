@@ -59,4 +59,10 @@ public class RoleServiceTests {
 		System.out.println(JSON.toJSONString(resp));
 	}
 
+	@Test
+	void testListRoleMenus() {
+		final Resp resp = roleService.listRoleMenus(1L);
+		System.out.println(JSON.toJSONString(resp));
+	}
+
 }
