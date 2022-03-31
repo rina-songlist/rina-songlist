@@ -36,7 +36,7 @@ public class MenuDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "菜单ID", required = false, example = "1")
+	@ApiModelProperty(value = "菜单名", required = false, example = "1")
 	private String name;
 
 	/**
@@ -44,7 +44,7 @@ public class MenuDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "菜单ID", required = false, example = "1")
+	@ApiModelProperty(value = "菜单对应图标", required = false, example = "1")
 	private String icon;
 
 	/**
