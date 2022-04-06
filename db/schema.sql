@@ -11,7 +11,7 @@
  Target Server Version : 50737
  File Encoding         : 65001
 
- Date: 26/03/2022 06:25:41
+ Date: 06/04/2022 15:19:12
 */
 
 SET NAMES utf8mb4;
@@ -33,7 +33,7 @@ CREATE TABLE `menu` (
   `update_by` varchar(20) DEFAULT 'admin' COMMENT '更新者',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
 
 -- ----------------------------
 -- Table structure for role
@@ -48,7 +48,7 @@ CREATE TABLE `role` (
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`role_id`) USING BTREE,
   UNIQUE KEY `role_name` (`role_name`) USING BTREE COMMENT '权限名唯一'
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='权限清单';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='权限清单';
 
 -- ----------------------------
 -- Table structure for role_menu
@@ -92,7 +92,7 @@ CREATE TABLE `song_list` (
   `update_by` varchar(20) DEFAULT 'admin' COMMENT '更新者',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`song_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=233 DEFAULT CHARSET=utf8mb4 COMMENT='歌曲清单';
+) ENGINE=InnoDB AUTO_INCREMENT=236 DEFAULT CHARSET=utf8mb4 COMMENT='歌曲清单';
 
 -- ----------------------------
 -- Table structure for user
@@ -108,6 +108,6 @@ CREATE TABLE `user` (
   `update_by` varchar(20) DEFAULT 'admin' COMMENT '更新者',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COMMENT='用户清单';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COMMENT='用户清单';
 
 SET FOREIGN_KEY_CHECKS = 1;
