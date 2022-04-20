@@ -1,0 +1,19 @@
+version: 3.5
+services:
+  rina-songlist:
+    image:
+      rina/rina-songlist:latest
+    container_name: rina-songlist
+    ports:
+      - "8080:8080"
+      - "5555:5555"
+    env_file:
+      - ./envs/test.env
+    volumes:
+      - "/home/arvin/docker/projects/rina-songlist/logs:/var/rina_log"
+    restart: unless-stopped
+
+networks:
+  default:
+    external:
+      name: myProjects
