@@ -15,23 +15,24 @@ pipeline {
         stage('remove old containers and images') {
             steps {
                 script {
+                    sh "java -version"
                     // 停止老版本的容器
                     def result1 = sh "docker ps | grep rina-songlist"
-                    if (result1 != "") {
+                    if (${result1} != "") {
                         sh "echo 'stop rina-songlist'"
                         sh "docker stop rina-songlist"
                     }
 
                     // 删除老版本的容器
                     def result2 = sh "docker ps -a | grep rina-songlist"
-                    if (result2 != "") {
+                    if (${result2} != "") {
                         sh "echo 'rm rina-songlist'"
                         sh "docker rm rina-songlist"
                     }
 
                     // 删除老版本的镜像
                     def result3 = sh "docker images | grep rina/rina-songlist"
-                    if (result3 != "") {
+                    if (${result3} != "") {
                         sh "echo 'rmi rina/rina-songlist:latest'"
                         sh "docker rmi rina/rina-songlist:latest"
                     }
@@ -46,10 +47,12 @@ pipeline {
         stage('build project') {
             steps {
                 sh "mvn -DskipTests=true clean package"
+                def current = sh "docker images | grep rina/rina-songlist"
             }
         }
         stage('push images') {
             steps {
+                echo ${current}
                 withCredentials([usernamePassword(credentialsId: "${harbor_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
                     sh "docker login -u ${username} -p ${password} ${harbor_url}"
                     sh "docker tag rina/rina-songlist:${version} rina/rina-songlist:latest"
@@ -60,12 +63,12 @@ pipeline {
         }
         stage('make container and run') {
             steps {
-                sh "docker run -d --name rina-songlist --restart=unless-stopped -p 8080:8080 -p 5555:5555 --env-file ./envs/test.env -v /home/arvin/docker/projects/rina-songlist/logs:/var/rina_log rina/rina-songlist:latest"
-                sh "docker network connect myProjects rina-songlist"
+                sh "docker-compose up -d"
             }
         }
         stage('remove useless containers and images') {
             steps {
+                echo ${current}
                 sh "docker rmi rina/rina-songlist:${version}"
                 sh "docker rmi 192.168.0.9:8084/rina/rina-songlist:${version}"
             }
