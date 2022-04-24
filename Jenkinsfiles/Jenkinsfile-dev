@@ -21,9 +21,9 @@ pipeline {
 
                 // 引入sonar-scanner工具
                 script {
-                    scannerHome = tool 'sonar-scanner2'
+                    scannerHome = tool 'sonar-scanner'
                 }
-                withSonarQubeEnv('dell-sonarqube2') {
+                withSonarQubeEnv('dell-sonarqube') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
