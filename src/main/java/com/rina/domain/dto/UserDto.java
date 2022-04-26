@@ -61,7 +61,7 @@ public class UserDto implements Serializable {
 	/**
 	 * 当前用户权限名
 	 */
-	@ApiModelProperty(value = "当前用户权限名", required = true, example = "test")
+	@ApiModelProperty(value = "当前用户权限名", required = false, example = "test")
 	private String roleName;
 
 	/**

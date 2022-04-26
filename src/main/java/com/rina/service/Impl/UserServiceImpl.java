@@ -162,7 +162,14 @@ public class UserServiceImpl implements UserService {
 			User user = userMapper.getOneUser(userDto.getId());
 
 			// 更新前做数据可用性检查
-			if (dataUsableCheck(userDto.getUserName())) {
+			if (dataUsableCheck(userDto.getUserName()) && !user.getUserName().equals(userDto.getUserName())) {
+				userMapper.updateEditorName(user.getUserName(), userDto.getUserName());
+				roleUserMapper.updateEditorName(user.getUserName(), userDto.getUserName());
+				menuMapper.updateEditorName(user.getUserName(), userDto.getUserName());
+				roleMapper.updateEditorName(user.getUserName(), userDto.getUserName());
+				roleMenuMapper.updateEditorName(user.getUserName(), userDto.getUserName());
+				songListMapper.updateEditorName(user.getUserName(), userDto.getUserName());
+
 				user = user.withUserName(userDto.getUserName());
 			}
 			if (dataUsableCheck(userDto.getPassword())) {
@@ -173,12 +180,7 @@ public class UserServiceImpl implements UserService {
 			user = user.withUpdateTime(new Date());
 
 			userResult = userMapper.updateOneUserByUserId(user);
-			userMapper.updateEditorName(currentUser);
-			roleResult = roleUserMapper.updateEditorName(currentUser);
-			menuMapper.updateEditorName(currentUser);
-			roleMapper.updateEditorName(currentUser);
-			roleMenuMapper.updateEditorName(currentUser);
-			songListMapper.updateEditorName(currentUser);
+			roleResult = 1;
 		}
 
 		return RespUtils.editData(userResult, roleResult);
@@ -190,7 +192,7 @@ public class UserServiceImpl implements UserService {
 
 		RoleUser roleUser = roleUserMapper.findRoleByUser(roleUserDto.getUserId());
 
-		roleUser = roleUser.withRoleId(roleUser.getRoleId());
+		roleUser = roleUser.withRoleId(roleUserDto.getRoleId());
 		roleUser = roleUser.withUpdateBy(currentUser);
 		roleUser = roleUser.withUpdateTime(new Date());
 

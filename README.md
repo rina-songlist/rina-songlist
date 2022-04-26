@@ -26,7 +26,8 @@
 
 ## 将要推出的功能
 
-- [ ] 管理后台
+- [x] 歌单展示
+- [x] 管理后台
 - [ ] 自动统计当前直播所被点到的歌，并与OBS联动
 
 ## 使用方法
@@ -41,11 +42,7 @@ docker run -itd --name mysql-test -p 3306:3306 mysql:5.7
 4. 使用 `schema.sql` 初始化数据库， 并使用 `data_initials.sql` 导入初始数据
 
 ### 开始使用
-1. 导入已打包好的 `docker` 镜像
-
-```bash
-docker load -i rina-songlist-(release-version).rar
-```
+1. ~~导入已打包好的 `docker` 镜像~~ 从镜像库下载所需版本
 
 2. 使用 `.env` 或是环境变量启动项目，一下是启动示例：
    1. 环境变量说明：

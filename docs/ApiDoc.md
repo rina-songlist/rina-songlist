@@ -35,64 +35,8 @@
 
 ---
 
-## 2. 登陆
+## 2. 后端接口文档
 
-## 3. 歌单展示 `/song-list`
+接口测试方案已转至ApiFox平台，请自行跳转使用
 
-### 3.1. 普通用户的数据列表
-
-- 请求路径`/public-list`
-
-- 请求方法`GET`
-
-- 请求参数
-
-  | 参数名       | 参数说明         | 参数类型 | 备注     |
-  | ------------ | ---------------- | -------- | -------- |
-  | pageSize     | 页面展示的数据量 | Integer  | 不能为空 |
-  | pageNum      | 当前页数         | Integer  | 不能为空 |
-  | orderBy | 排序依据 |String|不能为空|
-  | withDesc | 是否倒序排序 |Boolean|不能为空|
-  | ids          | 歌曲IDs          | Long[]   | 可以为空 |
-  | nameOrArtist | 歌名或歌手名     | String   | 可以为空 |
-
-
-
-
-- 相应参数
-
-- | 参数名   | 参数说明   |
-  | -------- | ---------- |
-  | total    | 总数据条数 |
-  | id       | 歌曲ID     |
-  | name     | 歌曲名     |
-  | artist   | 歌手名     |
-  | language | 语言       |
-
-  
-
-- 响应数据
-
-  ``` json
-  {
-    "code": 200,
-    "message": "请求成功",
-    "data": [
-      {
-        "id": 14,
-        "name": "影炎≒Variation",
-        "artist": "vocaloid",
-        "language": "日文"
-      },
-      {
-        "id": 198,
-        "name": "影炎 Variation",
-        "artist": "vocaloid",
-        "language": "日文"
-      }
-    ],
-    "total": 2
-  }
-  ```
-
-  
+[Api接口详细文档](https://www.apifox.cn/apidoc/shared-f3c67d37-7c6e-4ee6-ab9a-29cf8f9786d3)

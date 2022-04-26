@@ -31,8 +31,9 @@ public interface RoleMapper {
 
     /**
      * 用户名更新时更新表中的创建者和更新者
+     * @param oldEditor 旧的用户名
      * @param newEditor 新的用户名
      * @return
      */
-    int updateEditorName(String newEditor);
+    int updateEditorName(String oldEditor, String newEditor);
 }

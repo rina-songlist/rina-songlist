@@ -3,7 +3,7 @@ logging:
     path: /var/rina_log
   level:
     com:
-      rina: trace
+      rina: debug
 
 mybatis:
   configuration:
