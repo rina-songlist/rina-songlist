@@ -1,5 +1,3 @@
-// 当前版本
-version="1.1"
 // git代码拉取相关
 gitlab_url="http://192.168.0.9:8082"
 gitlab_ssh_auth="197b44e0-5710-4cd7-b453-7f397f090f58"
@@ -20,21 +18,24 @@ pipeline {
         stage('build project') {
             steps {
                 sh "mvn -DskipTests=true clean package"
+                script {
+                    env.version = sh(script: "docker images | grep rina/rina-songlist | awk '{print \$2}'", returnStdout: true).trim()
+                }
             }
         }
         stage('push images') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${harbor_auth}", passwordVariable: 'password', usernameVariable: 'username')]) {
                     sh "docker login -u ${username} -p ${password} ${harbor_url}"
-                    sh "docker tag rina/rina-songlist:${version} 192.168.0.9:8084/rina/rina-songlist:${version}"
-                    sh "docker push 192.168.0.9:8084/rina/rina-songlist:${version}"
+                    sh "docker tag rina/rina-songlist:${env.version} 192.168.0.9:8084/rina/rina-songlist:${env.version}"
+                    sh "docker push 192.168.0.9:8084/rina/rina-songlist:${env.version}"
                 }
             }
         }
         stage('remove useless containers and images') {
             steps {
-                sh "docker rmi rina/rina-songlist:${version}"
-                sh "docker rmi 192.168.0.9:8084/rina/rina-songlist:${version}"
+                sh "docker rmi rina/rina-songlist:${env.version}"
+                sh "docker rmi 192.168.0.9:8084/rina/rina-songlist:${env.version}"
             }
         }
     }
