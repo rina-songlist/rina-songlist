@@ -68,7 +68,6 @@ pipeline {
         }
         stage('make container and run') {
             steps {
-                sh "pwd"
                 sh "docker-compose up -d"
             }
         }
