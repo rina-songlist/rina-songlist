@@ -117,7 +117,7 @@ public class SongListServiceImpl implements SongListService {
 
 	@Override
 	public Resp editSongList(SongListDto songListDto) {
-		final String currentUser = MyThreadLocal.get().getUserName();
+		final String currentUser = MyThreadLocal.get().get("userName");
 		log.info("当前用户为：{}", currentUser);
 
 		int songListResult = 0;

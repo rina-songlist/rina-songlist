@@ -15,11 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +35,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Resp treeMenus() {
-		final Long roleId = MyThreadLocal.get().getRoleId();
+		final Long roleId = Long.valueOf(MyThreadLocal.get().get("roleId"));
 		log.info("当前权限ID为：{}", roleId);
 
 		final List<MenuDto> menuDtos = queryMenus2menuDtos(roleId);
@@ -83,7 +80,7 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Resp editMenu(MenuDto menuDto) {
-		final String currentUser = MyThreadLocal.get().getUserName();
+		final String currentUser = MyThreadLocal.get().get("userName");
 		log.info("当前用户为：{}", currentUser);
 
 		int menuResult = 0;

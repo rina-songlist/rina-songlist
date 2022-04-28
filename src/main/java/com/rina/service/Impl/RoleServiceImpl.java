@@ -80,7 +80,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Resp editRole(RoleDto roleDto) {
-		final String currentUser = MyThreadLocal.get().getUserName();
+		final String currentUser = MyThreadLocal.get().get("userName");
 		log.info("当前用户为：{}", currentUser);
 
 		int roleResult = 0;
@@ -112,7 +112,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Resp changeMenus(Long roleId, Long... menuIds) {
-		final String currentUser = MyThreadLocal.get().getUserName();
+		final String currentUser = MyThreadLocal.get().get("userName");
 
 		final List<Long> newMenuIds = Arrays.asList(menuIds);
 		List<Long> oldMenuIds = new ArrayList<>();

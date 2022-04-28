@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp updateToken(String newUserName) {
-		final Long currentRole = MyThreadLocal.get().getRoleId();
+		final Long currentRole = Long.valueOf(MyThreadLocal.get().get("roleId"));
 
 		String token = null;
 		try {
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp editUser(UserDto userDto) {
-		final String currentUser = MyThreadLocal.get().getUserName();
+		final String currentUser = MyThreadLocal.get().get("userName");
 		log.info("当前用户为：{}", currentUser);
 
 		int userResult = 0;
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp changeRole(RoleUserDto roleUserDto) {
-		final String currentUser = MyThreadLocal.get().getUserName();
+		final String currentUser = MyThreadLocal.get().get("userName");
 
 		RoleUser roleUser = roleUserMapper.findRoleByUser(roleUserDto.getUserId());
 
