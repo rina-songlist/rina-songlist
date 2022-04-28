@@ -4,12 +4,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.rina.config.AppProperties;
-import com.rina.domain.vo.UserDetailsVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +27,7 @@ public class GuavaCacheUtil {
 
 	private final AppProperties appProperties;
 
-	private LoadingCache<String, UserDetailsVo> cache = null;
+	private LoadingCache<String, Map<String, String>> cache = null;
 
 	@PostConstruct
 	public void init() {
@@ -40,25 +41,25 @@ public class GuavaCacheUtil {
 				.maximumSize(10)
 				.expireAfterWrite(expireTime, TimeUnit.MILLISECONDS)
 				.build(
-						new CacheLoader<String, UserDetailsVo>() {
+						new CacheLoader<String, Map<String, String>>() {
 							@Override
-							public UserDetailsVo load(String key) throws Exception {
+							public HashMap<String, String> load(String key) throws Exception {
 								return null;
 							}
 						}
 				);
 	}
 
-	public void put(String token, UserDetailsVo userDetailsVo) {
+	public void put(String token, Map<String, String> userDetails) {
 		Optional.ofNullable(get(token))
 				.orElseGet(() -> {
-					this.cache.put(token, userDetailsVo);
+					this.cache.put(token, userDetails);
 					return null;
 				});
 		log.info("当前用户已存入cache");
 	}
 
-	public UserDetailsVo get(String token) {
+	public Map<String, String> get(String token) {
 		return this.cache.getIfPresent(token);
 	}
 
