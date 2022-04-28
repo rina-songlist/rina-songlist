@@ -1,8 +1,8 @@
 package com.rina.interceptor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rina.domain.vo.UserDetailsVo;
 import com.rina.enums.ResultCode;
 import com.rina.resp.Resp;
 import com.rina.util.GuavaCacheUtil;
@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -33,7 +34,7 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 	private final ObjectMapper objectMapper;
 	private final GuavaCacheUtil cache;
 
-	private UserDetailsVo userDetails = null;
+	private Map<String, String> userDetails = null;
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -53,7 +54,8 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 					jwtUtil.parseClaims(token)
 							.ifPresent(claims -> {
 								try {
-									userDetails = objectMapper.readValue(claims.getSubject(), UserDetailsVo.class);
+									userDetails = objectMapper.readValue(claims.getSubject(),
+											new TypeReference<Map<String, String>>() {});
 								} catch (JsonProcessingException e) {
 									log.error("jackson反序列化出错：{}", e.getLocalizedMessage());
 								}
@@ -65,7 +67,9 @@ public class AuthInfoInterceptor implements HandlerInterceptor {
 					break out;
 				}
 			}
-			userDetails = Optional.ofNullable(userDetails).orElse(cache.get(token));
+			userDetails = Optional.ofNullable(userDetails)
+					.orElse(cache.get(token));
+			System.out.println(userDetails);
 			MyThreadLocal.set(userDetails);
 			return true;
 		} else {
