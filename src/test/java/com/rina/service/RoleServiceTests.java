@@ -2,12 +2,14 @@ package com.rina.service;
 
 import com.alibaba.fastjson.JSON;
 import com.rina.domain.dto.RoleDto;
-import com.rina.domain.vo.UserDetailsVo;
 import com.rina.resp.Resp;
 import com.rina.util.MyThreadLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 权限管理相关的service的测试
@@ -35,7 +37,9 @@ public class RoleServiceTests {
 
 	@Test
 	void testEditRoleWithInsert() {
-		MyThreadLocal.set(new UserDetailsVo("test", 1L));
+		Map<String, String> map = new HashMap<>();
+		map.put("userName", "test");
+		MyThreadLocal.set(map);
 
 		final Resp resp = roleService.editRole(new RoleDto(null, "test", null, null));
 		System.out.println(JSON.toJSONString(resp));
@@ -45,7 +49,9 @@ public class RoleServiceTests {
 
 	@Test
 	void testEditRoleWithUpdate() {
-		MyThreadLocal.set(new UserDetailsVo("test", 1L));
+		Map<String, String> map = new HashMap<>();
+		map.put("userName", "test");
+		MyThreadLocal.set(map);
 
 		final Resp resp = roleService.editRole(new RoleDto(3L, "test2", null, null));
 		System.out.println(JSON.toJSONString(resp));
