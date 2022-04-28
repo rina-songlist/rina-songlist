@@ -85,7 +85,7 @@ public class MenuServiceImpl implements MenuService {
 
 		int menuResult = 0;
 		int roleResult = 0;
-		if (menuDto.getId() == null) {
+		if (menuDto.getId() == null || menuDto.getId() == 0) {
 			// 添加新的的菜单
 			final Menu menu = Menu.builder()
 					.menuName(menuDto.getName())

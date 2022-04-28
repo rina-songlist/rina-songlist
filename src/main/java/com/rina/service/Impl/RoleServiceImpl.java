@@ -54,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
 		List<Long> menuIdList = new ArrayList<>();
 		roleMenuMapper.findMenuByRole(roleId)
 				.forEach(x -> menuIdList.add(x.getMenuId()));
-		final Long[] menuIds = menuIdList.toArray(new Long[menuIdList.size()]);
+		final Long[] menuIds = menuIdList.toArray(new Long[0]);
 
 		return RespUtils.queryData(menuIds);
 	}
@@ -84,7 +84,7 @@ public class RoleServiceImpl implements RoleService {
 		log.info("当前用户为：{}", currentUser);
 
 		int roleResult = 0;
-		if (roleDto.getId() == null) {
+		if (roleDto.getId() == null || roleDto.getId() == 0) {
 			// 添加一条新权限
 			final Role role = Role.builder()
 					.roleName(roleDto.getRole())

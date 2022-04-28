@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
 		int userResult = 0;
 		int roleResult = 0;
-		if (userDto.getId() == null) {
+		if (userDto.getId() == null || userDto.getId() == 0) {
 			// 添加一个用户
 			final User user = User.builder()
 					.userName(userDto.getUserName())

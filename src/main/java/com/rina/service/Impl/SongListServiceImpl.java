@@ -121,7 +121,7 @@ public class SongListServiceImpl implements SongListService {
 		log.info("当前用户为：{}", currentUser);
 
 		int songListResult = 0;
-		if (songListDto.getId() == null) {
+		if (songListDto.getId() == null || songListDto.getId() == 0) {
 			// 添加一条歌单
 			final SongList songList = SongList.builder()
 					.songName(songListDto.getName())
