@@ -19,7 +19,7 @@ pipeline {
             steps {
                 sh "mvn -DskipTests=true clean package"
                 script {
-                    env.version = sh(script: "docker images | grep rina/rina-songlist | awk '{print \$2}'", returnStdout: true).trim()
+                    env.version = sh(script: "docker images | grep rina/rina-songlist | awk '{print \$2}' | head -n 1", returnStdout: true).trim()
                 }
             }
         }
