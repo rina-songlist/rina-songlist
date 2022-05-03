@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.rina.mapper.SongListMapper">
 	<resultMap id="BaseResultMap" type="com.rina.domain.SongList">
-		<id column="song_id" property="songId" jdbcType="BIGINT"/>
-		<result column="song_name" property="songName" jdbcType="VARCHAR"/>
-		<result column="song_artist" property="songArtist" jdbcType="VARCHAR"/>
-		<result column="song_language" property="songLanguage" jdbcType="VARCHAR"/>
+		<id column="song_id" property="id" jdbcType="BIGINT"/>
+		<result column="song_name" property="name" jdbcType="VARCHAR"/>
+		<result column="song_artist" property="artist" jdbcType="VARCHAR"/>
+		<result column="song_language" property="language" jdbcType="VARCHAR"/>
 		<result column="create_by" property="createBy" jdbcType="VARCHAR"/>
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
 		<result column="update_by" property="updateBy" jdbcType="VARCHAR"/>
@@ -14,26 +14,26 @@
 	<delete id="deleteOneSong" parameterType="java.lang.Long">
 		delete
 		from song_list
-		where song_id = #{songId,jdbcType=BIGINT}
+		where song_id = #{id,jdbcType=BIGINT}
 	</delete>
 	<insert id="insert" parameterType="com.rina.domain.SongList">
 		insert into song_list (song_id, song_name, song_artist,
 		                       song_language, create_by, create_time,
 		                       update_by, update_time)
-		values (#{songId,jdbcType=BIGINT}, #{songName,jdbcType=VARCHAR}, #{songArtist,jdbcType=VARCHAR},
-		        #{songLanguage,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{artist,jdbcType=VARCHAR},
+		        #{language,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		        #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
 	</insert>
 	<update id="updateOneSongBySongId" parameterType="com.rina.domain.SongList">
 		update song_list
-		set song_name     = #{songName,jdbcType=VARCHAR},
-		    song_artist   = #{songArtist,jdbcType=VARCHAR},
-		    song_language = #{songLanguage,jdbcType=VARCHAR},
+		set song_name     = #{name,jdbcType=VARCHAR},
+		    song_artist   = #{artist,jdbcType=VARCHAR},
+		    song_language = #{language,jdbcType=VARCHAR},
 		    create_by     = #{createBy,jdbcType=VARCHAR},
 		    create_time   = #{createTime,jdbcType=TIMESTAMP},
 		    update_by     = #{updateBy,jdbcType=VARCHAR},
 		    update_time   = #{updateTime,jdbcType=TIMESTAMP}
-		where song_id = #{songId,jdbcType=BIGINT}
+		where song_id = #{id,jdbcType=BIGINT}
 	</update>
 	<select id="getOneSongBySongId" resultMap="BaseResultMap" parameterType="java.lang.Long">
 		select song_id,
@@ -45,7 +45,7 @@
 		       update_by,
 		       update_time
 		from song_list
-		where song_id = #{songId,jdbcType=BIGINT}
+		where song_id = #{id,jdbcType=BIGINT}
 	</select>
 	<select id="selectAll" resultMap="BaseResultMap">
 		select song_id,

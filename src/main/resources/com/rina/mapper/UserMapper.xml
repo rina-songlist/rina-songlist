@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rina.mapper.UserMapper">
 	<resultMap id="BaseResultMap" type="com.rina.domain.User">
-		<id column="user_id" jdbcType="BIGINT" property="userId"/>
+		<id column="user_id" jdbcType="BIGINT" property="id"/>
 		<result column="user_name" jdbcType="VARCHAR" property="userName"/>
 		<result column="password" jdbcType="VARCHAR" property="password"/>
 		<result column="status" jdbcType="BIT" property="status"/>
@@ -20,7 +20,7 @@
 		insert into user (user_id, user_name, password,
 		                  status, create_by, create_time,
 		                  update_by, update_time)
-		values (#{userId,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+		values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
 		        #{status,jdbcType=BIT}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
 		        #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
 	</insert>
@@ -33,7 +33,7 @@
 		    create_time = #{createTime,jdbcType=TIMESTAMP},
 		    update_by   = #{updateBy,jdbcType=VARCHAR},
 		    update_time = #{updateTime,jdbcType=TIMESTAMP}
-		where user_id = #{userId,jdbcType=BIGINT}
+		where user_id = #{id,jdbcType=BIGINT}
 	</update>
 	<select id="getOneUser" parameterType="java.lang.Long" resultMap="BaseResultMap">
 		select user_id,
@@ -45,7 +45,7 @@
 		       update_by,
 		       update_time
 		from user
-		where user_id = #{userId,jdbcType=BIGINT}
+		where user_id = #{id,jdbcType=BIGINT}
 	</select>
 	<select id="getAllUsers" resultMap="BaseResultMap">
 		select user_id,
