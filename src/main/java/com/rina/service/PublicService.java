@@ -24,4 +24,17 @@ public interface PublicService {
 		return false;
 	}
 
+	/**
+	 * 数据可用性的简单检查
+	 * @param data 待检查数据
+	 * @return 是否可用
+	 * @param <T> 待检查数据类型
+	 */
+	default <T> boolean dataUsableEasyCheck(T data) {
+		if (data instanceof String) {
+			return !"undifined".equals(data);
+		}
+		return true;
+	}
+
 }

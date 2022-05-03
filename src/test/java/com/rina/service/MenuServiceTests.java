@@ -2,7 +2,6 @@ package com.rina.service;
 
 import com.alibaba.fastjson.JSON;
 import com.rina.domain.dto.MenuDto;
-import com.rina.domain.vo.UserDetailsVo;
 import com.rina.mapper.MenuMapper;
 import com.rina.mapper.RoleMenuMapper;
 import com.rina.resp.Resp;
@@ -11,6 +10,9 @@ import com.rina.util.MyThreadLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 菜单所对应的service的测试类
@@ -32,7 +34,9 @@ public class MenuServiceTests {
 
 	@Test
 	public void testTreeMenus() {
-		MyThreadLocal.set(new UserDetailsVo("admin", 1L));
+		Map<String, String> map = new HashMap<>();
+		map.put("roleId", "1");
+		MyThreadLocal.set(map);
 		final Resp resp = menuService.treeMenus();
 		System.out.println(JSON.toJSONString(resp));
 
@@ -47,7 +51,9 @@ public class MenuServiceTests {
 
 	@Test
 	public void testEditMenuWithInsert() {
-		MyThreadLocal.set(new UserDetailsVo("test", 1L));
+		Map<String, String> map = new HashMap<>();
+		map.put("userName", "test");
+		MyThreadLocal.set(map);
 
 		final Resp resp = menuService.editMenu(new MenuDto(null,
 				"test",
@@ -66,7 +72,9 @@ public class MenuServiceTests {
 
 	@Test
 	public void testEditMenuWithUpdate() {
-		MyThreadLocal.set(new UserDetailsVo("test2", 1L));
+		Map<String, String> map = new HashMap<>();
+		map.put("userName", "test");
+		MyThreadLocal.set(map);
 
 		final UsualResp resp = (UsualResp) menuService.getSingleMenu(7L);
 		final MenuDto menu = (MenuDto) resp.getData();

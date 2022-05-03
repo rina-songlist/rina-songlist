@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -45,10 +46,15 @@ public class UserController {
 	}
 
 	private Resp setResponseHead(HttpServletResponse response, Resp resp) {
+		UsualResp<String> completeLoginData = new UsualResp<>();
 		if (!resp.getCode().equals(ResultCode.OK.getCode())) {
 			return Resp.failed();
 		}
-		UsualResp<String> completeLoginData = (UsualResp<String>) resp;
+		if (resp instanceof UsualResp) {
+			BeanUtils.copyProperties(resp, completeLoginData);
+		} else {
+			return Resp.failed();
+		}
 		response.setHeader("Authorization", completeLoginData.getData());
 		return Resp.succeed();
 	}

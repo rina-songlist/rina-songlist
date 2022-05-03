@@ -1,6 +1,6 @@
 package com.rina.util;
 
-import com.rina.domain.vo.UserDetailsVo;
+import java.util.Map;
 
 /**
  * 自定义线程数据读写工具
@@ -10,9 +10,9 @@ import com.rina.domain.vo.UserDetailsVo;
  */
 public class MyThreadLocal {
 
-	private static final ThreadLocal<UserDetailsVo> USER_THREAD_LOCAL = new ThreadLocal<>();
+	private static final ThreadLocal<Map<String, String>> USER_THREAD_LOCAL = new ThreadLocal<>();
 
-	public static void set(UserDetailsVo userDetails) {
+	public static void set(Map<String, String> userDetails) {
 		USER_THREAD_LOCAL.set(userDetails);
 	}
 
@@ -20,7 +20,7 @@ public class MyThreadLocal {
 		USER_THREAD_LOCAL.remove();
 	}
 
-	public static UserDetailsVo get() {
+	public static Map<String, String> get() {
 		return USER_THREAD_LOCAL.get();
 	}
 

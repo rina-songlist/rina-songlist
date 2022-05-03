@@ -4,12 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rina.domain.dto.SongListDto;
-import com.rina.domain.vo.UserDetailsVo;
 import com.rina.resp.Resp;
 import com.rina.util.MyThreadLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 歌单展示相关的service的测试
@@ -42,7 +44,9 @@ public class SongListServiceTests {
 
 	@Test
 	void testQuerySongListsWithNameAndArtist_withLogin() {
-		MyThreadLocal.set(new UserDetailsVo("test", 1l));
+		Map<String, String> map = new HashMap<>();
+		map.put("userName", "test");
+		MyThreadLocal.set(map);
 
 		final Resp resp = songListService.listSongLists(10, 1, "id", false, null, null);
 		System.out.println(JSON.toJSONString(resp));
@@ -58,7 +62,9 @@ public class SongListServiceTests {
 
 	@Test
 	void testEditSongListWithInsert() {
-		MyThreadLocal.set(new UserDetailsVo("test", 1l));
+		Map<String, String> map = new HashMap<>();
+		map.put("userName", "test");
+		MyThreadLocal.set(map);
 
 		final Resp resp = songListService.editSongList(new SongListDto(null,
 				"test",
@@ -71,7 +77,9 @@ public class SongListServiceTests {
 
 	@Test
 	void testEditSongListWithUpdate() {
-		MyThreadLocal.set(new UserDetailsVo("tester", 1l));
+		Map<String, String> map = new HashMap<>();
+		map.put("userName", "test");
+		MyThreadLocal.set(map);
 
 		final Resp resp = songListService.editSongList(new SongListDto(231L,
 				"test2",

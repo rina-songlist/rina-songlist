@@ -18,13 +18,13 @@ public class SongList implements Serializable {
 
     private static final long serialVersionUID = -5514114779942724772L;
 
-    private Long songId;
+    private Long id;
 
-    private String songName;
+    private String name;
 
-    private String songArtist;
+    private String artist;
 
-    private String songLanguage;
+    private String language;
 
     private String createBy;
 
