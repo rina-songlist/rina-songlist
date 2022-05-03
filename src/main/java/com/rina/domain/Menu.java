@@ -19,17 +19,17 @@ public class Menu implements Serializable {
 
     private static final long serialVersionUID = 8769523180890381985L;
 
-    private Long menuId;
+    private Long id;
 
-    private String menuName;
+    private String name;
 
-    private String menuIcon;
+    private String icon;
 
-    private String menuUrl;
+    private String url;
 
-    private Long menuParentId;
+    private Long parentId;
 
-    private Long menuOrderValue;
+    private Long orderValue;
 
     private String createBy;
 
