@@ -111,9 +111,9 @@ public class MenuServiceImpl implements MenuService {
 
 			// 更新前做数据可用性检查
 			if (dataUsableCheck(menuDto.getName())
-			&& dataUsableCheck(menuDto.getIcon())
-			&& dataUsableCheck(menuDto.getUrl())
-			&& dataUsableCheck(menuDto.getOrderValue())) {
+			&& dataUsableEasyCheck(menuDto.getIcon())
+			&& dataUsableEasyCheck(menuDto.getUrl())
+			&& menuDto.getOrderValue() != null) {
 				menu.setName(menuDto.getName());
 				menu.setIcon(menuDto.getIcon());
 				menu.setUrl(menuDto.getUrl());
