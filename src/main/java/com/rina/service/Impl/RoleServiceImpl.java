@@ -14,6 +14,7 @@ import com.rina.util.MyThreadLocal;
 import com.rina.util.RespUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -39,12 +40,17 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public Resp listRoles() {
 		final List<RoleDto> roleDtos = roleMapper.selectAll().stream()
-				.map(x -> RoleDto.builder()
-						.id(x.getRoleId())
-						.role(x.getRoleName())
-						.createBy(x.getCreateBy())
-						.updateBy(x.getUpdateBy())
-						.build())
+//				.map(x -> RoleDto.builder()
+//						.id(x.getId())
+//						.role(x.getName())
+//						.createBy(x.getCreateBy())
+//						.updateBy(x.getUpdateBy())
+//						.build())
+				.map(role -> {
+					final RoleDto dto = new RoleDto();
+					BeanUtils.copyProperties(role, dto);
+					return dto;
+				})
 				.collect(Collectors.toList());
 		return RespUtils.queryData(roleDtos);
 	}
@@ -68,12 +74,14 @@ public class RoleServiceImpl implements RoleService {
 			return Resp.failed();
 		}
 
-		final RoleDto roleDto = RoleDto.builder()
-				.id(roleId)
-				.role(role.getRoleName())
-				.createBy(role.getCreateBy())
-				.updateBy(role.getUpdateBy())
-				.build();
+//		final RoleDto roleDto = RoleDto.builder()
+//				.id(roleId)
+//				.role(role.getName())
+//				.createBy(role.getCreateBy())
+//				.updateBy(role.getUpdateBy())
+//				.build();
+		final RoleDto roleDto = new RoleDto();
+		BeanUtils.copyProperties(role, roleDto);
 
 		return UsualResp.succeed(roleDto);
 	}
@@ -86,23 +94,31 @@ public class RoleServiceImpl implements RoleService {
 		int roleResult = 0;
 		if (roleDto.getId() == null || roleDto.getId() == 0) {
 			// 添加一条新权限
-			final Role role = Role.builder()
-					.roleName(roleDto.getRole())
-					.createBy(currentUser)
-					.createTime(new Date())
-					.updateBy(currentUser)
-					.updateTime(new Date())
-					.build();
+//			final Role role = Role.builder()
+//					.role(roleDto.getRole())
+//					.createBy(currentUser)
+//					.createTime(new Date())
+//					.updateBy(currentUser)
+//					.updateTime(new Date())
+//					.build();
+			final Role role = new Role();
+			BeanUtils.copyProperties(roleDto, role);
+			role.setId(null);
+			role.setCreateBy(currentUser);
+			role.setCreateTime(new Date());
+			role.setUpdateBy(currentUser);
+			role.setUpdateTime(new Date());
+
 			roleResult = roleMapper.insert(role);
 		} else {
 			// 编辑权限
 			Role role = roleMapper.selectByPrimaryKey(roleDto.getId());
 
 			if (dataUsableCheck(roleDto.getRole())) {
-				role = role.withRoleName(roleDto.getRole());
+				BeanUtils.copyProperties(roleDto, role);
+				role.setUpdateBy(currentUser);
+				role.setUpdateTime(new Date());
 			}
-			role = role.withUpdateBy(currentUser);
-			role = role.withUpdateTime(new Date());
 
 			roleResult = roleMapper.updateByPrimaryKey(role);
 		}

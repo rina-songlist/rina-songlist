@@ -17,6 +17,7 @@ import com.rina.util.RespUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
 			if (BCrypt.checkpw(password, user.getPassword())) {
 				final UserDetailsVo userDetailsVo = new UserDetailsVo(
 						user.getUserName(),
-						roleUserMapper.findRoleByUser(user.getUserId()).getRoleId()
+						roleUserMapper.findRoleByUser(user.getId()).getRoleId()
 				);
 				token = jwtUtil.createJwtToken(userDetailsVo);
 			} else {
@@ -87,18 +88,18 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Resp listUsers() {
 		final List<UserDto> userDtos = userMapper.getAllUsers()
-				.stream().map(x -> UserDto.builder()
-						.id(x.getUserId())
-						.userName(x.getUserName())
-						.status(x.getStatus())
-						.createBy(x.getCreateBy())
-						.updateBy(x.getUpdateBy())
-						.build())
-				.peek(x -> {
-					x.setRoleId(roleUserMapper.findRoleByUser(x.getId())
-							.getRole().getRoleId());
-					x.setRoleName(roleUserMapper.findRoleByUser(x.getId())
-							.getRole().getRoleName());
+				.stream()
+				.map(user -> {
+					final UserDto dto = new UserDto();
+					BeanUtils.copyProperties(user, dto);
+					dto.setPassword(null);
+					return dto;
+				})
+				.peek(userDto -> {
+					userDto.setRoleId(roleUserMapper.findRoleByUser(userDto.getId())
+							.getRole().getId());
+					userDto.setRoleName(roleUserMapper.findRoleByUser(userDto.getId())
+							.getRole().getRole());
 				})
 				.collect(Collectors.toList());
 
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService {
 				.userName(user.getUserName())
 				.status(user.getStatus())
 				.roleName(roleUserMapper.findRoleByUser(userId)
-						.getRole().getRoleName())
+						.getRole().getRole())
 				.createBy(user.getCreateBy())
 				.updateBy(user.getUpdateBy())
 				.build();
