@@ -33,7 +33,7 @@
 ## 使用方法
 
 ### 使用前准备
-1. [下载](https://github.com/ArvinJr/rina/releases/download/v1.0-beta/v1.0-beta.zip) 并解压压缩包
+1. ~~[下载](https://github.com/ArvinJr/rina/releases/download/v1.0-beta/v1.0-beta.zip) 并解压压缩包~~
 2. 需安装`docker` [安装方法](https://www.runoob.com/docker/centos-docker-install.html) 国内用户可以考虑使用镜像源
 3. 需安装`MySQL:5.7`, 按需配置数据库用户
 ```bash
