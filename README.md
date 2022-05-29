@@ -78,6 +78,10 @@ docker run -itd --name my-rina-songlist \
 
 开发者请使用`test`或`dev`版本运行，`test`或`dev`版本包含`Swagger-ui`方便各位直接在网页上测试接口
 
+## 开源相关
+
+❗️❗️❗️若需使用本项目请在代码和网页的面登陆页面显著处标注！
+
 ## 开发协助
 
 请各位协助者在Pull Request时推送至`dev`分支，谢谢配合🙏
