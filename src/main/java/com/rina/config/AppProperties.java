@@ -25,6 +25,8 @@ public class AppProperties {
 		private String header = "Authorization";
 		// token过期时间
 		private String tokenExpireTime = "60*1000";
+		// Token缓存工具(此处使用redis或guava)
+		private String cacheType = "redis";
 	}
 
 }
