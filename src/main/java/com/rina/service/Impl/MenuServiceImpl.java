@@ -43,7 +43,7 @@ public class MenuServiceImpl implements MenuService {
 
 		if (menuDtos == null) {
 			log.error("数据库操作错误");
-			return Resp.failed();
+			return Resp.notFound();
 		} else {
 			List<MenuDto> treeMenus = TreeUtil.list2tree(menuDtos, MenuDto::getId, MenuDto::getParentId, MenuDto::getOrderValue, MenuDto::getChildren, MenuDto::setChildren);
 			return UsualResp.succeed(treeMenus);
@@ -63,7 +63,7 @@ public class MenuServiceImpl implements MenuService {
 
 		if (menu == null) {
 			log.info("查询数据不存在");
-			return Resp.failed();
+			return Resp.notFound();
 		}
 
 		final MenuDto menuDto = new MenuDto();

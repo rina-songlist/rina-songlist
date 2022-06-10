@@ -36,9 +36,7 @@ public class Resp implements Serializable {
 	}
 
 	public static Resp succeed() {
-		final Resp resp = new Resp();
-		resp.setByResultCode(ResultCode.OK);
-		return resp;
+		return succeed(ResultCode.OK);
 	}
 
 	public static Resp succeed(ResultCode resultCode) {
@@ -47,10 +45,20 @@ public class Resp implements Serializable {
 		return resp;
 	}
 
-	public static Resp failed() {
-		final Resp resp = new Resp();
-		resp.setByResultCode(ResultCode.NOT_FOUND);
-		return resp;
+	public static Resp notFound() {
+		return failed(ResultCode.NOT_FOUND);
+	}
+
+	public static Resp serverError() {
+		return failed(ResultCode.INTERNAL_SERVER_ERROR);
+	}
+
+	public static Resp forbidden() {
+		return failed(ResultCode.FORBIDDEN);
+	}
+
+	public static Resp unauthorized() {
+		return failed(ResultCode.UNAUTHORIZED);
 	}
 
 	public static Resp failed(ResultCode resultCode) {

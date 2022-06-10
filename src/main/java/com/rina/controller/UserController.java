@@ -48,12 +48,12 @@ public class UserController {
 	private Resp setResponseHead(HttpServletResponse response, Resp resp) {
 		UsualResp<String> completeLoginData = new UsualResp<>();
 		if (!resp.getCode().equals(ResultCode.OK.getCode())) {
-			return Resp.failed();
+			return Resp.notFound();
 		}
 		if (resp instanceof UsualResp) {
 			BeanUtils.copyProperties(resp, completeLoginData);
 		} else {
-			return Resp.failed();
+			return Resp.notFound();
 		}
 		response.setHeader("Authorization", completeLoginData.getData());
 		return Resp.succeed();

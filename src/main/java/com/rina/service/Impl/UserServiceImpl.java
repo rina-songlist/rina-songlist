@@ -112,7 +112,7 @@ public class UserServiceImpl implements UserService {
 
 		if (user == null) {
 			log.error("查询数据不存在");
-			return Resp.failed();
+			return Resp.notFound();
 		}
 
 		final UserDto userDto = UserDto.builder()

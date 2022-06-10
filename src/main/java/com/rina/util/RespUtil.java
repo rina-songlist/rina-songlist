@@ -23,7 +23,7 @@ public class RespUtils {
 	public static<T> Resp queryData(T data) {
 		if (data == null) {
 			log.error("数据库操作错误");
-			return Resp.failed();
+			return Resp.notFound();
 		} else {
 			return UsualResp.succeed(data);
 		}
@@ -39,7 +39,7 @@ public class RespUtils {
 
 		if (!isIntegrity) {
 			log.error("数据库操作错误");
-			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
+			return Resp.serverError();
 		}
 		return Resp.succeed(ResultCode.CREATED);
 	}
@@ -54,7 +54,7 @@ public class RespUtils {
 
 		if (!isIntegrity) {
 			log.error("数据库操作错误");
-			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
+			return Resp.serverError();
 		}
 		return Resp.succeed(ResultCode.DELETED);
 	}

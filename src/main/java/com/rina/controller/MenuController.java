@@ -31,7 +31,7 @@ public class MenuController {
 		} else if ("list".equals(type)) {
 			return menuService.listMenus();
 		}
-		return Resp.failed();
+		return Resp.notFound();
 	}
 
 	@GetMapping("/menu/{id}")

@@ -86,7 +86,7 @@ public class SongListServiceImpl implements SongListService {
 
 		if (songListDtoList.size() == 0) {
 			log.error("查询参数有误");
-			return Resp.failed();
+			return Resp.notFound();
 		} else {
 			return PageResp.succeed(ResultCode.OK, songListDtoList, totalPages);
 		}
@@ -98,7 +98,7 @@ public class SongListServiceImpl implements SongListService {
 
 		if (songList == null) {
 			log.error("查询数据不存在");
-			return Resp.failed();
+			return Resp.notFound();
 		}
 
 		final SongListDto songListDto = SongListDto.builder()
