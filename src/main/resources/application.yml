@@ -12,10 +12,23 @@ logging:
 
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://${DATABASE_URL}?useSSL=false&characterEncoding=UTF-8&allowMultiQueries=true
-    username: ${DATABASE_USERNAME}
-    password: ${DATABASE_PASSWORD}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:}
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT:6379}
+    username: ${REDIS_USERNAME:}
+    password: ${REDIS_PASSWORD:}
+    lettuce:
+      pool:
+        max-wait: 30000
+        max-active: 10
+        max-idle: 10
+        min-idle: 0
+    connect-timeout: 3000
+    timeout: 3000
   profiles:
     active: ${SPRING_ACTIVE_PROFILE:prod}
 
@@ -35,3 +48,5 @@ pagehelper:
 rina:
   jwt:
     token-expire-time: ${TOKEN_EXPIRE_TIME:60*1000}
+    # 此处如有需要可改为guava
+    cache-type: ${CACHE_TYPE:redis}
