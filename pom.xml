@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.rina</groupId>
 	<artifactId>rina-songlist</artifactId>
-	<version>1.2.2-test</version>
+	<version>1.2.3-dev</version>
 	<name>rina-song-list</name>
 	<description>rina-song-list</description>
 	<properties>
@@ -21,6 +21,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.mybatis.spring.boot</groupId>
 			<artifactId>mybatis-spring-boot-starter</artifactId>
@@ -40,6 +51,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- 解析自定义yaml属性 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -50,7 +67,6 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.44</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -80,13 +96,6 @@
 			<version>1.4.0</version>
 		</dependency>
 
-		<!-- 加密相关 -->
-		<dependency>
-			<groupId>org.mindrot</groupId>
-			<artifactId>jbcrypt</artifactId>
-			<version>0.4</version>
-		</dependency>
-
 		<!-- JWT相关 -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -113,9 +122,14 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.79</version>
+			<version>2.0.3</version>
 		</dependency>
 
 		<dependency>
