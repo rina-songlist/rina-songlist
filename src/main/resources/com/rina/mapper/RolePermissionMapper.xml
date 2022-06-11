@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rina.mapper.RolePermissionMapper">
+	<resultMap id="BaseResultMap" type="com.rina.domain.RolePermission">
+		<id column="role_id" jdbcType="BIGINT" property="roleId"/>
+		<id column="permission_id" jdbcType="BIGINT" property="permissionId"/>
+		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="map">
+		delete
+		from role_permission
+		where role_id = #{roleId,jdbcType=BIGINT}
+		  and permission_id = #{permissionId,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.rina.domain.RolePermission">
+		insert into role_permission (role_id, permission_id, create_by,
+		                             create_time, update_by, update_time)
+		values (#{roleId,jdbcType=BIGINT}, #{permissionId,jdbcType=BIGINT}, #{createBy,jdbcType=VARCHAR},
+		        #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.rina.domain.RolePermission">
+		update role_permission
+		set create_by   = #{createBy,jdbcType=VARCHAR},
+		    create_time = #{createTime,jdbcType=TIMESTAMP},
+		    update_by   = #{updateBy,jdbcType=VARCHAR},
+		    update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where role_id = #{roleId,jdbcType=BIGINT}
+		  and permission_id = #{permissionId,jdbcType=BIGINT}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+		select role_id, permission_id, create_by, create_time, update_by, update_time
+		from role_permission
+		where role_id = #{roleId,jdbcType=BIGINT}
+		  and permission_id = #{permissionId,jdbcType=BIGINT}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select role_id, permission_id, create_by, create_time, update_by, update_time
+		from role_permission
+	</select>
+
+	<resultMap id="RoleToPermission" type="com.rina.domain.RolePermission">
+		<id column="role_id" jdbcType="BIGINT" property="roleId"/>
+		<id column="permission_id" jdbcType="BIGINT" property="permissionId"/>
+		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+		<collection property="permission"
+		             column="permission_id"
+		             javaType="com.rina.domain.Permission"
+		             select="com.rina.mapper.PermissionMapper.findPermissionById" />
+	</resultMap>
+	<select id="findPermissionsByRoleId" parameterType="java.lang.Long" resultMap="RoleToPermission">
+		select role_id, permission_id, create_by, create_time, update_by, update_time
+		from role_permission
+		where role_id = #{roleId,jdbcType=BIGINT}
+	</select>
+</mapper>
