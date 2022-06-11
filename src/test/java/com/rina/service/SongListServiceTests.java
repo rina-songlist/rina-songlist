@@ -5,13 +5,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rina.domain.dto.SongListDto;
 import com.rina.resp.Resp;
-import com.rina.util.MyThreadLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 /**
  * 歌单展示相关的service的测试
@@ -43,54 +41,41 @@ public class SongListServiceTests {
 	}
 
 	@Test
+	@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsServiceImpl")
 	void testQuerySongListsWithNameAndArtist_withLogin() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final Resp resp = songListService.listSongLists(10, 1, "id", false, null, null);
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
+	@WithMockUser(authorities = "sys:songlist:view")
 	void testGetSingleSong() {
 		final Resp resp = songListService.getSingleSong(1L);
 		System.out.println(JSON.toJSONString(resp));
 	}
 
 	@Test
+	@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsServiceImpl")
 	void testEditSongListWithInsert() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final Resp resp = songListService.editSongList(new SongListDto(null,
 				"test",
 				"teser",
 				"JPN"));
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
+	@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsServiceImpl")
 	void testEditSongListWithUpdate() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final Resp resp = songListService.editSongList(new SongListDto(231L,
 				"test2",
 				"teser",
 				"JPN"));
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
+	@WithMockUser(authorities = "sys:songlist:delete")
 	void testDeleteSongList() {
 		final Resp resp = songListService.deleteSongList(231L);
 		System.out.println(JSON.toJSONString(resp));

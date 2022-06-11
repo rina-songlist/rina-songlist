@@ -6,13 +6,10 @@ import com.rina.mapper.MenuMapper;
 import com.rina.mapper.RoleMenuMapper;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
-import com.rina.util.MyThreadLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 /**
  * 菜单所对应的service的测试类
@@ -21,6 +18,7 @@ import java.util.Map;
  * @date 2022/03/19
  */
 @SpringBootTest
+@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsServiceImpl")
 public class MenuServiceTests {
 
 	@Autowired
@@ -34,13 +32,8 @@ public class MenuServiceTests {
 
 	@Test
 	public void testTreeMenus() {
-		Map<String, String> map = new HashMap<>();
-		map.put("roleId", "1");
-		MyThreadLocal.set(map);
 		final Resp resp = menuService.treeMenus();
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
@@ -51,10 +44,6 @@ public class MenuServiceTests {
 
 	@Test
 	public void testEditMenuWithInsert() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final Resp resp = menuService.editMenu(new MenuDto(null,
 				"test",
 				"icon",
@@ -66,24 +55,16 @@ public class MenuServiceTests {
 				null,
 				null));
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
 	public void testEditMenuWithUpdate() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final UsualResp resp = (UsualResp) menuService.getSingleMenu(7L);
 		final MenuDto menu = (MenuDto) resp.getData();
 		menu.setName("test2");
 
 		final Resp resp1 = menuService.editMenu(menu);
 		System.out.println(JSON.toJSONString(resp1));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test

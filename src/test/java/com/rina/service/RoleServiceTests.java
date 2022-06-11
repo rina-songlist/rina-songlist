@@ -3,13 +3,10 @@ package com.rina.service;
 import com.alibaba.fastjson.JSON;
 import com.rina.domain.dto.RoleDto;
 import com.rina.resp.Resp;
-import com.rina.util.MyThreadLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 /**
  * 权限管理相关的service的测试
@@ -18,6 +15,7 @@ import java.util.Map;
  * @date 2022/03/26
  */
 @SpringBootTest
+@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsServiceImpl")
 public class RoleServiceTests {
 
 	@Autowired
@@ -37,26 +35,14 @@ public class RoleServiceTests {
 
 	@Test
 	void testEditRoleWithInsert() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final Resp resp = roleService.editRole(new RoleDto(null, "test", null, null));
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
 	void testEditRoleWithUpdate() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final Resp resp = roleService.editRole(new RoleDto(3L, "test2", null, null));
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test

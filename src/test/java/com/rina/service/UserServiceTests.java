@@ -4,13 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.rina.domain.dto.UserDto;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
-import com.rina.util.MyThreadLocal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.security.test.context.support.WithUserDetails;
 
 /**
  * 用户管理和登陆相关的service的测试
@@ -19,6 +16,7 @@ import java.util.Map;
  * @date 2022/02/28
  */
 @SpringBootTest
+@WithUserDetails(value = "admin", userDetailsServiceBeanName = "userDetailsServiceImpl")
 public class UserServiceTests {
 
 	@Autowired
@@ -44,12 +42,8 @@ public class UserServiceTests {
 
 	@Test
 	public void testEditUserWithInsert() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final Resp resp = userService.editUser(new UserDto(null,
-				"tester3",
+				"tester",
 				"123123",
 				true,
 				null,
@@ -57,27 +51,19 @@ public class UserServiceTests {
 				null,
 				null));
 		System.out.println(JSON.toJSONString(resp));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
 	public void testEditUserWithUpdate() {
-		Map<String, String> map = new HashMap<>();
-		map.put("userName", "test");
-		MyThreadLocal.set(map);
-
 		final UsualResp<UserDto> resp = (UsualResp) userService.getSingleUser(2L);
 		final UserDto userDto = resp.getData().withUserName("tester2");
 		final Resp resp1 = userService.editUser(userDto);
 		System.out.println(JSON.toJSONString(resp1));
-
-		MyThreadLocal.unset();
 	}
 
 	@Test
 	public void testDeleteUser() {
-		final Resp resp = userService.deleteUser(3L);
+		final Resp resp = userService.deleteUser(2L);
 		System.out.println(JSON.toJSONString(resp));
 	}
 
