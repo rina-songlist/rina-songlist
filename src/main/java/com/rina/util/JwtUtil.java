@@ -1,9 +1,5 @@
 package com.rina.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rina.config.AppProperties;
-import com.rina.domain.vo.UserDetailsVo;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -13,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Jwt的工具类
@@ -26,8 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-	private final AppProperties appProperties;
-	private final ObjectMapper objectMapper;
+	private final CommonUtil commonUtil;
 
 	/**
 	 * 使用的加密算法
@@ -35,32 +30,67 @@ public class JwtUtil {
 	private static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
 	/**
+	 * 获取UUID
+	 * @return UUID
+	 */
+	private static String getUUID() {
+		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
+
+	/**
 	 * 创建token
-	 * @param userDetailsVo 简略化的user信息
+	 * @param subject token主要信息体
 	 * @return 加密后的token
 	 */
-	public String createJwtToken(UserDetailsVo userDetailsVo) throws JsonProcessingException {
-		final long now = System.currentTimeMillis();
-
-		// 将自定义的过期时间解析并换算为long
-		long expireTime = 1L;
-		final String[] strings = appProperties.getJwt().getTokenExpireTime().split("\\*");
-		for (String string : strings) {
-			expireTime *= Long.parseLong(string);
-		}
-
-		return Jwts.builder()
-				.setId("rina")
-				.claim("authorities", userDetailsVo.getUserName())
-				.setSubject(objectMapper.writeValueAsString(userDetailsVo))
-				.setIssuedAt(new Date(now))
-				.setExpiration(new Date(now + expireTime))
-				.signWith(KEY, SignatureAlgorithm.HS512)
+	public String createJwtToken(String subject) {
+		return getJwtBuilder(subject, commonUtil.tokenExpireMillis(), getUUID())
 				.compact();
 	}
 
 	/**
-	 * 查看token是否已过期
+	 * 创建token
+	 * @param subject token主要信息体
+	 * @param ttlMillis 过期时间（毫秒）
+	 * @return 加密后的token
+	 */
+	public String createJwtToken(String subject, Long ttlMillis) {
+		return getJwtBuilder(subject, ttlMillis, getUUID())
+				.compact();
+	}
+
+	/**
+	 * 创建token
+	 * @param subject token主要信息体
+	 * @param ttlMillis 过期时间（毫秒）
+	 * @param id token id
+	 * @return 加密后的token
+	 */
+	public String createJwtToken(String subject, Long ttlMillis, String id) {
+		return getJwtBuilder(subject, ttlMillis, id)
+				.compact();
+	}
+
+	/**
+	 * 生成JwtBuilder
+	 * @param subject token主要信息体
+	 * @param ttlMillis 过期时间（毫秒）
+	 * @param id token id
+	 * @return
+	 */
+	private static JwtBuilder getJwtBuilder(String subject, Long ttlMillis, String id) {
+		final long now = System.currentTimeMillis();
+
+		return Jwts.builder()
+				.setId(id)
+				.setSubject(subject)
+				.setIssuer("arvin")
+				.setIssuedAt(new Date(now))
+				.setExpiration(new Date(now + ttlMillis))
+				.signWith(KEY, SignatureAlgorithm.HS512);
+	}
+
+	/**
+	 * 查看token是否已过期 (已预处理所有异常)
 	 * @param token 加密后的token
 	 * @return 是否过期
 	 */
@@ -82,14 +112,11 @@ public class JwtUtil {
 	 * @param token 加密后的token
 	 * @return 解析后的token内容
 	 */
-	public Optional<Claims> parseClaims(String token){
-		try {
-			final Claims claims = Jwts.parserBuilder().setSigningKey(KEY).build()
-					.parseClaimsJws(token).getBody();
-			return Optional.ofNullable(claims);
-		} catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
-			return Optional.empty();
-		}
+	public Claims parseJwtToken(String token){
+		return Jwts.parserBuilder()
+				.setSigningKey(KEY).build()
+				.parseClaimsJws(token)
+				.getBody();
 	}
 
 }
