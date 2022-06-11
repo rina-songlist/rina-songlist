@@ -2,10 +2,7 @@ package com.rina.domain.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -15,6 +12,7 @@ import lombok.experimental.SuperBuilder;
  * @date 2022/03/25
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @With
 @AllArgsConstructor
