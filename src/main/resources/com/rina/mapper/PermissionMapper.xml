@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rina.mapper.PermissionMapper">
+	<resultMap id="BaseResultMap" type="com.rina.domain.Permission">
+		<id column="permission_id" jdbcType="BIGINT" property="id"/>
+		<result column="permission_name" jdbcType="VARCHAR" property="name"/>
+		<result column="remark" jdbcType="VARCHAR" property="remark"/>
+		<result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+		<result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+		<result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+	</resultMap>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete
+		from permission
+		where permission_id = #{id,jdbcType=BIGINT}
+	</delete>
+	<insert id="insert" parameterType="com.rina.domain.Permission">
+		insert into permission (permission_id, permission_name, remark,
+		                        create_by, create_time, update_by,
+		                        update_time)
+		values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+		        #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR},
+		        #{updateTime,jdbcType=TIMESTAMP})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.rina.domain.Permission">
+		update permission
+		set permission_name = #{name,jdbcType=VARCHAR},
+		    remark          = #{remark,jdbcType=VARCHAR},
+		    create_by       = #{createBy,jdbcType=VARCHAR},
+		    create_time     = #{createTime,jdbcType=TIMESTAMP},
+		    update_by       = #{updateBy,jdbcType=VARCHAR},
+		    update_time     = #{updateTime,jdbcType=TIMESTAMP}
+		where permission_id = #{id,jdbcType=BIGINT}
+	</update>
+	<select id="findPermissionById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select permission_id,
+		       permission_name,
+		       remark,
+		       create_by,
+		       create_time,
+		       update_by,
+		       update_time
+		from permission
+		where permission_id = #{id,jdbcType=BIGINT}
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select permission_id,
+		       permission_name,
+		       remark,
+		       create_by,
+		       create_time,
+		       update_by,
+		       update_time
+		from permission
+	</select>
+</mapper>
