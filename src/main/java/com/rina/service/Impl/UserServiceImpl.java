@@ -105,16 +105,29 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Resp updateToken(String newUserName) {
+	public Resp logout() {
 		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		String token = null;
+		final Long userId = loginUser.getUser().getId();
 		try {
-			token = jwtUtil.createJwtToken(new UserDetailsVo(newUserName, currentRole));
-		} catch (JsonProcessingException e) {
-			log.error("Json解析错误：{}", e.getLocalizedMessage());
-			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
+			if (Constants.CACHE_REDIS.equals(appProperties.getJwt().getCacheType())) {
+				try {
+					if (redisUtil.hasKey(Constants.LOGIN_CACHE_PREFIX + userId)) {
+						redisUtil.del(Constants.LOGIN_CACHE_PREFIX + userId);
+					}
+				} catch (Exception e) {
+					log.error("redis连接失败！：{}", e.getLocalizedMessage());
+					appProperties.getJwt().setCacheType("guava");
+					guavaCacheUtil.delete(Constants.LOGIN_CACHE_PREFIX + userId);
+				}
+			} else {
+				guavaCacheUtil.delete(Constants.LOGIN_CACHE_PREFIX + userId);
+			}
+		} catch (GuavaCacheNullKeyException e) {
+			return Resp.serverError();
 		}
+
+		return Resp.succeed();
+	}
 
 	@Override
 	public Resp updateToken(String newUserName) {
@@ -178,7 +191,7 @@ public class UserServiceImpl implements UserService {
 			// 添加一个用户
 			final User user = User.builder()
 					.userName(userDto.getUserName())
-					.password(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()))
+					.password(passwordEncoder.encode(userDto.getPassword()))
 					.status(userDto.getStatus())
 					.createBy(currentUser)
 					.createTime(new Date())
@@ -213,7 +226,7 @@ public class UserServiceImpl implements UserService {
 				user = user.withUserName(userDto.getUserName());
 			}
 			if (dataUsableCheck(userDto.getPassword())) {
-				user = user.withPassword(BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt()));
+				user = user.withPassword(passwordEncoder.encode(userDto.getPassword()));
 			}
 			user = user.withStatus(userDto.getStatus());
 			user = user.withUpdateBy(currentUser);

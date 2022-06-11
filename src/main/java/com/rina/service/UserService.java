@@ -22,6 +22,13 @@ public interface UserService extends PublicService{
 	Resp login(String username, String password);
 
 	/**
+	 * 退出登陆的方法
+	 * @return
+	 */
+	@PreAuthorize("@authChecker.authenticated()")
+	Resp logout();
+
+	/**
 	 * 更新token
 	 * @param newUserName 新的用户名
 	 * @return
