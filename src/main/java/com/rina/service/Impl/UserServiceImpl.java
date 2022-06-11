@@ -1,12 +1,13 @@
 package com.rina.service.Impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.rina.config.AppProperties;
+import com.rina.domain.LoginUser;
 import com.rina.domain.RoleUser;
 import com.rina.domain.User;
 import com.rina.domain.dto.RoleUserDto;
 import com.rina.domain.dto.UserDto;
-import com.rina.domain.vo.UserDetailsVo;
-import com.rina.enums.ResultCode;
+import com.rina.exception.GuavaCacheNullKeyException;
 import com.rina.mapper.*;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
@@ -14,12 +15,18 @@ import com.rina.service.UserService;
 import com.rina.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mindrot.jbcrypt.BCrypt;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +40,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+	private final AuthenticationManager authenticationManager;
 	private final UserMapper userMapper;
 	private final RoleUserMapper roleUserMapper;
 	private final MenuMapper menuMapper;
@@ -40,29 +48,57 @@ public class UserServiceImpl implements UserService {
 	private final RoleMenuMapper roleMenuMapper;
 	private final SongListMapper songListMapper;
 	private final JwtUtil jwtUtil;
+	private final AppProperties appProperties;
+	private final CommonUtil commonUtil;
+	private final RedisUtil redisUtil;
+	private final GuavaCacheUtil guavaCacheUtil;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public Resp login(String username, String password) {
-		String token = null;
+		// 使用AuthenticationManager进行用户验证
+		final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+		final Authentication authenticate = authenticationManager.authenticate(authenticationToken);
+
+		// 认证失败，给出相应的提示
+		if (Objects.isNull(authenticate)) {
+			throw new RuntimeException("登陆失败！");
+		}
+
+		// 认证成功，生成jwt
+		final LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
+
+		return cacheLoginUser(loginUser);
+	}
+
+	/**
+	 * 缓存当前登陆用户的信息
+	 * @param loginUser 当前登陆用户
+	 * @return
+	 */
+	@NotNull
+	private Resp cacheLoginUser(LoginUser loginUser) {
+		final String userId = loginUser.getUser().getId().toString();
+		final String token = jwtUtil.createJwtToken(userId);
+
+		// 将解析成功的用户信息存入缓存
 		try {
-			final User user = userMapper.login(username);
-
-			if (!user.getStatus()) {
-				return Resp.failed();
-			}
-
-			if (BCrypt.checkpw(password, user.getPassword())) {
-				final UserDetailsVo userDetailsVo = new UserDetailsVo(
-						user.getUserName(),
-						roleUserMapper.findRoleByUser(user.getId()).getRoleId()
-				);
-				token = jwtUtil.createJwtToken(userDetailsVo);
+			if (Constants.CACHE_REDIS.equals(appProperties.getJwt().getCacheType())) {
+				try {
+					redisUtil.set(Constants.LOGIN_CACHE_PREFIX + userId, loginUser, commonUtil.tokenExpireSeconds());
+				} catch (Exception e) {
+					log.error("redis连接失败！：{}", e.getLocalizedMessage());
+					appProperties.getJwt().setCacheType("guava");
+					guavaCacheUtil.put(Constants.LOGIN_CACHE_PREFIX + userId, loginUser);
+				}
 			} else {
-				return Resp.failed();
+				guavaCacheUtil.put(Constants.LOGIN_CACHE_PREFIX + userId, loginUser);
 			}
 		} catch (JsonProcessingException e) {
-			log.error("Json解析错误：{}", e.getLocalizedMessage());
-			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
+			log.error("JSON序列化错误：{}", e.getLocalizedMessage());
+			return Resp.serverError();
+		} catch (GuavaCacheNullKeyException e) {
+			return Resp.serverError();
 		}
 
 		return UsualResp.succeed(token);
@@ -80,7 +116,11 @@ public class UserServiceImpl implements UserService {
 			return Resp.failed(ResultCode.INTERNAL_SERVER_ERROR);
 		}
 
-		return UsualResp.succeed(token);
+	@Override
+	public Resp updateToken(String newUserName) {
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		return cacheLoginUser(loginUser);
 	}
 
 	@Override
