@@ -1,5 +1,7 @@
 package com.rina.service;
 
+import com.rina.util.Constants;
+
 /**
  * 总返回service（提供一些内部的工具方法）
  *
@@ -16,7 +18,7 @@ public interface PublicService {
 	 */
 	default <T> boolean dataUsableCheck(T data) {
 		if (data instanceof String) {
-			return !"".equals(data) && !"undifined".equals(data);
+			return !"".equals(data) && !Constants.FRONTEND_NULL_STRING.equals(data);
 		}
 		if (data instanceof Long) {
 			return !data.equals(0L);
