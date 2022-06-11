@@ -2,6 +2,7 @@ package com.rina.service;
 
 import com.rina.domain.dto.RoleDto;
 import com.rina.resp.Resp;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * 权限管理相关的service
@@ -15,6 +16,7 @@ public interface RoleService extends PublicService{
 	 * 获取所有权限列表
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:role:view')")
 	Resp listRoles();
 
 	/**
@@ -22,6 +24,7 @@ public interface RoleService extends PublicService{
 	 * @param roleId 权限ID
 	 * @return
 	 */
+	@PreAuthorize("@authChecker.hasAuthorities('sys:role:view','sys:menu:view')")
 	Resp listRoleMenus(Long roleId);
 
 	/**
@@ -29,6 +32,7 @@ public interface RoleService extends PublicService{
 	 * @param roleId 权限ID
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:role:view')")
 	Resp getSingleRole(Long roleId);
 
 	/**
@@ -36,6 +40,7 @@ public interface RoleService extends PublicService{
 	 * @param roleDto 权限ID
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:role:edit')")
 	Resp editRole(RoleDto roleDto);
 
 	/**
@@ -44,6 +49,9 @@ public interface RoleService extends PublicService{
 	 * @param newMenuIds 菜单ID
 	 * @return
 	 */
+	@PreAuthorize("@authChecker.hasAuthorities('sys:role:view'," +
+			"'sys:role:edit'," +
+			"'sys:menu:view')")
 	Resp changeMenus(Long roleId, Long... newMenuIds);
 
 	/**
@@ -51,6 +59,7 @@ public interface RoleService extends PublicService{
 	 * @param roleId 权限ID
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:role:delete')")
 	Resp deleteRole(Long roleId);
 
 }

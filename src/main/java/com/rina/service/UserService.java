@@ -3,6 +3,7 @@ package com.rina.service;
 import com.rina.domain.dto.RoleUserDto;
 import com.rina.domain.dto.UserDto;
 import com.rina.resp.Resp;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * 用户管理和登陆相关的service
@@ -25,12 +26,14 @@ public interface UserService extends PublicService{
 	 * @param newUserName 新的用户名
 	 * @return
 	 */
+	@PreAuthorize("@authChecker.authenticated()")
 	Resp updateToken(String newUserName);
 
 	/**
 	 * 获取所有用户
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:user:view')")
 	Resp listUsers();
 
 	/**
@@ -38,6 +41,7 @@ public interface UserService extends PublicService{
 	 * @param userId 用户ID
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:user:view')")
 	Resp getSingleUser(Long userId);
 
 	/**
@@ -46,6 +50,7 @@ public interface UserService extends PublicService{
 	 * @param userDto
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:user:edit')")
 	Resp editUser(UserDto userDto);
 
 	/**
@@ -53,6 +58,7 @@ public interface UserService extends PublicService{
 	 * @param roleUserDto 用户权限详情
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:role:change')")
 	Resp changeRole(RoleUserDto roleUserDto);
 
 	/**
@@ -60,6 +66,7 @@ public interface UserService extends PublicService{
 	 * @param userId 用户ID
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:user:delete')")
 	Resp deleteUser(Long userId);
 
 }

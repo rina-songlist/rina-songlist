@@ -2,6 +2,7 @@ package com.rina.service;
 
 import com.rina.domain.dto.MenuDto;
 import com.rina.resp.Resp;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 /**
  * 菜单所对应的service
@@ -15,12 +16,14 @@ public interface MenuService extends PublicService{
 	 * 树形查询菜单
 	 * @return
 	 */
+	@PreAuthorize("@authChecker.authenticated()")
 	Resp treeMenus();
 
 	/**
 	 * 列表查询菜单
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:menu:view')")
 	Resp listMenus();
 
 	/**
@@ -28,6 +31,7 @@ public interface MenuService extends PublicService{
 	 * @param menuId 菜单ID
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:menu:view')")
 	Resp getSingleMenu(Long menuId);
 
 	/**
@@ -36,6 +40,7 @@ public interface MenuService extends PublicService{
 	 * @param menuDto 菜单内容
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:menu:edit')")
 	Resp editMenu(MenuDto menuDto);
 
 	/**
@@ -43,6 +48,7 @@ public interface MenuService extends PublicService{
 	 * @param menuId 菜单ID
 	 * @return
 	 */
+	@PreAuthorize("hasAuthority('sys:menu:delete')")
 	Resp deleteMenu(Long menuId);
 
 }

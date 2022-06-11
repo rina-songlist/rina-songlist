@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -34,6 +35,7 @@ public class SongListController {
 	}
 
 	@GetMapping("/private/system/song-list")
+	@PreAuthorize("hasAuthority('sys:songlist:view')")
 	@ApiOperation(value = "管理用户所看到的歌单信息", notes = "需要鉴权")
 	public Resp privateUserSongList(@RequestParam(required = true) @ApiParam(value = "页面展示的数据量", required = true) Integer pageSize,
 	                               @RequestParam(required = true) @ApiParam(value = "当前页数", required = true) Integer pageNum,
