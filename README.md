@@ -16,7 +16,7 @@
 
 ## 所用到的技术栈
 
-`Spring Boot(SSM)`、`docker	`、`JWT`等
+`Spring Boot(SSM)`、`docker`、`JWT`、`Spring Security`、`redis`等
 
 ## 当前主要功能
 
@@ -28,30 +28,38 @@
 
 - [x] 歌单展示
 - [x] 管理后台
+- [x] 使用 `Spring Security` 进行权限管理
+- [x] 添加 `redis` 作为缓存手段之一
+- [ ] 添加 `redis` 断线重连
+- [ ] 添加与监测平台的连接
 - [ ] 自动统计当前直播所被点到的歌，并与OBS联动
 
 ## 使用方法
 
 ### 使用前准备
-1. [下载](https://github.com/ArvinJr/rina/releases/download/v1.0-beta/v1.0-beta.zip) 并解压压缩包
+1. ~~[下载](https://github.com/ArvinJr/rina/releases/download/v1.0-beta/v1.0-beta.zip) 并解压压缩包~~
 2. 需安装`docker` [安装方法](https://www.runoob.com/docker/centos-docker-install.html) 国内用户可以考虑使用镜像源
 3. 需安装`MySQL:5.7`, 按需配置数据库用户
 ```bash
 docker run -itd --name mysql-test -p 3306:3306 mysql:5.7
 ```
-4. 使用 `schema.sql` 初始化数据库， 并使用 `data_initials.sql` 导入初始数据
+4. （可选）需安装 `redis` 各版本均可，方法同上
+5. 使用 `schema.sql` 初始化数据库， 并使用 `data_initials.sql` 导入初始数据
 
 ### 开始使用
 1. ~~导入已打包好的 `docker` 镜像~~ 从镜像库下载所需版本
-
-2. 使用 `.env` 或是环境变量启动项目，一下是启动示例：
+2. 使用 `env` 文件或是环境变量启动项目，以下是启动示例：
    1. 环境变量说明：
-      1. `DATABASE_URL`数据库地址
-      2. `DATABASE_USERNAME`数据库用户名
-      3. `DATABASE_PASSWORD`数据库密码
-      4. `SPRING_ACTIVE_PROFILE`运行环境配置“默认为prod”
-      5. `TOKEN_EXPIRE_TIME`TOKEN过期时间
-
+      1. `DATABASE_URL`数据库地址 "不得为空"
+      2. `DATABASE_USERNAME`数据库用户名 "默认为root"
+      3. `DATABASE_PASSWORD`数据库密码 "默认为空"
+      4. `REDIS_HOST`redis地址 "默认为空"
+      5. `REDIS_PORT`redis端口 "默认为6379"
+      6. `REDIS_USERNAME`redis用户名 "默认为空"
+      7. `REDIS_PASSWORD`redis密码 "默认为空"
+      8. `SPRING_ACTIVE_PROFILE`运行环境配置 "默认为prod"
+      9. `TOKEN_EXPIRE_TIME`TOKEN过期时间（精确至毫秒） "默认为60秒"
+      10. `CACHE_TYPE`TOKEN缓存工具 "默认为redis"
    2. 文件映射说明：
       1. `/var/rina_log`日志文件输出地址
 
@@ -63,6 +71,7 @@ docker run -itd --name my-rina-songlist \
    -e DATABASE_USERNAME=root \
    -e DATABASE_PASSWORD=123456 \
    -e SPRING_ACTIVE_PROFILE=prod \
+   -e REDIS_HOST=localhost \
    -e TOKEN_EXPIRE_TIME=60*1000L \
    -v log:/var/rina_log
    rina/rina-songlist:(release-version)
@@ -74,6 +83,6 @@ docker run -itd --name my-rina-songlist \
 
 本项目是由 [`Intellij IDEA`](https://www.jetbrains.com/idea/) 编辑，JDK版本为 `jdk8`，使用 `MAVEN` 构建
 
-❗️❗️❗️运行时环境变量时使用`.env` 文件，并使用 [EnvFile](https://www.jetbrains.com/idea/) 插件调用，`VSCode`与`Eclipse`用户请自行寻找适合的插件
+❗️❗️❗️运行时环境变量时使用`.env` 文件，并使用 [EnvFile](https://plugins.jetbrains.com/plugin/7861-envfile) 插件调用，`VSCode`与`Eclipse`用户请自行寻找适合的插件
 
 开发者请使用`test`版本运行，`test`版本包含`Swagger-ui`方便各位直接在网页上测试接口
