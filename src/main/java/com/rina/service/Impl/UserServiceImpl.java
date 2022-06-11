@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp updateToken(String newUserName) {
-		final Long currentRole = Long.valueOf(MyThreadLocal.get().get("roleId"));
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		String token = null;
 		try {
@@ -128,7 +128,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp editUser(UserDto userDto) {
-		final String currentUser = MyThreadLocal.get().get("userName");
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final String currentUser = loginUser.getUser().getUserName();
 		log.info("当前用户为：{}", currentUser);
 
 		int userResult = 0;
@@ -187,7 +188,8 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Resp changeRole(RoleUserDto roleUserDto) {
-		final String currentUser = MyThreadLocal.get().get("userName");
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final String currentUser = loginUser.getUser().getUserName();
 
 		RoleUser roleUser = roleUserMapper.findRoleByUser(roleUserDto.getUserId());
 

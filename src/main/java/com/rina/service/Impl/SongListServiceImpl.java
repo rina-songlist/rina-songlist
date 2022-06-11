@@ -2,6 +2,7 @@ package com.rina.service.Impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.rina.domain.LoginUser;
 import com.rina.domain.SongList;
 import com.rina.domain.dto.PrivateSongListDto;
 import com.rina.domain.dto.SongListDto;
@@ -15,6 +16,7 @@ import com.rina.util.RespUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -49,7 +51,8 @@ public class SongListServiceImpl implements SongListService {
 		}
 
 		final Page<Object> page = PageHelper.startPage(pageNum, pageSize, orderMsg);
-		final boolean loginState = MyThreadLocal.get() == null;
+		final Object loginUser = SecurityContextHolder.getContext().getAuthentication();
+		final boolean notLogin = loginUser == null ;
 		List<SongListDto> songListDtoList = null;
 		long totalPages = 0;
 
@@ -62,7 +65,7 @@ public class SongListServiceImpl implements SongListService {
 						return dto;
 					})
 					.collect(Collectors.toList());
-		} else if (loginState) {
+		} else if (notLogin) {
 			// 普通查询（普通用户查询）
 			songListDtoList = songListMapper.selectByNameOrArtist(nameOrArtist).stream()
 					.map(songList -> {
@@ -112,7 +115,8 @@ public class SongListServiceImpl implements SongListService {
 
 	@Override
 	public Resp editSongList(SongListDto songListDto) {
-		final String currentUser = MyThreadLocal.get().get("userName");
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final String currentUser = loginUser.getUser().getUserName();
 		log.info("当前用户为：{}", currentUser);
 
 		int songListResult = 0;

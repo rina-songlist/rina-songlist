@@ -1,5 +1,6 @@
 package com.rina.service.Impl;
 
+import com.rina.domain.LoginUser;
 import com.rina.domain.Role;
 import com.rina.domain.RoleMenu;
 import com.rina.domain.dto.RoleDto;
@@ -14,6 +15,7 @@ import com.rina.util.RespUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -75,7 +77,8 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Resp editRole(RoleDto roleDto) {
-		final String currentUser = MyThreadLocal.get().get("userName");
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final String currentUser = loginUser.getUser().getUserName();
 		log.info("当前用户为：{}", currentUser);
 
 		int roleResult = 0;
@@ -108,7 +111,8 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Resp changeMenus(Long roleId, Long... menuIds) {
-		final String currentUser = MyThreadLocal.get().get("userName");
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final String currentUser = loginUser.getUser().getUserName();
 
 		final List<Long> newMenuIds = Arrays.asList(menuIds);
 		List<Long> oldMenuIds = new ArrayList<>();

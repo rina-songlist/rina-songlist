@@ -1,5 +1,6 @@
 package com.rina.service.Impl;
 
+import com.rina.domain.LoginUser;
 import com.rina.domain.Menu;
 import com.rina.domain.RoleMenu;
 import com.rina.domain.dto.MenuDto;
@@ -13,6 +14,7 @@ import com.rina.util.TreeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -35,7 +37,8 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Resp treeMenus() {
-		final Long roleId = Long.valueOf(MyThreadLocal.get().get("roleId"));
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final Long roleId = loginUser.getRoleId();
 		log.info("当前权限ID为：{}", roleId);
 
 		final List<MenuDto> menuDtos = queryMenus2menuDtos(roleId);
@@ -73,7 +76,8 @@ public class MenuServiceImpl implements MenuService {
 
 	@Override
 	public Resp editMenu(MenuDto menuDto) {
-		final String currentUser = MyThreadLocal.get().get("userName");
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final String currentUser = loginUser.getUser().getUserName();
 		log.info("当前用户为：{}", currentUser);
 
 		int menuResult = 0;
