@@ -6,13 +6,12 @@ import com.rina.resp.UsualResp;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 基础的数据库状态检测
- * 
+ * 全局前端数据的返回工具（基于mapper反馈处理）
  * @author arvin
  * @date 2022/03/23
  */
 @Slf4j
-public class RespUtils {
+public class RespUtil {
 
 	/**
 	 * 查询数据

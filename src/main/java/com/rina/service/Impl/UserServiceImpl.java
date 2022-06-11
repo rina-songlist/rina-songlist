@@ -11,9 +11,7 @@ import com.rina.mapper.*;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.UserService;
-import com.rina.util.JwtUtil;
-import com.rina.util.MyThreadLocal;
-import com.rina.util.RespUtils;
+import com.rina.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
@@ -103,7 +101,7 @@ public class UserServiceImpl implements UserService {
 				})
 				.collect(Collectors.toList());
 
-		return RespUtils.queryData(userDtos);
+		return RespUtil.queryData(userDtos);
 	}
 
 	@Override
@@ -184,7 +182,7 @@ public class UserServiceImpl implements UserService {
 			roleResult = 1;
 		}
 
-		return RespUtils.editData(userResult, roleResult);
+		return RespUtil.editData(userResult, roleResult);
 	}
 
 	@Override
@@ -198,7 +196,7 @@ public class UserServiceImpl implements UserService {
 		roleUser = roleUser.withUpdateTime(new Date());
 
 		final int changeResult = roleUserMapper.changeRoleByUser(roleUser);
-		return RespUtils.editData(changeResult);
+		return RespUtil.editData(changeResult);
 	}
 
 	@Override
@@ -206,6 +204,6 @@ public class UserServiceImpl implements UserService {
 		final int userResult = userMapper.deleteOneUser(userId);
 		final int roleResult = roleUserMapper.deleteByUserId(userId);
 
-		return RespUtils.deleteData(userResult, roleResult);
+		return RespUtil.deleteData(userResult, roleResult);
 	}
 }

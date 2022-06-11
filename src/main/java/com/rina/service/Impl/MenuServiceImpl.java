@@ -8,8 +8,7 @@ import com.rina.mapper.RoleMenuMapper;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.MenuService;
-import com.rina.util.MyThreadLocal;
-import com.rina.util.RespUtils;
+import com.rina.util.RespUtil;
 import com.rina.util.TreeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +53,7 @@ public class MenuServiceImpl implements MenuService {
 	public Resp listMenus() {
 		final List<MenuDto> menuDtos = queryMenus2menuDtos(null);
 
-		return RespUtils.queryData(menuDtos);
+		return RespUtil.queryData(menuDtos);
 	}
 
 	@Override
@@ -128,7 +127,7 @@ public class MenuServiceImpl implements MenuService {
 			}
 		}
 
-		return RespUtils.editData(menuResult, roleResult);
+		return RespUtil.editData(menuResult, roleResult);
 	}
 
 	@Override
@@ -136,7 +135,7 @@ public class MenuServiceImpl implements MenuService {
 		final int menuResult = menuMapper.deleteOneMenu(menuId);
 		final int roleResult = roleMenuMapper.deleteByMenuId(menuId);
 
-		return RespUtils.deleteData(menuResult, roleResult);
+		return RespUtil.deleteData(menuResult, roleResult);
 	}
 
 	/**

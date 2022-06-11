@@ -11,8 +11,7 @@ import com.rina.resp.PageResp;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.SongListService;
-import com.rina.util.MyThreadLocal;
-import com.rina.util.RespUtils;
+import com.rina.util.RespUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -145,13 +144,13 @@ public class SongListServiceImpl implements SongListService {
 			}
 		}
 
-		return RespUtils.editData(songListResult);
+		return RespUtil.editData(songListResult);
 	}
 
 	@Override
 	public Resp deleteSongList(Long songId) {
 		final int songListResult = songListMapper.deleteOneSong(songId);
 
-		return RespUtils.deleteData(songListResult);
+		return RespUtil.deleteData(songListResult);
 	}
 }

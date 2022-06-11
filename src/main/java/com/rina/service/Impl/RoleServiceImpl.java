@@ -10,8 +10,7 @@ import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.RoleService;
 import com.rina.util.ListUtil;
-import com.rina.util.MyThreadLocal;
-import com.rina.util.RespUtils;
+import com.rina.util.RespUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -40,19 +39,13 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	public Resp listRoles() {
 		final List<RoleDto> roleDtos = roleMapper.selectAll().stream()
-//				.map(x -> RoleDto.builder()
-//						.id(x.getId())
-//						.role(x.getName())
-//						.createBy(x.getCreateBy())
-//						.updateBy(x.getUpdateBy())
-//						.build())
 				.map(role -> {
 					final RoleDto dto = new RoleDto();
 					BeanUtils.copyProperties(role, dto);
 					return dto;
 				})
 				.collect(Collectors.toList());
-		return RespUtils.queryData(roleDtos);
+		return RespUtil.queryData(roleDtos);
 	}
 
 	@Override
@@ -62,7 +55,7 @@ public class RoleServiceImpl implements RoleService {
 				.forEach(x -> menuIdList.add(x.getMenuId()));
 		final Long[] menuIds = menuIdList.toArray(new Long[0]);
 
-		return RespUtils.queryData(menuIds);
+		return RespUtil.queryData(menuIds);
 	}
 
 	@Override
@@ -74,12 +67,6 @@ public class RoleServiceImpl implements RoleService {
 			return Resp.notFound();
 		}
 
-//		final RoleDto roleDto = RoleDto.builder()
-//				.id(roleId)
-//				.role(role.getName())
-//				.createBy(role.getCreateBy())
-//				.updateBy(role.getUpdateBy())
-//				.build();
 		final RoleDto roleDto = new RoleDto();
 		BeanUtils.copyProperties(role, roleDto);
 
@@ -94,13 +81,6 @@ public class RoleServiceImpl implements RoleService {
 		int roleResult = 0;
 		if (roleDto.getId() == null || roleDto.getId() == 0) {
 			// 添加一条新权限
-//			final Role role = Role.builder()
-//					.role(roleDto.getRole())
-//					.createBy(currentUser)
-//					.createTime(new Date())
-//					.updateBy(currentUser)
-//					.updateTime(new Date())
-//					.build();
 			final Role role = new Role();
 			BeanUtils.copyProperties(roleDto, role);
 			role.setId(null);
@@ -115,7 +95,7 @@ public class RoleServiceImpl implements RoleService {
 			Role role = roleMapper.selectByPrimaryKey(roleDto.getId());
 
 			if (dataUsableCheck(roleDto.getRole())) {
-				BeanUtils.copyProperties(roleDto, role);
+				role.setRole(roleDto.getRole());
 				role.setUpdateBy(currentUser);
 				role.setUpdateTime(new Date());
 			}
@@ -123,7 +103,7 @@ public class RoleServiceImpl implements RoleService {
 			roleResult = roleMapper.updateByPrimaryKey(role);
 		}
 
-		return RespUtils.editData(roleResult);
+		return RespUtil.editData(roleResult);
 	}
 
 	@Override
@@ -159,7 +139,7 @@ public class RoleServiceImpl implements RoleService {
 	public Resp deleteRole(Long roleId) {
 		final int roleResult = roleMapper.deleteByPrimaryKey(roleId);
 
-		return RespUtils.deleteData(roleResult);
+		return RespUtil.deleteData(roleResult);
 	}
 
 }
