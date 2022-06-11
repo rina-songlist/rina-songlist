@@ -37,6 +37,12 @@ public class UserController {
 		return setResponseHead(response, resp);
 	}
 
+	@PostMapping("/private/logout")
+	@ApiOperation(value = "退出登陆接口", notes = "需要授权")
+	public Resp logout() {
+		return userService.logout();
+	}
+
 	@GetMapping("/private/system/user/update")
 	@ApiOperation(value = "token更新接口", notes = "需要授权")
 	public Resp updateToken(@RequestParam(required = true) @ApiParam(value = "新用户名", required = true) String username,
