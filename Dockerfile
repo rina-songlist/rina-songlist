@@ -1,4 +1,4 @@
-FROM openjdk:8-jre
+FROM amazoncorretto:8
 MAINTAINER ArvinXY <arvinjunior@163.com>
 
 # 时区问题
