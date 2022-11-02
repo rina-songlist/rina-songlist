@@ -48,13 +48,6 @@ public interface MenuMapper {
     int updateOneMenuByMenuId(Menu menu);
 
     /**
-     * 通过菜单ID查询当前菜单
-     * @param menuId 菜单ID
-     * @return 当前菜单
-     */
-    Menu findMenuById(Long menuId);
-
-    /**
      * 获取最新添加的菜单的ID
      * @return 菜单ID
      */

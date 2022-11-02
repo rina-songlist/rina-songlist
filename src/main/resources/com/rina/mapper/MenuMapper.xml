@@ -69,21 +69,6 @@
 		from menu
 	</select>
 
-	<select id="findMenuById" resultMap="BaseResultMap" parameterType="java.lang.Long">
-		select menu_id,
-		       menu_name,
-		       menu_icon,
-		       menu_url,
-		       menu_parent_id,
-		       menu_order_value,
-		       create_by,
-		       create_time,
-		       update_by,
-		       update_time
-		from menu
-		where menu_id = #{id,jdbcType=BIGINT}
-	</select>
-
 	<select id="getNewestMenuId" resultType="java.lang.Long">
 		select MAX(menu_id) from menu
 	</select>
