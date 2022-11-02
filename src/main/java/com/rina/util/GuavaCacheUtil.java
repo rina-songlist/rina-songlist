@@ -31,6 +31,7 @@ public class GuavaCacheUtil {
 	private LoadingCache<String, String> cache = null;
 
 	@PostConstruct
+	@SuppressWarnings("all")
 	public void init() {
 		cache = CacheBuilder.newBuilder()
 				.maximumSize(10)
@@ -56,7 +57,7 @@ public class GuavaCacheUtil {
 	public<T> void put(String key, T value) throws JsonProcessingException {
 		if (StringUtils.isNotEmpty(key) && ObjectUtils.isNotEmpty(value)) {
 			this.cache.put(key, CommonUtil.objectMapper().writeValueAsString(value));
-			log.info("当前用户已存入cache");
+			log.info("数据缓存成功！");
 			return;
 		}
 		if (StringUtils.isEmpty(key)) {
