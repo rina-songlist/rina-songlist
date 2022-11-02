@@ -45,7 +45,7 @@ public class MenuServiceImpl implements MenuService {
 
 		if (menuDtos == null) {
 			log.error("数据库操作错误");
-			return Resp.notFound();
+			return Resp.serverError();
 		} else {
 			List<MenuDto> treeMenus = TreeUtil.list2tree(menuDtos, MenuDto::getId, MenuDto::getParentId, MenuDto::getOrderValue, MenuDto::getChildren, MenuDto::setChildren);
 			return UsualResp.succeed(treeMenus);
@@ -110,7 +110,7 @@ public class MenuServiceImpl implements MenuService {
 			roleResult = roleMenuMapper.insert(roleMenu);
 		} else {
 			// 编辑指定菜单
-			Menu menu = menuMapper.findMenuById(menuDto.getId());
+			Menu menu = menuMapper.getOneMenu(menuDto.getId());
 
 			// 更新前做数据可用性检查
 			if (dataUsableCheck(menuDto.getName())
@@ -170,6 +170,7 @@ public class MenuServiceImpl implements MenuService {
 							.updateTime(roleMenu.getMenu().getUpdateTime())
 							.build())
 					.collect(Collectors.toList());
+			// 若父菜单未包含，则添加相应父菜单
 			List<Menu> menus2 = new ArrayList<>(menus);
 			menus.forEach(x -> {
 				Menu menu2 = null;
