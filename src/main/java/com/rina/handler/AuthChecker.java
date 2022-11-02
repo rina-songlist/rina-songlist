@@ -9,8 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * SpringSecurity
- * 自定义的权限校验
+ * SpringSecurity 的自定义的权限校验
  * @author arvin
  * @date 2022/06/08
  */
@@ -21,7 +20,7 @@ public class AuthChecker {
 	 * 当前用户持有任何权限
 	 * @return
 	 */
-	public boolean authenticated() {
+	public boolean hasAnyAuthority() {
 		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		return loginUser.getPermissions() != null;
 	}
