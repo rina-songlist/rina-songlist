@@ -16,7 +16,7 @@ public interface MenuService extends PublicService{
 	 * 树形查询菜单
 	 * @return
 	 */
-	@PreAuthorize("@authChecker.authenticated()")
+	@PreAuthorize("@authChecker.hasAnyAuthority()")
 	Resp treeMenus();
 
 	/**
