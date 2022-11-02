@@ -47,6 +47,18 @@ pagehelper:
 
 rina:
   jwt:
+    # token所对应header名
+    header: ${HEADER:Authorization}
+    # token过期时间
     token-expire-time: ${TOKEN_EXPIRE_TIME:60*1000}
-    # 此处如有需要可改为guava
+    # 缓存方式，此处如有需要可改为guava
     cache-type: ${CACHE_TYPE:redis}
+  async-pool:
+    # 核心线程数
+    core-pool-size: ${CORE_POOL_SIZE:2}
+    # 最大线程数
+    max-pool-size: ${MAX_POOL_SIZE:5}
+    # 队列大小
+    queue-capacity: ${QUEUE_CAPACITY:10}
+    # 线程最大空闲时间
+    keep-alive-seconds: ${KEEP_ALIVE_SECONDS:6}
