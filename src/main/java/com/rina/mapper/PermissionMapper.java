@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * permission表所对应的mapper
  * @author arvin
+ * @date 2022/10/10
  */
 @Mapper
 public interface PermissionMapper {
@@ -20,9 +21,13 @@ public interface PermissionMapper {
      * @param permissionId 许可ID
      * @return 许可详情
      */
-    Permission findPermissionById(Long permissionId);
+    Permission getOnePermission(Long permissionId);
 
-    List<Permission> selectAll();
+    /**
+     * 获取所有许可
+     * @return
+     */
+    List<Permission> getAllPermissions();
 
     int updateByPrimaryKey(Permission record);
 }
