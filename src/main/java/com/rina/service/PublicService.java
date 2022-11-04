@@ -34,7 +34,7 @@ public interface PublicService {
 	 */
 	default <T> boolean dataUsableEasyCheck(T data) {
 		if (data instanceof String) {
-			return !"undifined".equals(data);
+			return !Constants.FRONTEND_NULL_STRING.equals(data);
 		}
 		return true;
 	}
