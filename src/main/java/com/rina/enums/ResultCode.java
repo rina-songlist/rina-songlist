@@ -1,11 +1,16 @@
 package com.rina.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 返回体集合
  *
  * @author arvin
  * @date 2022/02/07
  */
+@Getter
+@AllArgsConstructor
 public enum ResultCode {
 
 	/* 成功的返回体 */
@@ -23,32 +28,11 @@ public enum ResultCode {
 	/**
 	 * 网页状态码
 	 */
-	private Integer code;
+	private final Integer code;
 
 	/**
 	 * 信息描述
 	 */
-	private String message;
-
-	public Integer getCode() {
-		return code;
-	}
-
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	ResultCode(Integer code, String message) {
-		this.code = code;
-		this.message = message;
-	}
+	private final String message;
 
 }
