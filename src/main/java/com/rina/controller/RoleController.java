@@ -30,7 +30,7 @@ public class RoleController {
 	}
 
 	@GetMapping("/roleMenu/{id}")
-	@ApiOperation(value = "获取当前权限下的菜单", notes = "需要授权")
+	@ApiOperation(value = "获取指定权限下的菜单", notes = "需要授权")
 	public Resp listRoleMenus(@PathVariable(value = "id", required = true) @ApiParam(value = "权限ID", required = true) Long roleId) {
 		return roleService.listRoleMenus(roleId);
 	}
