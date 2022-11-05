@@ -4,12 +4,12 @@ import com.rina.domain.LoginUser;
 import com.rina.domain.Role;
 import com.rina.domain.RoleMenu;
 import com.rina.domain.dto.RoleDto;
-import com.rina.enums.ResultCode;
 import com.rina.mapper.RoleMapper;
 import com.rina.mapper.RoleMenuMapper;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.RoleService;
+import com.rina.task.PermissionTask;
 import com.rina.util.ListUtil;
 import com.rina.util.RespUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +39,7 @@ public class RoleServiceImpl implements RoleService {
 
 	private final RoleMapper roleMapper;
 	private final RoleMenuMapper roleMenuMapper;
+	private final PermissionTask permissionTask;
 
 	@Override
 	public Resp listRoles() {
@@ -113,8 +116,13 @@ public class RoleServiceImpl implements RoleService {
 	public Resp changeMenus(Long roleId, Long... menuIds) {
 		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		final String currentUser = loginUser.getUser().getUserName();
-
 		final List<Long> newMenuIds = Arrays.asList(menuIds);
+		List<Integer> roleUpdateResult = null;
+
+		// 开启子线程
+		final Future<List<Integer>> permissionFuture = permissionTask.updateViewPermissions(currentUser, roleId, newMenuIds);
+		List<Integer> permissionFutureResult = null;
+
 		List<Long> oldMenuIds = new ArrayList<>();
 		roleMenuMapper.findMenuByRole(roleId)
 				.forEach(x -> oldMenuIds.add(x.getMenuId()));
@@ -130,13 +138,48 @@ public class RoleServiceImpl implements RoleService {
 				.updateBy(currentUser)
 				.updateTime(new Date())
 				.build()));
-		roleMenus.forEach(roleMenuMapper::insert);
+		final List<Integer> roleInserted = roleMenus.stream().map(roleMenuMapper::insert)
+				.distinct()
+				.map(x -> {
+					if (x.equals(0)) {
+						x = 1;
+					}
+					return x;
+				}).
+				collect(Collectors.toList());
 
 		// 删除菜单
 		final List<Long> deleteMenus = ListUtil.compareLists(oldMenuIds, newMenuIds);
-		deleteMenus.forEach(x -> roleMenuMapper.deleteByPrimaryKey(roleId, x));
+		final List<Integer> roleDeleted = deleteMenus.stream().map(x -> roleMenuMapper.deleteByPrimaryKey(roleId, x))
+				.distinct()
+				.map(x -> {
+					if (x.equals(0)) {
+						x = 1;
+					}
+					return x;
+				})
+				.collect(Collectors.toList());
 
-		return Resp.succeed(ResultCode.CREATED);
+		roleUpdateResult = roleInserted;
+		roleUpdateResult.addAll(roleDeleted);
+
+		// 获取子线程结果
+		while (true) {
+			if (permissionFuture.isDone()) {
+				try {
+					permissionFutureResult = permissionFuture.get();
+				} catch (InterruptedException | ExecutionException e) {
+					log.error("更新menu的view权限失败！原因：{}", e.getLocalizedMessage());
+					permissionFutureResult = new ArrayList<>();
+				}
+				break;
+			}
+		}
+
+		roleUpdateResult.addAll(permissionFutureResult);
+		final Integer[] roleUpdated = roleUpdateResult.toArray(new Integer[0]);
+
+		return RespUtil.editData(roleUpdated);
 	}
 
 	@Override
