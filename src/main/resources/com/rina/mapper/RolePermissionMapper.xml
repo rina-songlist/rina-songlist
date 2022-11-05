@@ -51,7 +51,7 @@
 		<collection property="permission"
 		             column="permission_id"
 		             javaType="com.rina.domain.Permission"
-		             select="com.rina.mapper.PermissionMapper.findPermissionById" />
+		             select="com.rina.mapper.PermissionMapper.getOnePermission" />
 	</resultMap>
 	<select id="findPermissionsByRoleId" parameterType="java.lang.Long" resultMap="RoleToPermission">
 		select role_id, permission_id, create_by, create_time, update_by, update_time
