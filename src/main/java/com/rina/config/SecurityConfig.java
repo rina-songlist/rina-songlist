@@ -55,9 +55,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticationEntryPoint(authenticationEntryPoint)
 				.and()
 				.authorizeRequests()
-				.antMatchers("/private/login",
-						"/song-list",
-						"/swagger-ui/*").anonymous()
+				.antMatchers("/private/login", "/song-list").anonymous()
+				.antMatchers("/swagger-ui/*", "/swagger-resources**", "/v2/*").permitAll()
 				.anyRequest().authenticated();
 	}
 }
