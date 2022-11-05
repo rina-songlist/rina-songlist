@@ -86,13 +86,16 @@ public class UserServiceImpl implements UserService {
 			if (Constants.CACHE_REDIS.equals(appProperties.getJwt().getCacheType())) {
 				try {
 					redisUtil.set(Constants.LOGIN_CACHE_PREFIX + userId, loginUser, commonUtil.tokenExpireSeconds());
+					log.info("当前用户已存入redis，用户ID：{}", userId);
 				} catch (Exception e) {
 					log.error("redis连接失败！：{}", e.getLocalizedMessage());
 					appProperties.getJwt().setCacheType("guava");
 					guavaCacheUtil.put(Constants.LOGIN_CACHE_PREFIX + userId, loginUser);
+					log.info("当前用户已存入guava，用户ID：{}", userId);
 				}
 			} else {
 				guavaCacheUtil.put(Constants.LOGIN_CACHE_PREFIX + userId, loginUser);
+				log.info("当前用户已存入guava，用户ID：{}", userId);
 			}
 		} catch (JsonProcessingException e) {
 			log.error("JSON序列化错误：{}", e.getLocalizedMessage());
@@ -113,14 +116,17 @@ public class UserServiceImpl implements UserService {
 				try {
 					if (redisUtil.hasKey(Constants.LOGIN_CACHE_PREFIX + userId)) {
 						redisUtil.del(Constants.LOGIN_CACHE_PREFIX + userId);
+						log.info("当前用户已从redis移除，用户ID：{}", userId);
 					}
 				} catch (Exception e) {
 					log.error("redis连接失败！：{}", e.getLocalizedMessage());
 					appProperties.getJwt().setCacheType("guava");
 					guavaCacheUtil.delete(Constants.LOGIN_CACHE_PREFIX + userId);
+					log.info("当前用户已从guava移除，用户ID：{}", userId);
 				}
 			} else {
 				guavaCacheUtil.delete(Constants.LOGIN_CACHE_PREFIX + userId);
+				log.info("当前用户已从guava移除，用户ID：{}", userId);
 			}
 		} catch (GuavaCacheNullKeyException e) {
 			return Resp.serverError();
