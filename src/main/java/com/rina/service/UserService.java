@@ -25,7 +25,7 @@ public interface UserService extends PublicService{
 	 * 退出登陆的方法
 	 * @return
 	 */
-	@PreAuthorize("@authChecker.authenticated()")
+	@PreAuthorize("@authChecker.hasAnyAuthority()")
 	Resp logout();
 
 	/**
@@ -33,7 +33,7 @@ public interface UserService extends PublicService{
 	 * @param newUserName 新的用户名
 	 * @return
 	 */
-	@PreAuthorize("@authChecker.authenticated()")
+	@PreAuthorize("@authChecker.hasAnyAuthority()")
 	Resp updateToken(String newUserName);
 
 	/**
@@ -65,7 +65,7 @@ public interface UserService extends PublicService{
 	 * @param roleUserDto 用户权限详情
 	 * @return
 	 */
-	@PreAuthorize("hasAuthority('sys:role:change')")
+	@PreAuthorize("hasAuthority('sys:user:edit')")
 	Resp changeRole(RoleUserDto roleUserDto);
 
 	/**
