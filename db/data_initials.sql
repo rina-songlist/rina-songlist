@@ -8,6 +8,43 @@ INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_paren
 INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (4, '角色管理', 'iconfont icon-group', '/pc/system/role', 1, 2, 'admin', NOW(), 'admin', NOW());
 INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (5, '菜单管理', 'iconfont icon-workbench', '/pc/system/menu', 1, 3, 'admin', NOW(), 'admin', NOW());
 INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (6, '歌单展示', 'iconfont icon-document', '/pc/show/song-list', 2, 1, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `menu` (`menu_id`, `menu_name`, `menu_icon`, `menu_url`, `menu_parent_id`, `menu_order_value`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (7, '许可管理', 'aaa', '/pc/system/permission', 1, 4, 'admin', NOW(), 'admin', NOW());
+
+-- ----------------------------
+-- Records of menu_permission
+-- ----------------------------
+INSERT INTO `menu_permission` (`menu_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (3, 3, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `menu_permission` (`menu_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (4, 8, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `menu_permission` (`menu_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (5, 14, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `menu_permission` (`menu_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (6, 21, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `menu_permission` (`menu_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (7, 18, 'admin', NOW(), 'admin', NOW());
+
+-- ----------------------------
+-- Records of permission
+-- ----------------------------
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 'system', '系统管理', NULL, 1, 0, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 'user', '用户权限', 1, 1, 0, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (3, 'sys:user:view', '查看用户', 2, 1, 1, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (4, 'sys:user:edit', '编辑用户', 2, 2, 1, 0, 3, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (5, 'sys:user:delete', '删除用户', 2, 3, 1, 0, 3, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (6, 'sys:user:changeRole', '更改用户权限', 2, 4, 1, 0, 3, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (7, 'role', '角色权限', 1, 2, 0, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (8, 'sys:role: view', '查看权限', 7, 1, 1, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (9, 'sys:role:edit', '编辑角色', 7, 2, 1, 0, 8, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (10, 'sys:role:delete', '删除角色', 7, 3, 1, 0, 8, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (11, 'sys:role:changeMenu', '更改角色可见菜单', 7, 4, 1, 0, 8, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (12, 'sys:role:changePermission', '更改角色操作许可', 7, 5, 1, 0, 8, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (13, 'menu', '菜单权限', 1, 3, 0, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (14, 'sys:menu:view', '查看菜单', 13, 1, 1, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (15, 'sys:menu:edit', '编辑菜单', 13, 2, 1, 0, 14, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (16, 'sys:menu:delete', '删除菜单', 13, 3, 1, 0, 14, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (17, 'permission', '许可权限', 1, 4, 0, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (18, 'sys:permission:view', '查看许可', 17, 1, 1, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (19, 'show', '用户展示', NULL, 2, 0, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (20, 'songList', '歌单权限', 19, 1, 0, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (21, 'sys:songList:view', '查看歌单', 20, 1, 1, 1, NULL, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (22, 'sys:songList:edit', '编辑歌单', 20, 2, 1, 0, 21, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `permission` (`permission_id`, `permission_name`, `remark`, `permission_parent_id`, `permission_order_value`, `deepest`, `disabled`, `main_permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (23, 'sys:songList:delete', '删除歌单', 20, 3, 1, 0, 21, 'admin', NOW(), 'admin', NOW());
 
 -- ----------------------------
 -- Table structure for role
@@ -24,11 +61,40 @@ INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `upda
 INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 4, 'admin', NOW(), 'admin', NOW());
 INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 5, 'admin', NOW(), 'admin', NOW());
 INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 6, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 2, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 3, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_menu` (`role_id`, `menu_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 6, 'admin', NOW(), 'admin', NOW());
+
+-- ----------------------------
+-- Records of role_permission
+-- ----------------------------
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 3, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 4, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 5, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 6, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 8, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 9, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 10, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 11, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 12, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 14, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 15, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 16, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 18, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 21, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 22, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 23, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 3, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 8, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 14, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 18, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_permission` (`role_id`, `permission_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 21, 'admin', NOW(), 'admin', NOW());
 
 -- ----------------------------
 -- Table structure for role_user
 -- ----------------------------
 INSERT INTO `role_user` (`role_id`, `user_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 1, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `role_user` (`role_id`, `user_id`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (2, 16, 'admin', NOW(), 'admin', NOW());
 
 -- ----------------------------
 -- Table structure for song_list
@@ -268,3 +334,4 @@ INSERT INTO rina.song_list (song_id, song_name, song_artist, song_language, crea
 -- Table structure for user
 -- ----------------------------
 INSERT INTO `user` (`user_id`, `user_name`, `password`, `status`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (1, 'admin', '$2a$10$THJaKjA.PHhMXwNvDasp3egCjsJe8OGXlA96D7BIUaRGEGPk8EkF.', 1, 'admin', NOW(), 'admin', NOW());
+INSERT INTO `user` (`user_id`, `user_name`, `password`, `status`, `create_by`, `create_time`, `update_by`, `update_time`) VALUES (16, 'tester', '$2a$10$LBklC2HCTvlzIEbPTaJICO9e8kDyLwYDVHzixO6GU/hZlFpgFZrxa', 1, 'admin', NOW(), 'admin', NOW());
