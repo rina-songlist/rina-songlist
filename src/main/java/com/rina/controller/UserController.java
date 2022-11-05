@@ -1,5 +1,6 @@
 package com.rina.controller;
 
+import com.rina.config.AppProperties;
 import com.rina.domain.dto.RoleUserDto;
 import com.rina.domain.dto.UserDto;
 import com.rina.domain.dto.UserLoginDto;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
 	private final UserService userService;
+	private final AppProperties appProperties;
 
 	@PostMapping("/private/login")
 	@ApiOperation(value = "后台登陆接口", notes = "无需授权")
@@ -61,7 +63,7 @@ public class UserController {
 		} else {
 			return Resp.notFound();
 		}
-		response.setHeader("Authorization", completeLoginData.getData());
+		response.setHeader(appProperties.getJwt().getHeader(), completeLoginData.getData());
 		return Resp.succeed();
 	}
 
