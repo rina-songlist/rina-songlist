@@ -117,7 +117,7 @@ public class TreeUtil {
 	}
 
 	/**
-	 * 将数组转化为树形结构（简化了需求的获取当前节点排序顺序的变量）
+	 * 将数组转化为树形结构（简化了需求的是否为主节点的变量）
 	 * @param source 源数据
 	 * @param getIdFun 获取当前节点id的方法
 	 * @param getPidFun 获取当前父节点id的方法
@@ -137,7 +137,7 @@ public class TreeUtil {
 	}
 
 	/**
-	 * 将数组转化为树形结构（简化了需求的是否为主节点的变量）
+	 * 将数组转化为树形结构（简化了需求的获取当前节点排序顺序的变量）
 	 * @param source 源数据
 	 * @param isRoot 是否为主节点的方法
 	 * @param getIdFun 获取当前节点id的方法
