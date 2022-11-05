@@ -52,7 +52,7 @@
 		<collection property="menu"
 		            column="menu_id"
 		            ofType="com.rina.domain.Menu"
-		            select="com.rina.mapper.MenuMapper.findMenuById" />
+		            select="com.rina.mapper.MenuMapper.getOneMenu" />
 	</resultMap>
 	<select id="findMenuByRole" parameterType="java.lang.Long" resultMap="roleToMap">
 		select role_id, menu_id, create_by, create_time, update_by, update_time
