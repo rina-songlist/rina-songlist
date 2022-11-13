@@ -27,9 +27,13 @@ public interface RoleService extends PublicService{
 	@PreAuthorize("hasAuthority('sys:role:changeMenu')")
 	Resp listRoleMenus(Long roleId);
 
-	////TODO 查许可
-	//@PreAuthorize("hasAuthority('sys:role:changePermission')")
-	//Resp listRolePermissions(Long roleId);
+	/**
+	 * 查询指定权限下的许可
+	 * @param roleId 权限ID
+	 * @return
+	 */
+	@PreAuthorize("hasAuthority('sys:role:changePermission')")
+	Resp listRolePermissions(Long roleId);
 
 	/**
 	 * 获取一条权限信息
@@ -57,8 +61,14 @@ public interface RoleService extends PublicService{
 	Resp changeMenus(Long roleId, Long... newMenuIds);
 
 	//TODO 改许可
-	//@PreAuthorize("hasAuthority('sys:role:changePermission')")
-	//Resp changePermissions(Long roleId, Long... permissionIds);
+	/**
+	 * 更改可查看许可
+	 * @param roleId 权限ID
+	 * @param permissionIds 菜单ID
+	 * @return
+	 */
+	@PreAuthorize("hasAuthority('sys:role:changePermission')")
+	Resp changePermissions(Long roleId, Long... permissionIds);
 
 	/**
 	 * 删除一条权限

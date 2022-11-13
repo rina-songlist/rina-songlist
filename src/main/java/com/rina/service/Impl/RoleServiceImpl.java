@@ -3,9 +3,11 @@ package com.rina.service.Impl;
 import com.rina.domain.LoginUser;
 import com.rina.domain.Role;
 import com.rina.domain.RoleMenu;
+import com.rina.domain.RolePermission;
 import com.rina.domain.dto.RoleDto;
 import com.rina.mapper.RoleMapper;
 import com.rina.mapper.RoleMenuMapper;
+import com.rina.mapper.RolePermissionMapper;
 import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.RoleService;
@@ -39,6 +41,7 @@ public class RoleServiceImpl implements RoleService {
 
 	private final RoleMapper roleMapper;
 	private final RoleMenuMapper roleMenuMapper;
+	private final RolePermissionMapper rolePermissionMapper;
 	private final PermissionTask permissionTask;
 
 	@Override
@@ -61,6 +64,21 @@ public class RoleServiceImpl implements RoleService {
 		final Long[] menuIds = menuIdList.toArray(new Long[0]);
 
 		return RespUtil.queryData(menuIds);
+	}
+
+	/**
+	 * 查询指定权限下的许可
+	 *
+	 * @param roleId 权限ID
+	 * @return
+	 */
+	@Override
+	public Resp listRolePermissions(Long roleId) {
+		List<Long> permissionIdList = new ArrayList<>();
+		rolePermissionMapper.findPermissionsByRoleId(roleId)
+				.forEach(x -> permissionIdList.add(x.getPermissionId()));
+		final Long[] permissionIds = permissionIdList.toArray(new Long[0]);
+		return RespUtil.queryData(permissionIds);
 	}
 
 	@Override
@@ -177,6 +195,64 @@ public class RoleServiceImpl implements RoleService {
 		}
 
 		roleUpdateResult.addAll(permissionFutureResult);
+		final Integer[] roleUpdated = roleUpdateResult.toArray(new Integer[0]);
+
+		return RespUtil.editData(roleUpdated);
+	}
+
+	/**
+	 * 更改可查看许可
+	 *
+	 * @param roleId        权限ID
+	 * @param permissionIds 菜单ID
+	 * @return
+	 */
+	@Override
+	public Resp changePermissions(Long roleId, Long... permissionIds) {
+		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		final String currentUser = loginUser.getUser().getUserName();
+		final List<Long> newPermissionIds = Arrays.asList(permissionIds);
+		List<Integer> roleUpdateResult = null;
+		List<Long> oldPermissionIds = new ArrayList<>();
+		rolePermissionMapper.findPermissionsByRoleId(roleId)
+				.forEach(x -> oldPermissionIds.add(x.getPermissionId()));
+
+		//添加许可
+		List<RolePermission> rolePermissions = new ArrayList<>();
+		ListUtil.compareLists(newPermissionIds, oldPermissionIds)
+				.forEach(x -> rolePermissions.add(RolePermission.builder()
+						.roleId(roleId)
+						.permissionId(x)
+						.createBy(currentUser)
+						.createTime(new Date())
+						.updateBy(currentUser)
+						.updateTime(new Date())
+						.build()));
+
+		final List<Integer> roleInserted = rolePermissions.stream().map(rolePermissionMapper::insert)
+				.distinct()
+				.map(x -> {
+					if (x.equals(0)) {
+						x = 1;
+					}
+					return x;
+				})
+				.collect(Collectors.toList());
+
+		//删除许可
+		List<Integer> roleDeleted = ListUtil.compareLists(oldPermissionIds, newPermissionIds)
+				.stream().map(x -> rolePermissionMapper.deleteByPrimaryKey(roleId, x))
+				.distinct()
+				.map(x -> {
+					if (x.equals(0)) {
+						x = 1;
+					}
+					return x;
+				})
+				.collect(Collectors.toList());
+
+		roleUpdateResult = roleInserted;
+		roleUpdateResult.addAll(roleDeleted);
 		final Integer[] roleUpdated = roleUpdateResult.toArray(new Integer[0]);
 
 		return RespUtil.editData(roleUpdated);

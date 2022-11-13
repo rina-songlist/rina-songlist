@@ -35,6 +35,12 @@ public class RoleController {
 		return roleService.listRoleMenus(roleId);
 	}
 
+	@GetMapping("/rolePermission/{id}")
+	@ApiOperation(value = "获取指定权限下的许可", notes = "需要授权")
+	public Resp listRolePermissions(@PathVariable(value = "id", required = true) @ApiParam(value = "权限ID", required = true) Long roleId) {
+		return roleService.listRolePermissions(roleId);
+	}
+
 	@GetMapping("/role/{id}")
 	@ApiOperation(value = "获取单一权限", notes = "需要授权")
 	public Resp getSingleRole(@PathVariable(value = "id", required = true) @ApiParam(value = "权限ID", required = true) Long roleId) {
@@ -47,11 +53,18 @@ public class RoleController {
 		return  roleService.editRole(roleDto);
 	}
 
-	@PostMapping("/role/{id}")
+	@PostMapping("/roleMenu/{id}")
 	@ApiOperation(value = "更改可查看菜单", notes = "需要授权")
 	public Resp changeMenus(@PathVariable(value = "id", required = true) @ApiParam(value = "权限ID", required = true) Long roleId,
 	                        @RequestBody(required = true) @ApiParam(value = "菜单ID", required = true) Long... menuIds) {
 		return roleService.changeMenus(roleId, menuIds);
+	}
+
+	@PostMapping("/rolePermission/{id}")
+	@ApiOperation(value = "更改可查看许可", notes = "需要授权")
+	public Resp changePermissions(@PathVariable(value = "id", required = true) @ApiParam(value = "权限ID", required = true) Long roleId,
+								  @RequestBody(required = true) @ApiParam(value = "许可ID", required = true) Long... permissionIds) {
+		return roleService.changePermissions(roleId, permissionIds);
 	}
 
 	@DeleteMapping("/role/{id}")
