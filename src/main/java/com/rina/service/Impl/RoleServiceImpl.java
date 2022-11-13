@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,12 +39,42 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 public class RoleServiceImpl implements RoleService {
 
 	private final RoleMapper roleMapper;
 	private final RoleMenuMapper roleMenuMapper;
 	private final RolePermissionMapper rolePermissionMapper;
 	private final PermissionTask permissionTask;
+
+	@Override
+	public void testTransactional() throws Exception {
+		System.out.println(rolePermissionMapper.findPermissionsByRoleId(2L).stream()
+				.map(RolePermission::getPermissionId)
+				.collect(Collectors.toList()));
+		int insert = rolePermissionMapper.insert(RolePermission.builder()
+				.roleId(2L)
+				.permissionId(23L)
+				.createBy("aftermath")
+				.createTime(new Date())
+				.updateBy("aftermath")
+				.updateTime(new Date())
+				.build());
+		System.out.println("父线程添加是否成功: " + (insert>0));
+		System.out.println("父线程读: " + rolePermissionMapper.findPermissionsByRoleId(2L).stream()
+				.map(RolePermission::getPermissionId)
+				.collect(Collectors.toList()));
+
+		Future<List<Long>> future = permissionTask.testTransactional();
+		// 获取子线程结果
+		while (true) {
+			if (future.isDone()) {
+				future.get();
+				break;
+			}
+		}
+		//throw new Exception("test error");
+	}
 
 	@Override
 	public Resp listRoles() {

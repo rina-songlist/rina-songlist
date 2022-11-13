@@ -13,6 +13,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public interface RoleService extends PublicService{
 
 	/**
+	 * 测试事务
+	 * @throws Exception 扔一个异常检查回滚
+	 */
+	void testTransactional() throws Exception;
+
+	/**
 	 * 获取所有权限列表
 	 * @return
 	 */

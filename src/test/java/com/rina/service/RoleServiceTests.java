@@ -1,12 +1,16 @@
 package com.rina.service;
 
 import com.alibaba.fastjson.JSON;
+import com.rina.domain.RolePermission;
 import com.rina.domain.dto.RoleDto;
+import com.rina.mapper.RolePermissionMapper;
 import com.rina.resp.Resp;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
+
+import java.util.stream.Collectors;
 
 /**
  * 权限管理相关的service的测试
@@ -20,6 +24,20 @@ public class RoleServiceTests {
 
 	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private RolePermissionMapper rolePermissionMapper;
+
+	@Test
+	void testTransactional() {
+		try {
+			roleService.testTransactional();
+		} catch (Exception e) {
+			System.out.println("发生错误: "+e.getMessage());
+		}
+		System.out.println("读已提交: " + rolePermissionMapper.findPermissionsByRoleId(2L).stream()
+				.map(RolePermission::getPermissionId)
+				.collect(Collectors.toList()));
+	}
 
 	@Test
 	void testListRoles() {

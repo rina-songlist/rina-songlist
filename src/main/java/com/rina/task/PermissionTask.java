@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
  */
 @Component
 @AllArgsConstructor
+@Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 public class PermissionTask {
 
 	private final MenuPermissionMapper menuPermissionMapper;
@@ -84,4 +87,21 @@ public class PermissionTask {
 		return new AsyncResult<>(permissionUpdateResult);
 	}
 
+	@Async
+	public Future<List<Long>> testTransactional() {
+		int insert = rolePermissionMapper.insert(RolePermission.builder()
+				.roleId(2L)
+				.permissionId(24L)
+				.createBy("aftermath")
+				.createTime(new Date())
+				.updateBy("aftermath")
+				.updateTime(new Date())
+				.build());
+		System.out.println("子线程添加是否成功: " + (insert>0));
+		System.out.println("子线程读: " + rolePermissionMapper.findPermissionsByRoleId(2L).stream()
+				.map(RolePermission::getPermissionId)
+				.collect(Collectors.toList()));
+		System.out.println(1/0);
+		return new AsyncResult<>(rolePermissionMapper.findPermissionsByRoleId(2L).stream().map(RolePermission::getPermissionId).collect(Collectors.toList()));
+	}
 }
