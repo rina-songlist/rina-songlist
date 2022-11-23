@@ -1,8 +1,9 @@
 package com.rina.domain;
 
+import com.rina.domain.relation.AbstractRoleRelationType;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,25 +11,26 @@ import java.util.Date;
  * @author arvin
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class RolePermission implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class RolePermission extends AbstractRoleRelationType {
 
     private static final long serialVersionUID = 4471319874141668747L;
 
-    private Long roleId;
-
     private Long permissionId;
 
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
-
     private Permission permission;
+
+    public RolePermission(Long roleId,
+                          Long permissionId,
+                          String createBy,
+                          Date createTime,
+                          String updateBy,
+                          Date updateTime,
+                          Permission permission) {
+        super(roleId, createBy, createTime, updateBy, updateTime);
+        this.permissionId = permissionId;
+        this.permission = permission;
+    }
 }
