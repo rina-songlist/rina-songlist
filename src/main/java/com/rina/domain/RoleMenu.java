@@ -1,8 +1,9 @@
 package com.rina.domain;
 
+import com.rina.domain.relation.AbstractRoleRelationType;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,26 +12,27 @@ import java.util.Date;
  * @author arvin
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class RoleMenu implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class RoleMenu extends AbstractRoleRelationType {
 
     private static final long serialVersionUID = 1216966007014837211L;
 
-    private Long roleId;
-
     private Long menuId;
 
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
-
     private Menu menu;
+
+    public RoleMenu(Long roleId,
+                    Long menuId,
+                    String createBy,
+                    Date createTime,
+                    String updateBy,
+                    Date updateTime,
+                    Menu menu) {
+        super(roleId, createBy, createTime, updateBy, updateTime);
+        this.menuId = menuId;
+        this.menu = menu;
+    }
 
 }
