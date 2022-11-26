@@ -3,7 +3,7 @@ package com.rina.task;
 import com.rina.domain.RolePermission;
 import com.rina.mapper.MenuPermissionMapper;
 import com.rina.mapper.RolePermissionMapper;
-import com.rina.util.CRUDUtils;
+import com.rina.util.RelationTableUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -32,60 +32,23 @@ public class PermissionTask {
 	 * @param newMenuIds 更新后的菜单ID
 	 * @return 任务完成状态
 	 */
-	// TODO 与RoleServiceImpl.changeMenus相似内容提取成工具类，并采用lambda方式调用
 	@Async
 	public Future<List<Integer>> updateViewPermissions(String currentUser, Long roleId, List<Long> newMenuIds) {
 		final List<Long> newPermissionIds = newMenuIds.size() == 0 ?
 				newMenuIds : menuPermissionMapper.findPermissionByMenu(newMenuIds);
-		CRUDUtils crudUtils = new CRUDUtils();
-		List<Integer> permissionUpdateResult = crudUtils.updateById(roleId, newPermissionIds,
+		List<Integer> permissionUpdateResult = RelationTableUtils.compareAndUpdateRelationTable(roleId, newPermissionIds,
 														rolePermissionMapper::findPermissionsByRoleId,
 														RolePermission::getPermissionId,
-														t -> RolePermission.builder().roleId(roleId).permissionId(t)
-																.createBy(currentUser).createTime(new Date()).updateBy(currentUser).updateTime(new Date()).build(),
+														permissionId -> RolePermission.builder()
+																.roleId(roleId)
+																.permissionId(permissionId)
+																.createBy(currentUser)
+																.createTime(new Date())
+																.updateBy(currentUser)
+																.updateTime(new Date())
+																.build(),
 														rolePermissionMapper::insert,
 														rolePermissionMapper::deleteByPrimaryKey);
-		////从这开始
-		//final List<Long> oldPermissionIds = new ArrayList<>();
-		//rolePermissionMapper.findPermissionsByRoleId(roleId)
-		//		.forEach(rolePermission -> oldPermissionIds.add(rolePermission.getPermissionId()));
-		//
-		//// 添加许可
-		//List<RolePermission> rolePermissions = new ArrayList<>();
-		//ListUtil.compareLists(newPermissionIds, oldPermissionIds)
-		//		.forEach(insert -> rolePermissions.add(RolePermission.builder()
-		//						.roleId(roleId)
-		//						.permissionId(insert)
-		//						.createBy(currentUser)
-		//						.createTime(new Date())
-		//						.updateBy(currentUser)
-		//						.updateTime(new Date())
-		//				.build()));
-		//
-		//final List<Integer> permissionInserted = rolePermissions.stream().map(rolePermissionMapper::insert)
-		//		.distinct()
-		//		.map(x -> {
-		//			if (x.equals(0)) {
-		//				x = 1;
-		//			}
-		//			return x;
-		//		})
-		//		.collect(Collectors.toList());
-		//
-		//// 删除许可
-		//final List<Integer> permissionDeleted = ListUtil.compareLists(oldPermissionIds, newPermissionIds)
-		//		.stream().map(x -> rolePermissionMapper.deleteByPrimaryKey(roleId, x))
-		//		.distinct()
-		//		.map(x -> {
-		//			if (x.equals(0)) {
-		//				x = 1;
-		//			}
-		//			return x;
-		//		})
-		//		.collect(Collectors.toList());
-		//
-		//permissionUpdateResult = permissionInserted;
-		//permissionUpdateResult.addAll(permissionDeleted);
 
 		// TODO 后续需改为事物处理
 		return new AsyncResult<>(permissionUpdateResult);
