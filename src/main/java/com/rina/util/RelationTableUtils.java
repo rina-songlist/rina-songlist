@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 /**
  * 关系表工具类
- * @author : aftermath
- * @date : 2022-11-06 10:56:34
+ * @author aftermath
+ * @date 2022-11-06 10:56:34
  */
 public class RelationTableUtils {
 
