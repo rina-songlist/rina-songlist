@@ -10,7 +10,7 @@ import com.rina.resp.Resp;
 import com.rina.resp.UsualResp;
 import com.rina.service.RoleService;
 import com.rina.task.PermissionTask;
-import com.rina.util.CRUDUtils;
+import com.rina.util.RelationTableUtils;
 import com.rina.util.RespUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -118,58 +118,24 @@ public class RoleServiceImpl implements RoleService {
 		final String currentUser = loginUser.getUser().getUserName();
 		final List<Long> newMenuIds = Arrays.asList(menuIds);
 
+		List<Integer> permissionFutureResult;
+
 		// 开启子线程
 		final Future<List<Integer>> permissionFuture = permissionTask.updateViewPermissions(currentUser, roleId, newMenuIds);
 
-		CRUDUtils crudUtils = new CRUDUtils();
-		List<Integer> roleUpdateResult = crudUtils.updateById(roleId, newMenuIds,
+		List<Integer> roleUpdateResult = RelationTableUtils.compareAndUpdateRelationTable(roleId, newMenuIds,
 																roleMenuMapper::findMenuByRole,
 																RoleMenu::getMenuId,
-																t -> RoleMenu.builder().roleId(roleId).menuId(t)
-																		.createBy(currentUser).createTime(new Date()).updateBy(currentUser).updateTime(new Date()).build(),
+																permissionId -> RoleMenu.builder()
+																		.roleId(roleId)
+																		.menuId(permissionId)
+																		.createBy(currentUser)
+																		.createTime(new Date())
+																		.updateBy(currentUser)
+																		.updateTime(new Date())
+																		.build(),
 																roleMenuMapper::insert,
 																roleMenuMapper::deleteByPrimaryKey);
-		List<Integer> permissionFutureResult;
-
-		//List<Long> oldMenuIds = new ArrayList<>();
-		//roleMenuMapper.findMenuByRole(roleId)
-		//		.forEach(x -> oldMenuIds.add(x.getMenuId()));
-		//
-		//// 添加菜单
-		//final List<Long> insertMenus = ListUtil.compareLists(newMenuIds, oldMenuIds);
-		//List<RoleMenu> roleMenus = new ArrayList<>();
-		//insertMenus.forEach(x -> roleMenus.add(RoleMenu.builder()
-		//		.roleId(roleId)
-		//		.menuId(x)
-		//		.createBy(currentUser)
-		//		.createTime(new Date())
-		//		.updateBy(currentUser)
-		//		.updateTime(new Date())
-		//		.build()));
-		//final List<Integer> roleInserted = roleMenus.stream().map(roleMenuMapper::insert)
-		//		.distinct()
-		//		.map(x -> {
-		//			if (x.equals(0)) {
-		//				x = 1;
-		//			}
-		//			return x;
-		//		}).
-		//		collect(Collectors.toList());
-		//
-		//// 删除菜单
-		//final List<Long> deleteMenus = ListUtil.compareLists(oldMenuIds, newMenuIds);
-		//final List<Integer> roleDeleted = deleteMenus.stream().map(x -> roleMenuMapper.deleteByPrimaryKey(roleId, x))
-		//		.distinct()
-		//		.map(x -> {
-		//			if (x.equals(0)) {
-		//				x = 1;
-		//			}
-		//			return x;
-		//		})
-		//		.collect(Collectors.toList());
-		//
-		//roleUpdateResult = roleInserted;
-		//roleUpdateResult.addAll(roleDeleted);
 
 		// 获取子线程结果
 		while (true) {
