@@ -1,11 +1,11 @@
 package com.rina.domain.relation;
 
-import lombok.AllArgsConstructor;
+import com.rina.domain.AbstractBasicTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -17,20 +17,16 @@ import java.util.Date;
  */
 @Data
 @SuperBuilder
-@AllArgsConstructor
 @NoArgsConstructor
-public abstract class AbstractRoleRelationType implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public abstract class AbstractRoleRelationType extends AbstractBasicTable {
 
 	private static final long serialVersionUID = -870469471184910565L;
 
-	protected Long roleId;
+	private Long roleId;
 
-	protected String createBy;
-
-	protected Date createTime;
-
-	protected String updateBy;
-
-	protected Date updateTime;
-
+	protected AbstractRoleRelationType(Long roleId, String createBy, Date createTime, String updateBy, Date updateTime) {
+		super(createBy, createTime, updateBy, updateTime);
+		this.roleId = roleId;
+	}
 }
