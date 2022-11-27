@@ -2,7 +2,9 @@ package com.rina.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -13,8 +15,6 @@ import java.util.stream.Collectors;
  */
 public class RelationTableUtils {
 
-    // TODO 将方法重载为单入有返、单入无返、双入无返的方法
-
     /**
      * 通过 id 更新 R 表单的 T 字段
      * @param index 索引id
@@ -23,7 +23,7 @@ public class RelationTableUtils {
      * @param tGetterFromR 从R拿到T的方法
      * @param rCreator R实例的构造方法
      * @param insertMapperByR 通过R插入表的方法
-     * @param deleteMapperByIndexAndParam 通过索引和另一参数删除表的方法
+     * @param deleteMapperByIndexAndParam 通过索引和另一参数删除表的方法（双入有返）
      * @param <T> 需要更新的字段 (eg: RoleMenuId)
      * @param <R> 更新字段所处的实体类 (eg: RoleMenu)
      * @return 更新记录数
@@ -60,5 +60,85 @@ public class RelationTableUtils {
         updateResult.addAll(deleteResult);
         return updateResult;
     }
+
+	/**
+	 * 通过 id 更新 R 表单的 T 字段
+	 * @param index 索引id
+	 * @param newParams 更新后的参数集合
+	 * @param findOldListByIndex 通过索引查询旧参数的方法
+	 * @param tGetterFromR 从R拿到T的方法
+	 * @param rCreator R实例的构造方法
+	 * @param insertMapperByR 通过R插入表的方法
+	 * @param deleteMapperByIndexAndParam 通过索引删除表的方法（单入有返）
+	 * @param <T> 需要更新的字段 (eg: RoleMenuId)
+	 * @param <R> 更新字段所处的实体类 (eg: RoleMenu)
+	 * @return 更新记录数
+	 */
+	public static <T extends Comparable<T>, R> List<Integer> compareAndUpdateRelationTable(Long index,
+	                                                                                       List<T> newParams,
+	                                                                                       Function<Long, List<R>> findOldListByIndex,
+	                                                                                       Function<R, T> tGetterFromR,
+	                                                                                       Function<T, R> rCreator,
+	                                                                                       Function<R, Integer> insertMapperByR,
+	                                                                                       Function<Long, Integer> deleteMapperByIndexAndParam) {
+		return compareAndUpdateRelationTable(index, newParams, findOldListByIndex, tGetterFromR, rCreator, insertMapperByR,
+				(aLong, t) -> {
+					return deleteMapperByIndexAndParam.apply(aLong);
+				});
+	}
+
+	/**
+	 * 通过 id 更新 R 表单的 T 字段
+	 * @param index 索引id
+	 * @param newParams 更新后的参数集合
+	 * @param findOldListByIndex 通过索引查询旧参数的方法
+	 * @param tGetterFromR 从R拿到T的方法
+	 * @param rCreator R实例的构造方法
+	 * @param insertMapperByR 通过R插入表的方法
+	 * @param deleteMapperByIndexAndParam 通过索引删除表的方法（单入无返）
+	 * @param <T> 需要更新的字段 (eg: RoleMenuId)
+	 * @param <R> 更新字段所处的实体类 (eg: RoleMenu)
+	 * @return 更新记录数
+	 */
+	public static <T extends Comparable<T>, R> List<Integer> compareAndUpdateRelationTable(Long index,
+	                                                                                       List<T> newParams,
+	                                                                                       Function<Long, List<R>> findOldListByIndex,
+	                                                                                       Function<R, T> tGetterFromR,
+	                                                                                       Function<T, R> rCreator,
+	                                                                                       Function<R, Integer> insertMapperByR,
+	                                                                                       Consumer<Long> deleteMapperByIndexAndParam) {
+		return compareAndUpdateRelationTable(index, newParams, findOldListByIndex, tGetterFromR, rCreator, insertMapperByR
+				, (x, y) -> {
+					deleteMapperByIndexAndParam.accept(x);
+					return 1;
+				});
+	}
+
+	/**
+	 * 通过 id 更新 R 表单的 T 字段
+	 * @param index                       索引id
+	 * @param newParams                   更新后的参数集合
+	 * @param findOldListByIndex          通过索引查询旧参数的方法
+	 * @param tGetterFromR                从R拿到T的方法
+	 * @param rCreator                    R实例的构造方法
+	 * @param insertMapperByR             通过R插入表的方法
+	 * @param deleteMapperByIndexAndParam 通过索引删除表的方法（双入无返）
+	 * @param <T>                         需要更新的字段 (eg: RoleMenuId)
+	 * @param <R>                         更新字段所处的实体类 (eg: RoleMenu)
+	 * @return 更新记录数
+	 */
+	public static <T extends Comparable<T>, R> List<Integer> compareAndUpdateRelationTable(Long index,
+	                                                                                       List<T> newParams,
+	                                                                                       Function<Long, List<R>> findOldListByIndex,
+	                                                                                       Function<R, T> tGetterFromR,
+	                                                                                       Function<T, R> rCreator,
+	                                                                                       Function<R, Integer> insertMapperByR,
+	                                                                                       BiConsumer<Long, T> deleteMapperByIndexAndParam) {
+		return compareAndUpdateRelationTable(index, newParams, findOldListByIndex, tGetterFromR, rCreator, insertMapperByR
+				, (x, y) -> {
+					deleteMapperByIndexAndParam.accept(x, y);
+					return 1;
+				});
+	}
 
 }
