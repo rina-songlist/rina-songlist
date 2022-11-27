@@ -13,12 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public interface RoleService extends PublicService{
 
 	/**
-	 * 测试事务
-	 * @throws Exception 扔一个异常检查回滚
-	 */
-	void testTransactional() throws Exception;
-
-	/**
 	 * 获取所有权限列表
 	 * @return
 	 */
@@ -66,7 +60,6 @@ public interface RoleService extends PublicService{
 	@PreAuthorize("hasAuthority('sys:role:changeMenu')")
 	Resp changeMenus(Long roleId, Long... newMenuIds);
 
-	//TODO 改许可
 	/**
 	 * 更改可查看许可
 	 * @param roleId 权限ID
