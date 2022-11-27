@@ -1,8 +1,10 @@
 package com.rina.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,11 +13,10 @@ import java.util.Date;
  * @date 2022/10/10
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class MenuPermission implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class MenuPermission extends AbstractBasicTable {
 
     private static final long serialVersionUID = 8067507136141895301L;
 
@@ -23,11 +24,10 @@ public class MenuPermission implements Serializable {
 
     private Long permissionId;
 
-    private String createBy;
+    public MenuPermission(String createBy, Date createTime, String updateBy, Date updateTime, Long menuId, Long permissionId) {
+        super(createBy, createTime, updateBy, updateTime);
+        this.menuId = menuId;
+        this.permissionId = permissionId;
+    }
 
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
 }
