@@ -232,14 +232,14 @@ public class UserServiceImpl implements UserService {
 				roleMenuMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 				songListMapper.updateEditorName(user.getUserName(), userDto.getUserName());
 
-				user = user.withUserName(userDto.getUserName());
+				user.setUserName(userDto.getUserName());
 			}
 			if (dataUsableCheck(userDto.getPassword())) {
-				user = user.withPassword(passwordEncoder.encode(userDto.getPassword()));
+				user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 			}
-			user = user.withStatus(userDto.getStatus());
-			user = user.withUpdateBy(currentUser);
-			user = user.withUpdateTime(new Date());
+			user.setStatus(userDto.getStatus());
+			user.setUpdateBy(currentUser);
+			user.setUpdateTime(new Date());
 
 			userResult = userMapper.updateOneUserByUserId(user);
 			roleResult = 1;
@@ -255,9 +255,9 @@ public class UserServiceImpl implements UserService {
 
 		RoleUser roleUser = roleUserMapper.findRoleByUser(roleUserDto.getUserId());
 
-		roleUser = roleUser.withRoleId(roleUserDto.getRoleId());
-		roleUser = roleUser.withUpdateBy(currentUser);
-		roleUser = roleUser.withUpdateTime(new Date());
+		roleUser.setRoleId(roleUserDto.getRoleId());
+		roleUser.setUpdateBy(currentUser);
+		roleUser.setUpdateTime(new Date());
 
 		final int changeResult = roleUserMapper.changeRoleByUser(roleUser);
 		return RespUtil.editData(changeResult);
