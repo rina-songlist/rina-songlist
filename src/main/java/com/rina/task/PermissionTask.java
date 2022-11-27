@@ -53,25 +53,7 @@ public class PermissionTask {
 														rolePermissionMapper::insert,
 														rolePermissionMapper::deleteByPrimaryKey);
 
-		// TODO 后续需改为事物处理
 		return new AsyncResult<>(permissionUpdateResult);
 	}
 
-	@Async
-	public Future<List<Long>> testTransactional() {
-		int insert = rolePermissionMapper.insert(RolePermission.builder()
-				.roleId(2L)
-				.permissionId(24L)
-				.createBy("aftermath")
-				.createTime(new Date())
-				.updateBy("aftermath")
-				.updateTime(new Date())
-				.build());
-		System.out.println("子线程添加是否成功: " + (insert>0));
-		System.out.println("子线程读: " + rolePermissionMapper.findPermissionsByRoleId(2L).stream()
-				.map(RolePermission::getPermissionId)
-				.collect(Collectors.toList()));
-		System.out.println(1/0);
-		return new AsyncResult<>(rolePermissionMapper.findPermissionsByRoleId(2L).stream().map(RolePermission::getPermissionId).collect(Collectors.toList()));
-	}
 }
