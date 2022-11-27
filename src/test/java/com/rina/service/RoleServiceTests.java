@@ -57,4 +57,10 @@ public class RoleServiceTests {
 		System.out.println(JSON.toJSONString(resp));
 	}
 
+	@Test
+	void testListRolePermissions() {
+		final Resp resp = roleService.listRolePermissions(1L);
+		System.out.println(JSON.toJSONString(resp));
+	}
+
 }

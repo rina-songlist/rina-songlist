@@ -16,8 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,6 +35,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = Exception.class)
 public class MenuServiceImpl implements MenuService {
 
 	private final MenuMapper menuMapper;
