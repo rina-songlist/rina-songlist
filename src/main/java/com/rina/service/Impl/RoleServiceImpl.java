@@ -48,35 +48,6 @@ public class RoleServiceImpl implements RoleService {
 	private final PermissionTask permissionTask;
 
 	@Override
-	public void testTransactional() throws Exception {
-		System.out.println(rolePermissionMapper.findPermissionsByRoleId(2L).stream()
-				.map(RolePermission::getPermissionId)
-				.collect(Collectors.toList()));
-		int insert = rolePermissionMapper.insert(RolePermission.builder()
-				.roleId(2L)
-				.permissionId(23L)
-				.createBy("aftermath")
-				.createTime(new Date())
-				.updateBy("aftermath")
-				.updateTime(new Date())
-				.build());
-		System.out.println("父线程添加是否成功: " + (insert>0));
-		System.out.println("父线程读: " + rolePermissionMapper.findPermissionsByRoleId(2L).stream()
-				.map(RolePermission::getPermissionId)
-				.collect(Collectors.toList()));
-
-		Future<List<Long>> future = permissionTask.testTransactional();
-		// 获取子线程结果
-		while (true) {
-			if (future.isDone()) {
-				future.get();
-				break;
-			}
-		}
-		//throw new Exception("test error");
-	}
-
-	@Override
 	public Resp listRoles() {
 		final List<RoleDto> roleDtos = roleMapper.selectAll().stream()
 				.map(role -> {
@@ -98,12 +69,6 @@ public class RoleServiceImpl implements RoleService {
 		return RespUtil.queryData(menuIds);
 	}
 
-	/**
-	 * 查询指定权限下的许可
-	 *
-	 * @param roleId 权限ID
-	 * @return
-	 */
 	@Override
 	public Resp listRolePermissions(Long roleId) {
 		List<Long> permissionIdList = new ArrayList<>();
@@ -232,13 +197,7 @@ public class RoleServiceImpl implements RoleService {
 		return RespUtil.editData(roleUpdated);
 	}
 
-	/**
-	 * 更改可查看许可
-	 *
-	 * @param roleId        权限ID
-	 * @param permissionIds 菜单ID
-	 * @return
-	 */
+	// TODO 使用工具类抽离通用性方法
 	@Override
 	public Resp changePermissions(Long roleId, Long... permissionIds) {
 		final LoginUser loginUser = (LoginUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
