@@ -1,8 +1,10 @@
 package com.rina.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,15 +12,12 @@ import java.util.Date;
  * @author arvin
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class SongList implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class SongList extends AbstractDomainTable {
 
     private static final long serialVersionUID = -5514114779942724772L;
-
-    private Long id;
 
     private String name;
 
@@ -26,11 +25,11 @@ public class SongList implements Serializable {
 
     private String language;
 
-    private String createBy;
+    public SongList(String createBy, Date createTime, String updateBy, Date updateTime, Long id, String name, String artist, String language) {
+        super(id, createBy, createTime, updateBy, updateTime);
+        this.name = name;
+        this.artist = artist;
+        this.language = language;
+    }
 
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
 }

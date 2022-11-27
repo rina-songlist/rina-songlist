@@ -1,8 +1,10 @@
 package com.rina.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,11 +13,10 @@ import java.util.Date;
  * @author arvin
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class User implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class User extends AbstractDomainTable {
 
     private static final long serialVersionUID = 8867247020450884661L;
 
@@ -27,12 +28,11 @@ public class User implements Serializable {
 
     private Boolean status;
 
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
+    public User(String createBy, Date createTime, String updateBy, Date updateTime, Long id, String userName, String password, Boolean status) {
+        super(id, createBy, createTime, updateBy, updateTime);
+        this.userName = userName;
+        this.password = password;
+        this.status = status;
+    }
 
 }

@@ -1,8 +1,10 @@
 package com.rina.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,15 +13,12 @@ import java.util.Date;
  * @author arvin
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class Menu implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class Menu extends AbstractDomainTable {
 
     private static final long serialVersionUID = 8769523180890381985L;
-
-    private Long id;
 
     private String name;
 
@@ -31,12 +30,12 @@ public class Menu implements Serializable {
 
     private Long orderValue;
 
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
-
+    public Menu(String createBy, Date createTime, String updateBy, Date updateTime, Long id, String name, String icon, String url, Long parentId, Long orderValue) {
+        super(id, createBy, createTime, updateBy, updateTime);
+        this.name = name;
+        this.icon = icon;
+        this.url = url;
+        this.parentId = parentId;
+        this.orderValue = orderValue;
+    }
 }

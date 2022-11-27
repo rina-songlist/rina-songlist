@@ -1,8 +1,10 @@
 package com.rina.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,24 +13,18 @@ import java.util.Date;
  * @author arvin
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class Role implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class Role extends AbstractDomainTable {
 
     private static final long serialVersionUID = 8847562476138143980L;
 
-    private Long id;
-
     private String role;
 
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
+    public Role(String createBy, Date createTime, String updateBy, Date updateTime, Long id, String role) {
+        super(id, createBy, createTime, updateBy, updateTime);
+        this.role = role;
+    }
 
 }

@@ -1,8 +1,11 @@
 package com.rina.domain;
 
-import lombok.*;
+import com.rina.domain.relation.AbstractRoleRelationType;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,29 +14,23 @@ import java.util.Date;
  * @author arvin
  */
 @Data
-@Builder
-@With
-@AllArgsConstructor
+@SuperBuilder
 @NoArgsConstructor
-public class RoleUser implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class RoleUser extends AbstractRoleRelationType {
 
     private static final long serialVersionUID = 457992597942856703L;
 
-    private Long roleId;
-
     private Long userId;
-
-    private String createBy;
-
-    private Date createTime;
-
-    private String updateBy;
-
-    private Date updateTime;
 
     /**
      * 连表查询时存放role信息
      */
     private Role role;
 
+    public RoleUser(Long roleId, String createBy, Date createTime, String updateBy, Date updateTime, Long userId, Role role) {
+        super(roleId, createBy, createTime, updateBy, updateTime);
+        this.userId = userId;
+        this.role = role;
+    }
 }
