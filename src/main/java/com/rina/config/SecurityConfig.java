@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.authorizeRequests()
 				.antMatchers("/private/login", "/song-list").anonymous()
-				.antMatchers("/swagger-ui/*", "/swagger-resources**", "/v2/*").permitAll()
+				.antMatchers("/swagger-ui**", "/swagger-ui/**", "/v3/**").permitAll()
 				.anyRequest().authenticated();
 	}
 }
