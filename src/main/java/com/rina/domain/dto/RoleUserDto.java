@@ -1,7 +1,6 @@
 package com.rina.domain.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -18,7 +17,7 @@ import java.io.Serializable;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "用户权限信息")
+@Schema(description = "用户权限信息")
 public class RoleUserDto implements Serializable {
 
 	private static final long serialVersionUID = -7465804681447964067L;
@@ -28,7 +27,7 @@ public class RoleUserDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "用户ID", required = true, example = "1")
+	@Schema(description = "用户ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	private Long userId;
 
 	/**
@@ -36,7 +35,7 @@ public class RoleUserDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "权限ID", required = true, example = "1")
+	@Schema(description = "权限ID", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	private Long roleId;
 
 }

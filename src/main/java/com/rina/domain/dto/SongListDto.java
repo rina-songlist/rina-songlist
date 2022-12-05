@@ -1,7 +1,6 @@
 package com.rina.domain.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +22,7 @@ import java.io.Serializable;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "歌单详情内容")
+@Schema(description = "歌单详情内容")
 public class SongListDto implements Serializable {
 
 	private static final long serialVersionUID = -5350617301641447106L;
@@ -31,7 +30,7 @@ public class SongListDto implements Serializable {
 	/**
 	 * 歌单id
 	 */
-	@ApiModelProperty(value = "歌单ID", required = false, example = "1")
+	@Schema(description = "歌单ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private Long id;
 
 	/**
@@ -39,13 +38,13 @@ public class SongListDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "歌曲名", required = true, example = "test")
+	@Schema(description = "歌曲名", requiredMode = Schema.RequiredMode.REQUIRED, example = "song name")
 	private String name;
 
 	/**
 	 * 歌手
 	 */
-	@ApiModelProperty(value = "歌手", required = true, example = "tester")
+	@Schema(description = "歌手", requiredMode = Schema.RequiredMode.REQUIRED, example = "artist")
 	private String artist;
 
 	/**
@@ -53,7 +52,7 @@ public class SongListDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "语言", required = true, example = "JPN")
+	@Schema(description = "语言", requiredMode = Schema.RequiredMode.REQUIRED, example = "JPN")
 	private String language;
 
 }
