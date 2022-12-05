@@ -3,9 +3,11 @@ package com.rina.controller;
 import com.rina.domain.dto.SongListDto;
 import com.rina.resp.Resp;
 import com.rina.service.SongListService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,48 +20,48 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "歌单展示")
+@Tag(name = "歌单展示")
 public class SongListController {
 
 	private final SongListService songListService;
 
 	@GetMapping("/song-list")
-	@ApiOperation(value = "普通用户所看到的歌单信息", notes = "无需鉴权")
-	public Resp publicUserSongList(@RequestParam(required = true) @ApiParam(value = "页面展示的数据量", required = true) Integer pageSize,
-	                               @RequestParam(required = true) @ApiParam(value = "当前页数", required = true) Integer pageNum,
-	                               @RequestParam(required = true) @ApiParam(value = "排序依据", required = true) String orderBy,
-	                               @RequestParam(required = true) @ApiParam(value = "是否倒序排序", required = true) Boolean withDesc,
-	                               @RequestParam(required = false) @ApiParam(value = "歌名或歌手名", required = false) String nameOrArtist,
-	                               @RequestParam(required = false) @ApiParam(value = "歌曲IDs", required = false) Long... ids) {
+	@Operation(summary = "普通用户所看到的歌单信息")
+	public Resp publicUserSongList(@RequestParam @Parameter(name = "页面展示的数据量", in = ParameterIn.QUERY, required = true) Integer pageSize,
+	                               @RequestParam @Parameter(name = "当前页数", in = ParameterIn.QUERY, required = true) Integer pageNum,
+	                               @RequestParam @Parameter(name = "排序依据", in = ParameterIn.QUERY, required = true) String orderBy,
+	                               @RequestParam @Parameter(name = "是否倒叙排序", in = ParameterIn.QUERY, required = true) Boolean withDesc,
+	                               @RequestParam(required = false) @Parameter(name = "歌手或歌手名", in = ParameterIn.QUERY) String nameOrArtist,
+	                               @RequestParam(required = false) @Parameter(name = "歌曲IDs", in = ParameterIn.QUERY) Long... ids) {
 		return songListService.listSongLists(pageSize, pageNum, orderBy, withDesc, nameOrArtist, ids);
 	}
 
 	@GetMapping("/private/system/song-list")
 	@PreAuthorize("hasAuthority('sys:songlist:view')")
-	@ApiOperation(value = "管理用户所看到的歌单信息", notes = "需要鉴权")
-	public Resp privateUserSongList(@RequestParam(required = true) @ApiParam(value = "页面展示的数据量", required = true) Integer pageSize,
-	                               @RequestParam(required = true) @ApiParam(value = "当前页数", required = true) Integer pageNum,
-	                               @RequestParam(required = true) @ApiParam(value = "排序依据", required = true) String orderBy,
-	                               @RequestParam(required = true) @ApiParam(value = "是否倒序排序", required = true) Boolean withDesc,
-	                               @RequestParam(required = false) @ApiParam(value = "歌名或歌手名", required = false) String nameOrArtist) {
-		return songListService.listSongLists(pageSize, pageNum, orderBy, withDesc, nameOrArtist,  null);
+	@Operation(summary = "管理用户所看到的歌单信息", security = {@SecurityRequirement(name = "Authorization")})
+	public Resp privateUserSongList(@RequestParam @Parameter(name = "页面展示的数据量", in = ParameterIn.QUERY, required = true) Integer pageSize,
+	                                @RequestParam @Parameter(name = "当前页数", in = ParameterIn.QUERY, required = true) Integer pageNum,
+	                                @RequestParam @Parameter(name = "排序依据", in = ParameterIn.QUERY, required = true) String orderBy,
+	                                @RequestParam @Parameter(name = "是否倒叙排序", in = ParameterIn.QUERY, required = true) Boolean withDesc,
+	                                @RequestParam(required = false) @Parameter(name = "歌手或歌手名", in = ParameterIn.QUERY) String nameOrArtist) {
+		return songListService.listSongLists(pageSize, pageNum, orderBy, withDesc, nameOrArtist, null);
 	}
 
 	@GetMapping("/private/system/song-list/{id}")
-	@ApiOperation(value = "获取单条歌单", notes = "需要授权")
-	public Resp getSingleSong(@PathVariable(value = "id", required = true) @ApiParam(value = "歌曲ID", required = true) Long songId) {
+	@Operation(summary = "获取单条歌单", security = {@SecurityRequirement(name = "Authorization")})
+	public Resp getSingleSong(@PathVariable(value = "id") @Parameter(name = "歌曲ID", in = ParameterIn.PATH, required = true) Long songId) {
 		return songListService.getSingleSong(songId);
 	}
 
 	@PutMapping("/private/system/song-list")
-	@ApiOperation(value = "添加（更改）歌单", notes = "需要授权")
-	public Resp editSongList(@RequestBody(required = true) @ApiParam(value = "歌单详情", required = true) SongListDto songListDto) {
+	@Operation(summary = "添加（更改）歌单", security = {@SecurityRequirement(name = "Authorization")})
+	public Resp editSongList(@RequestBody @Parameter(name = "歌单详情", in = ParameterIn.DEFAULT, required = true) SongListDto songListDto) {
 		return songListService.editSongList(songListDto);
 	}
 
 	@DeleteMapping("/private/system/song-list/{id}")
-	@ApiOperation(value = "删除一条歌单", notes = "需要授权")
-	public Resp deleteSongList(@PathVariable(value = "id", required = true) @ApiParam(value = "歌曲ID", required = true) Long songId) {
+	@Operation(summary = "删除一条歌单", security = {@SecurityRequirement(name = "Authorization")})
+	public Resp deleteSongList(@PathVariable(value = "id") @Parameter(name = "歌曲ID", in = ParameterIn.PATH, required = true) Long songId) {
 		return songListService.deleteSongList(songId);
 	}
 
