@@ -6,10 +6,11 @@ logging:
       rina: error
 
 #生产模式下禁用swagger-ui
-springfox:
-  documentation:
+springdoc:
+  api-docs:
     enabled: false
-    auto-startup: false
+  swagger-ui:
+    enabled: false
 
 #生产模式下禁用devtools
 spring:
