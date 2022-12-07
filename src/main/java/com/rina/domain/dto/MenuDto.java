@@ -1,7 +1,6 @@
 package com.rina.domain.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -20,7 +19,7 @@ import java.util.List;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "菜单详细内容")
+@Schema(description = "菜单详细内容")
 public class MenuDto implements Serializable {
 
 	private static final long serialVersionUID = 6042211652617506636L;
@@ -28,7 +27,7 @@ public class MenuDto implements Serializable {
 	/**
 	 * 菜单ID
 	 */
-	@ApiModelProperty(value = "菜单ID", required = false, example = "1")
+	@Schema(description = "菜单ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private Long id;
 
 	/**
@@ -36,7 +35,7 @@ public class MenuDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "菜单名", required = false, example = "1")
+	@Schema(description = "菜单名", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private String name;
 
 	/**
@@ -44,25 +43,25 @@ public class MenuDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "菜单对应图标", required = false, example = "1")
+	@Schema(description = "菜单对应图标", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private String icon;
 
 	/**
 	 * 菜单功能对应地址
 	 */
-	@ApiModelProperty(value = "菜单功能对应地址", required = false, example = "url")
+	@Schema(description = "菜单功能对应地址", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private String url;
 
 	/**
 	 * 父级ID
 	 */
-	@ApiModelProperty(value = "父级ID", required = false, example = "1")
+	@Schema(description = "父级ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private Long parentId;
 
 	/**
 	 * 父级菜单名
 	 */
-	@ApiModelProperty(value = "父级菜单名", required = false, example = "parentName")
+	@Schema(description = "父级菜单名", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String parentName;
 
 	/**
@@ -70,25 +69,25 @@ public class MenuDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "当前层级的排序顺序", required = true, example = "1")
+	@Schema(description = "当前层级的排序顺序", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
 	private Long orderValue;
 
 	/**
 	 * 创建者
 	 */
-	@ApiModelProperty(value = "创建者", required = false, example = "test")
+	@Schema(description = "创建者", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String createBy;
 
 	/**
 	 * 更新者
 	 */
-	@ApiModelProperty(value = "更新者", required = false, example = "test")
+	@Schema(description = "更新者", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String updateBy;
 
 	/**
 	 * 子菜单
 	 */
-	@ApiModelProperty(value = "子菜单", required = false, example = "tests", hidden = true)
+	@Schema(description = "子菜单", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private List<MenuDto> children;
 
 }

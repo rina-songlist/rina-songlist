@@ -1,7 +1,6 @@
 package com.rina.domain.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -19,7 +18,7 @@ import java.io.Serializable;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "用户的详细内容")
+@Schema(description = "用户的详细内容")
 public class UserDto implements Serializable {
 
 	private static final long serialVersionUID = 6237639195205521573L;
@@ -27,7 +26,7 @@ public class UserDto implements Serializable {
 	/**
 	 * 用户ID
 	 */
-	@ApiModelProperty(value = "用户ID", required = false, example = "1")
+	@Schema(description = "用户ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private Long id;
 
 	/**
@@ -35,13 +34,13 @@ public class UserDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "用户名", required = true, example = "test")
+	@Schema(description = "用户名", requiredMode = Schema.RequiredMode.REQUIRED, example = "username")
 	private String userName;
 
 	/**
 	 * 密码
 	 */
-	@ApiModelProperty(value = "密码", required = false, example = "test")
+	@Schema(description = "密码", requiredMode = Schema.RequiredMode.REQUIRED, example = "password")
 	private String password;
 
 	/**
@@ -49,31 +48,31 @@ public class UserDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "用户状态", required = true, example = "true")
+	@Schema(description = "用户状态", requiredMode = Schema.RequiredMode.REQUIRED, example = "true")
 	private Boolean status;
 
 	/**
 	 * 权限ID
 	 */
-	@ApiModelProperty(value = "权限ID", required = false, example = "1")
+	@Schema(description = "权限ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private Long roleId;
 
 	/**
 	 * 当前用户权限名
 	 */
-	@ApiModelProperty(value = "当前用户权限名", required = false, example = "test")
+	@Schema(description = "当前用户权限名", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String roleName;
 
 	/**
 	 * 创建者
 	 */
-	@ApiModelProperty(value = "菜单ID", required = false, example = "test")
+	@Schema(description = "创建者", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String createBy;
 
 	/**
 	 * 更新者
 	 */
-	@ApiModelProperty(value = "菜单ID", required = false, example = "test")
+	@Schema(description = "更新者", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String updateBy;
 
 }

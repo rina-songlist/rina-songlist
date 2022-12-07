@@ -1,7 +1,6 @@
 package com.rina.domain.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -19,7 +18,7 @@ import java.io.Serializable;
 @With
 @AllArgsConstructor
 @NoArgsConstructor
-@ApiModel(description = "权限详情内容")
+@Schema(description = "权限详情内容")
 public class RoleDto implements Serializable {
 
 	private static final long serialVersionUID = 2338060146121957031L;
@@ -27,7 +26,7 @@ public class RoleDto implements Serializable {
 	/**
 	 * 权限ID
 	 */
-	@ApiModelProperty(value = "权限ID", required = false, example = "1")
+	@Schema(description = "权限ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	private Long id;
 
 	/**
@@ -35,19 +34,19 @@ public class RoleDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "权限名", required = true, example = "true")
+	@Schema(description = "权限名", requiredMode = Schema.RequiredMode.REQUIRED, example = "role name")
 	private String role;
 
 	/**
 	 * 创建者
 	 */
-	@ApiModelProperty(value = "创建者", required = false, example = "tester")
+	@Schema(description = "创建者", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String createBy;
 
 	/**
 	 * 更新者
 	 */
-	@ApiModelProperty(value = "更新者", required = false, example = "tester")
+	@Schema(description = "更新者", requiredMode = Schema.RequiredMode.NOT_REQUIRED, accessMode = Schema.AccessMode.READ_ONLY)
 	private String updateBy;
 
 }

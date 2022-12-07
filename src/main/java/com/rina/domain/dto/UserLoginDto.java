@@ -1,7 +1,6 @@
 package com.rina.domain.dto;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -19,7 +18,7 @@ import java.io.Serializable;
 @With
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "登陆信息")
+@Schema(description = "登陆信息")
 public class UserLoginDto implements Serializable {
 
 	private static final long serialVersionUID = -2438647957404692821L;
@@ -29,7 +28,7 @@ public class UserLoginDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "用户名", required = true, position = 1)
+	@Schema(description = "用户名", requiredMode = Schema.RequiredMode.REQUIRED, example = "username")
 	private String username;
 
 	/**
@@ -37,7 +36,7 @@ public class UserLoginDto implements Serializable {
 	 */
 	@NotNull
 	@NotBlank
-	@ApiModelProperty(value = "密码", required = true, position = 2)
+	@Schema(description = "密码", requiredMode = Schema.RequiredMode.REQUIRED, example = "password")
 	private String password;
 
 }
